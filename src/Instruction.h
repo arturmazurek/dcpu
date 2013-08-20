@@ -15,13 +15,13 @@ struct Instruction {
     unsigned int cyclesLeft;
     
     union Value {
-        uint16_t raw;
-        
         struct Decoded {
-            uint16_t a : 6;
-            uint16_t b : 5;
             uint16_t o : 5;
+            uint16_t b : 5;
+            uint16_t a : 6;
         } decoded;
+        
+        uint16_t raw;
     } value;
 };
 
