@@ -17,4 +17,10 @@ void Core::resetState() {
     
     memset(&m_registers, 0, sizeof(Registers));
     m_registers.SP = STACK_START;
+    
+    memset(&m_current, 0, sizeof(Instruction));
+}
+
+void Core::doCycle() {
+    
 }

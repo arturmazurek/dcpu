@@ -13,6 +13,7 @@
 
 #include <array>
 
+#include "Instruction.h"
 #include "Registers.h"
 
 class Core {
@@ -21,10 +22,14 @@ public:
     
     void resetState();
     
+    void doCycle();
+    
 private:
     static const int MEMORY_SIZE = 0x10000;
     static const int STACK_START = 0xffff;
     std::array<uint16_t, MEMORY_SIZE> m_memory;
+    
+    Instruction m_current;
     
     Registers m_registers;
 };
