@@ -25,6 +25,13 @@ public:
     void doCycle();
     
 private:
+    bool interruptsEnabled() const;
+    bool handleInterrupt();
+    
+    void fetchAndDecode();
+    void execute();
+    
+private:
     static const int MEMORY_SIZE = 0x10000;
     static const int STACK_START = 0xffff;
     std::array<uint16_t, MEMORY_SIZE> m_memory;

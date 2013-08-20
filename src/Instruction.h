@@ -12,7 +12,7 @@
 #include <cstdint>
 
 struct Instruction {
-    unsigned int cycles;
+    unsigned int cyclesLeft;
     
     union Value {
         uint16_t raw;
