@@ -24,6 +24,8 @@ public:
     
     void doCycle();
     
+    void printRegisters() const;
+    
 private:
     bool interruptsEnabled() const;
     bool handleInterrupt();

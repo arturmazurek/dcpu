@@ -8,11 +8,14 @@
 
 #include <iostream>
 
+#include "Core.h"
+
 int main(int argc, const char * argv[])
 {
-
-    // insert code here...
-    std::cout << "Hello, World!\n";
+    Core c;
+    c.resetState();
+    c.printRegisters();
+    
     return 0;
 }
 

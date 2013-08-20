@@ -206,6 +206,7 @@
 		75C7E38717C3CA00001247DA /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_CXX_LANGUAGE_STANDARD = "c++0x";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Debug;
@@ -213,6 +214,7 @@
 		75C7E38817C3CA00001247DA /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_CXX_LANGUAGE_STANDARD = "c++0x";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;
