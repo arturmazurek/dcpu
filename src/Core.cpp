@@ -25,10 +25,10 @@ void Core::resetState() {
 }
 
 void Core::doCycle() {
-    if(m_current.cyclesLeft > 1) {
-        --m_current.cyclesLeft;
-        return;
-    }
+//    if(m_current.cyclesLeft > 1) {
+//        --m_current.cyclesLeft;
+//        return;
+//    }
     
     if(interruptsEnabled()) {
         if(handleInterrupt()) {

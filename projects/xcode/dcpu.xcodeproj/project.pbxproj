@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		75ABD72317C5253E00BED3AB /* Instruction.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 75ABD72217C5253E00BED3AB /* Instruction.cpp */; };
 		75C7E38B17C3CA72001247DA /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 75C7E38A17C3CA72001247DA /* main.cpp */; };
 		75C7E38F17C3D49B001247DA /* Core.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 75C7E38D17C3D49B001247DA /* Core.cpp */; };
 /* End PBXBuildFile section */
@@ -24,6 +25,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		75ABD72217C5253E00BED3AB /* Instruction.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Instruction.cpp; sourceTree = "<group>"; };
 		75C7E37D17C3CA00001247DA /* dcpu */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = dcpu; sourceTree = BUILT_PRODUCTS_DIR; };
 		75C7E38A17C3CA72001247DA /* main.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		75C7E38C17C3CDF3001247DA /* Opcodes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Opcodes.h; sourceTree = "<group>"; };
@@ -69,6 +71,7 @@
 				75C7E38E17C3D49B001247DA /* Core.h */,
 				75C7E39017C3D9B9001247DA /* Registers.h */,
 				75C7E39117C3DF74001247DA /* Instruction.h */,
+				75ABD72217C5253E00BED3AB /* Instruction.cpp */,
 			);
 			name = src;
 			path = ../../src;
@@ -127,6 +130,7 @@
 			files = (
 				75C7E38F17C3D49B001247DA /* Core.cpp in Sources */,
 				75C7E38B17C3CA72001247DA /* main.cpp in Sources */,
+				75ABD72317C5253E00BED3AB /* Instruction.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

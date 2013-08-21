@@ -11,18 +11,14 @@
 
 #include <cstdint>
 
+#include "Opcodes.h"
+
 struct Instruction {
-    unsigned int cyclesLeft;
+    char raw[2];
     
-    union Value {
-        struct Decoded {
-            uint16_t o : 5;
-            uint16_t b : 5;
-            uint16_t a : 6;
-        } decoded;
-        
-        uint16_t raw;
-    } value;
+    Instruction(Opcode op, uint8_t b, uint8_t a);
+    Instruction(Opcode op, uint8_t a);
+    Instruction();
 };
 
 #endif

@@ -12,15 +12,17 @@
 #include "Core.h"
 #include "Opcodes.h"
 
+using namespace std;
+
 int main(int argc, const char * argv[])
 {
     Core c;
     c.resetState();
     c.printRegisters();
     
-    std::cout << std::endl;
-    Instruction::Value v = {OP_MUL, 1, 63};
-    std::cout << std::bitset<16>(v.raw) << std::endl;
+    cout << endl;
+    Instruction i{OP_ADD, 24, 12};
+    cout << bitset<8>{i.raw[0]} << bitset<8>{i.raw[1]} << endl;
     
     return 0;
 }

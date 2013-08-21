@@ -9,7 +9,9 @@
 #ifndef dcpu_opcodes_h
 #define dcpu_opcodes_h
 
-enum Opcodes {
+enum Opcode {
+    OP_NONE = 0x00, // special
+    
     // Normal 
     OP_SET = 0x01, // sets b to a
     OP_ADD = 0x02, // sets b to b+a, sets EX to 0x0001 if there's an overflow, 0x0 otherwise
