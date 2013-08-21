@@ -18,11 +18,19 @@ int main(int argc, const char * argv[])
 {
     Core c;
     c.resetState();
+    
     c.printRegisters();
+    cout << endl;
+    
+    Instruction m[] = {
+        {OP_SET, 0x02, 0x07}
+    };
+    c.setInstructions(m, sizeof(m) / sizeof(*m));
+    
+    c.doCycle();
     
     cout << endl;
-    Instruction i{OP_ADD, 24, 12};
-    cout << bitset<8>{i.raw[0]} << bitset<8>{i.raw[1]} << endl;
+    c.printRegisters();
     
     return 0;
 }

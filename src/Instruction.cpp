@@ -19,7 +19,7 @@ Instruction::Instruction(Opcode op, uint8_t b, uint8_t a) : Instruction{} {
     assert(b <= 0b11111);
     assert(op <= 0b11111);
     
-    raw[1] = 0;
+    raw[1] = op;
     raw[1] |= (b << 5);
     
     raw[0] = b >> 3;
