@@ -13,7 +13,7 @@
 
 #include "Opcodes.h"
 
-struct Instruction {
+struct Instruction final {
     uint8_t raw[2];
     
     Instruction(Opcode op, uint8_t b, uint8_t a);

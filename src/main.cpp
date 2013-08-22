@@ -23,13 +23,12 @@ int main(int argc, const char * argv[])
     cout << endl;
     
     Instruction m[] = {
-        {OP_SET, 0x02, 0x07}
+        {OP_SET, 0x01, 0x22}
     };
     c.setInstructions(m, sizeof(m) / sizeof(*m));
     
     c.doCycle();
     
-    cout << endl;
     c.printRegisters();
     
     return 0;

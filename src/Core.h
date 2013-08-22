@@ -39,6 +39,8 @@ private:
     void executeNormal();
     void executeSpecial();
     
+    uint16_t* checkOperand(uint16_t& operand, bool inA);
+    
 private:
     static const int MEMORY_SIZE = 0x10000;
     static const int STACK_START = 0xffff;
@@ -47,9 +49,14 @@ private:
     Instruction m_current;
     struct Decoded {
         int costLeft;
-        uint8_t element1;
-        uint8_t element2;
-        uint8_t element3;
+        bool special;
+        
+        Opcode opcode;
+        uint16_t a;
+        uint16_t b;
+        
+        uint16_t* source;
+        uint16_t* target;
     } m_decoded;
     
     Registers m_registers;
