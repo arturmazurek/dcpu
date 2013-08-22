@@ -20,16 +20,19 @@ int main(int argc, const char * argv[])
     c.resetState();
     
     c.printRegisters();
-    cout << endl;
     
     Instruction m[] = {
-        {OP_SET, 0x01, 0x22}
+        {OP_SET, 0x01, 0x22},
+        {OP_SET, 0x00, 0x20},
+        {OP_SET, 0x02, 0x00}
     };
     c.setInstructions(m, sizeof(m) / sizeof(*m));
     
-    c.doCycle();
-    
-    c.printRegisters();
+    for(int i = 0; i < (sizeof(m) / sizeof(*m)); ++i) {
+        c.doCycle();
+        cout << endl;
+        c.printRegisters();
+    }
     
     return 0;
 }

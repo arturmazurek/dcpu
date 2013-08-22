@@ -39,7 +39,7 @@ void Core::setInstructions(Instruction* m, unsigned size, unsigned startingAt) {
 }
 
 void Core::doCycle() {
-    if(m_decoded.costLeft >= 1) {
+    if(m_decoded.costLeft > 1) {
         --m_decoded.costLeft;
         return;
     }
