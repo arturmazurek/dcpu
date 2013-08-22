@@ -27,6 +27,7 @@ public:
     void doCycle();
     
     void printRegisters() const;
+    void printMemory(uint16_t start, uint16_t end) const;
     
 private:
     bool interruptsEnabled() const;

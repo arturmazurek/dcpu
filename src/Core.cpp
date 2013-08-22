@@ -74,6 +74,21 @@ void Core::printRegisters() const {
     cout.fill(fill);
 }
 
+void Core::printMemory(uint16_t start, uint16_t end) const {
+    using namespace std;
+    auto fill = cout.fill('0');
+    
+    while(start < end) {
+        uint16_t val = m_memory[start];
+        char *temp = reinterpret_cast<char*>(&val);
+        
+        cout << bitset<8>(temp[0]) << bitset<8>(temp[1]) << " 0x" << hex << setw(4) << m_memory[start] << endl;
+        ++start;
+    }
+    
+    cout.fill(fill);
+}
+
 bool Core::interruptsEnabled() const {
     return false;
 }

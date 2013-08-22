@@ -34,6 +34,9 @@ int main(int argc, const char * argv[])
         c.printRegisters();
     }
     
+    cout << endl;
+    c.printMemory(0, 10);
+    
     return 0;
 }
 
