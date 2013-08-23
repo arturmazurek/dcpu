@@ -36,6 +36,14 @@ struct TestAdder {
 #define TEST \
     (TestsHolder::TestFunction)[](Core& core, bool& result)
 
+#define CHECK_EQUAL(a, b, msg) {\
+    auto a_ = (a);\
+    auto b_ = (b);\
+    if(a_ != b_) {\
+        std::cout << "Test failed: " << msg << std::endl << "\t" << #a << " == " << a_ << " , " << #b << " == " << b_ << std::endl;\
+        result = false;\
+    }}
+
 #define CHECK_TRUE(x, msg) \
 if(!(x)) {\
 std::cout << "Test failed: " << msg << std::endl;\

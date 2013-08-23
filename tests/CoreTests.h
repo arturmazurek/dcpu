@@ -15,23 +15,26 @@ TESTS_START(CoreTests)
 
 TEST {
     CHECK_TRUE(true, "Are tests working");
+    CHECK_EQUAL(1, 1, "Basic checks");
 },
 
+// initialisations
+
 TEST {
-    CHECK_TRUE(core.registers().A == 0, "Is register A properly initialised");
-    CHECK_TRUE(core.registers().B == 0, "Is register B properly initialised");
-    CHECK_TRUE(core.registers().C == 0, "Is register C properly initialised");
-    CHECK_TRUE(core.registers().D == 0, "Is register D properly initialised");
-    CHECK_TRUE(core.registers().X == 0, "Is register X properly initialised");
-    CHECK_TRUE(core.registers().Y == 0, "Is register Y properly initialised");
-    CHECK_TRUE(core.registers().Z == 0, "Is register Z properly initialised");
-    CHECK_TRUE(core.registers().I == 0, "Is register I properly initialised");
-    CHECK_TRUE(core.registers().J == 0, "Is register J properly initialised");
+    CHECK_EQUAL(core.registers().A, 0, "Is register A properly initialised");
+    CHECK_EQUAL(core.registers().B, 0, "Is register B properly initialised");
+    CHECK_EQUAL(core.registers().C, 0, "Is register C properly initialised");
+    CHECK_EQUAL(core.registers().D, 0, "Is register D properly initialised");
+    CHECK_EQUAL(core.registers().X, 0, "Is register X properly initialised");
+    CHECK_EQUAL(core.registers().Y, 0, "Is register Y properly initialised");
+    CHECK_EQUAL(core.registers().Z, 0, "Is register Z properly initialised");
+    CHECK_EQUAL(core.registers().I, 0, "Is register I properly initialised");
+    CHECK_EQUAL(core.registers().J, 0, "Is register J properly initialised");
     
-    CHECK_TRUE(core.registers().PC == 0, "Is register PC properly initialised");
-    CHECK_TRUE(core.registers().SP == 0xffff, "Is register SP properly initialised");
-    CHECK_TRUE(core.registers().EX == 0, "Is register EX properly initialised");
-    CHECK_TRUE(core.registers().IA == 0, "Is register IA properly initialised");
+    CHECK_EQUAL(core.registers().PC, 0, "Is register PC properly initialised");
+    CHECK_EQUAL(core.registers().SP, 0xffff, "Is register SP properly initialised");
+    CHECK_EQUAL(core.registers().EX, 0, "Is register EX properly initialised");
+    CHECK_EQUAL(core.registers().IA, 0, "Is register IA properly initialised");
 },
 
 TEST {
@@ -42,6 +45,23 @@ TEST {
             break;
         }
     }
+},
+
+// basic opcodes
+TEST {
+    Instruction i[] = {
+        {OP_SET, 0x00, 0x20}, // SET A, 0xffff
+        {OP_SET, 0x09, 0x20}, // SET [B], 0xffff
+    };
+    core.setInstructions(i, ARRAY_SIZE(i));
+    
+    core.doCycle();
+    CHECK_EQUAL(core.registers().A, 0xffff, "Is A set properly");
+    CHECK_EQUAL(core.registers().PC, 1, "Is program counter increasing 1");
+    
+    core.doCycle();
+    CHECK_EQUAL(core.memory(0), 0xffff, "Is memory register-addressed correctly");
+    CHECK_EQUAL(core.registers().PC, 2, "Is program counter increasing 2");
 }
 
 TESTS_END
