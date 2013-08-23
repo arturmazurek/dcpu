@@ -14,22 +14,33 @@
 
 #include "TestsHolder.h"
 
-#define TEST t = [](Core& core)
+struct TestAdder {
+    std::function<bool(Core&)> f;
+    
+    TestAdder(std::function<bool(Core&)> f) : f{f} {}
+    ~TestAdder() {
+        TestsHolder::instance().addTest(f);
+    }
+};
+
+#define D_TEST(l) \
+    TestAdder t##l = (std::function<bool(Core&)>)[](Core& core)
+
+#define TEST D_TEST(__LINE__)
+
+#define CHECK_TRUE(x, msg) \
+    if(!(x)) {\
+        std::cout << "Test failed: " << msg << std::endl;\
+        return false;\
+    }
 
 static void prepareCoreTests() {
     using namespace std;
     
-    TestsHolder& th = TestsHolder::instance();
-    
-    th.addTest([](Core& core) {
-        cout << "Tests working" << endl;
+    TEST {
+        CHECK_TRUE(true, "Are tests working");
         return true;
-    });
-    
-    th.addTest([](Core& core) {
-        cout << "Yes, certainly working" << endl;
-        return true;
-    });
+    };
     
 }
 
