@@ -9,9 +9,6 @@
 #ifndef dcpu_CoreTests_h
 #define dcpu_CoreTests_h
 
-#include <functional>
-#include <iostream>
-
 #include "TestsUtil.h"
 
 TESTS_START(CoreTests)
