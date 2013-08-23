@@ -30,6 +30,7 @@ public:
     void printMemory(uint16_t start, uint16_t end) const;
     
     const Registers& registers() const;
+    uint16_t memory(uint16_t at) const;
     
 private:
     bool interruptsEnabled() const;

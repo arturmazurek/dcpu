@@ -32,6 +32,10 @@ const Registers& Core::registers() const {
     return m_registers;
 }
 
+uint16_t Core::memory(uint16_t at) const {
+    return m_memory[at];
+}
+
 void Core::setMemory(uint16_t* m, unsigned size, unsigned startingAt) {
     assert(size + startingAt < MEMORY_SIZE);
     
