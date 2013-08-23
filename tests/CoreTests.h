@@ -24,7 +24,6 @@ TEST {
     CHECK_EQUAL(core.registers().A, 0, "Is register A properly initialised");
     CHECK_EQUAL(core.registers().B, 0, "Is register B properly initialised");
     CHECK_EQUAL(core.registers().C, 0, "Is register C properly initialised");
-    CHECK_EQUAL(core.registers().D, 0, "Is register D properly initialised");
     CHECK_EQUAL(core.registers().X, 0, "Is register X properly initialised");
     CHECK_EQUAL(core.registers().Y, 0, "Is register Y properly initialised");
     CHECK_EQUAL(core.registers().Z, 0, "Is register Z properly initialised");
@@ -52,6 +51,9 @@ TEST {
     Instruction i[] = {
         {OP_SET, 0x00, 0x20}, // SET A, 0xffff
         {OP_SET, 0x09, 0x20}, // SET [B], 0xffff
+        {OP_SET, 0x02, 0x00}, // SET C, A
+        {OP_SET, 0x03, 0x0c}, // SET X, [Y]
+        {OP_SET, 0x00, 0x3f}, // SET A, 30
     };
     core.setInstructions(i, ARRAY_SIZE(i));
     
@@ -62,6 +64,16 @@ TEST {
     core.doCycle();
     CHECK_EQUAL(core.memory(0), 0xffff, "Is memory register-addressed correctly");
     CHECK_EQUAL(core.registers().PC, 2, "Is program counter increasing 2");
+    
+    core.doCycle();
+    CHECK_EQUAL(core.registers().C, 0xffff, "Can assign register to register");
+    CHECK_EQUAL(core.registers().PC, 3, "Is program counter increasing 3");
+    
+    core.doCycle();
+    CHECK_EQUAL(core.registers().X, 0xffff, "Can assing registers from memory");
+    
+    core.doCycle();
+    CHECK_EQUAL(core.registers().A, 30, "Can assign register with different value");
 }
 
 TESTS_END

@@ -13,7 +13,7 @@
 #include <cstdint>
 
 struct Registers {
-    uint16_t A, B, C, D, X, Y, Z, I, J;
+    uint16_t A, B, C, X, Y, Z, I, J;
     uint16_t PC;
     uint16_t SP;
     uint16_t EX;
