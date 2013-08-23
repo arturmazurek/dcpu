@@ -11,11 +11,14 @@
 
 #include "Core.h"
 #include "Opcodes.h"
+#include "tests.h"
 
 using namespace std;
 
 int main(int argc, const char * argv[])
 {
+    runTests();
+    
     Core c;
     c.resetState();
     
