@@ -13,7 +13,8 @@
 #include "TestsHolder.h"
 
 static void runTests() {
-    prepareCoreTests();
+    ADD_TESTS(CoreTests);
+    
     TestsHolder::instance().runTests();
 }
 

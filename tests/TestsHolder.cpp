@@ -8,6 +8,8 @@
 
 #include "TestsHolder.h"
 
+#include <iostream>
+
 #include "Core.h"
 
 TestsHolder& TestsHolder::instance() {
@@ -16,13 +18,24 @@ TestsHolder& TestsHolder::instance() {
 }
 
 void TestsHolder::runTests() {
+    int successful = 0;
+    int failed = 0;
+    
     for(auto& test : m_tests) {
         Core c;
         c.resetState();
         
-        bool result = true;
-        test(c, result);
+        bool s = true;
+        test(c, s);
+        
+        if(s) {
+            ++successful;
+        } else {
+            ++failed;
+        }
     }
+    
+    std::cout << "Run " << (successful + failed) << " tests. " << successful << " passed." << std::endl;
 }
 
 void TestsHolder::addTest(TestFunction t) {

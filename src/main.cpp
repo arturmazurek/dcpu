@@ -18,6 +18,7 @@ using namespace std;
 int main(int argc, const char * argv[])
 {
     runTests();
+    cout << endl;
     
     Core c;
     c.resetState();

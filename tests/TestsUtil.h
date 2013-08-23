@@ -11,6 +11,19 @@
 
 #include "TestsHolder.h"
 
+#define ADD_TESTS(name) prepare##name()
+
+#define TESTS_START(name) void prepare##name() {\
+TestsHolder::TestFunction tests[] = {
+
+#define TESTS_END };\
+for(int i = 0; i < ARRAY_SIZE(tests); ++i) {\
+TestsHolder::instance().addTest(tests[i]);\
+}\
+}
+
+#define ARRAY_SIZE(x) (sizeof(x)/sizeof(*x))
+
 struct TestAdder {
     TestsHolder::TestFunction f;
     
@@ -20,10 +33,8 @@ struct TestAdder {
     }
 };
 
-#define D_TEST(l) \
-TestAdder t##l = (TestsHolder::TestFunction)[](Core& core, bool& result)
-
-#define TEST D_TEST(__LINE__)
+#define TEST \
+    (TestsHolder::TestFunction)[](Core& core, bool& result)
 
 #define CHECK_TRUE(x, msg) \
 if(!(x)) {\

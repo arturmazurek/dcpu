@@ -28,6 +28,10 @@ void Core::resetState() {
     memset(&m_current, 0, sizeof(Instruction));
 }
 
+const Registers& Core::registers() const {
+    return m_registers;
+}
+
 void Core::setMemory(uint16_t* m, unsigned size, unsigned startingAt) {
     assert(size + startingAt < MEMORY_SIZE);
     

@@ -29,6 +29,8 @@ public:
     void printRegisters() const;
     void printMemory(uint16_t start, uint16_t end) const;
     
+    const Registers& registers() const;
+    
 private:
     bool interruptsEnabled() const;
     bool handleInterrupt();
