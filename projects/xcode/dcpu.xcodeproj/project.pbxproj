@@ -30,6 +30,7 @@
 		7587BDB017C79A3600E0D416 /* TestsHolder.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TestsHolder.h; sourceTree = "<group>"; };
 		7587BDB417C79D4000E0D416 /* TestsHolder.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TestsHolder.cpp; sourceTree = "<group>"; };
 		7587BDB817C7A14600E0D416 /* CoreTests.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CoreTests.h; sourceTree = "<group>"; };
+		7587BDB917C7BA1100E0D416 /* TestsUtil.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TestsUtil.h; sourceTree = "<group>"; };
 		75ABD72217C5253E00BED3AB /* Instruction.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Instruction.cpp; sourceTree = "<group>"; };
 		75C7E37D17C3CA00001247DA /* dcpu */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = dcpu; sourceTree = BUILT_PRODUCTS_DIR; };
 		75C7E38A17C3CA72001247DA /* main.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
@@ -58,6 +59,7 @@
 				7587BDB017C79A3600E0D416 /* TestsHolder.h */,
 				7587BDB417C79D4000E0D416 /* TestsHolder.cpp */,
 				7587BDB817C7A14600E0D416 /* CoreTests.h */,
+				7587BDB917C7BA1100E0D416 /* TestsUtil.h */,
 			);
 			name = test;
 			path = ../../tests;

@@ -20,10 +20,11 @@ void TestsHolder::runTests() {
         Core c;
         c.resetState();
         
-        test(c);
+        bool result = true;
+        test(c, result);
     }
 }
 
-void TestsHolder::addTest(std::function<bool(Core&)> t) {
+void TestsHolder::addTest(TestFunction t) {
     m_tests.push_back(t);
 }

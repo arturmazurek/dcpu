@@ -16,10 +16,12 @@ class Core;
 
 class TestsHolder {
 public:
+    typedef std::function<void(Core&, bool&)> TestFunction;
+    
     static TestsHolder& instance();
     
     void runTests();
-    void addTest(std::function<bool(Core&)> t);
+    void addTest(TestFunction t);
     
 private:
     TestsHolder() {}
@@ -27,7 +29,7 @@ private:
     TestsHolder& operator=(const TestsHolder&);
     
 private:
-    std::list<std::function<bool(Core&)>> m_tests;
+    std::list<TestFunction> m_tests;
 };
 
 #endif
