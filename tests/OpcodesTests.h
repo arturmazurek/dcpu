@@ -180,6 +180,31 @@ TEST {
     core.doCycle();
     CHECK_EQUAL(core.registers().A, static_cast<uint16_t>(0xfffe + 35), "Does adding overflow correctly");
     CHECK_EQUAL(core.registers().EX, 1, "Is EX set correctly after overflow");
+},
+
+TEST {
+    meta.name = "OP_SUB";
+    
+    Instruction i[] = {
+        {OP_SET, 0x1d, 0x20}, // SET EX, 0xffff
+        {OP_SET, 0x00, 0x1f}, // SET A, 0x001f
+        { 0x001f },
+        {OP_SUB, 0x00, 0x1f}, // SUB A, 0x0f
+        { 0x000f },
+        {OP_SUB, 0x00, 0x1f}, // SUB A, 0x20
+        { 0x0020 }
+    };
+    core.setInstructions(i, ARRAY_SIZE(i));
+    
+    core.doCycle(3);
+    CHECK_EQUAL(core.registers().A, 0x10, "Can subtract stuff");
+    CHECK_EQUAL(core.registers().EX, 0, "Is EX set correctly when there's no overflow");
+    
+    core.doCycle(1);
+    uint16_t temp = 0x10;
+    temp -= 0x20;
+    CHECK_EQUAL(core.registers().A, temp, "Can subtract stuff with overflow");
+    CHECK_EQUAL(core.registers().EX, 0xffff, "Is EX set correctly when there's an overflow");
 }
 
 TESTS_END

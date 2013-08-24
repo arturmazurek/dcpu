@@ -223,6 +223,21 @@ void Core::executeNormal() {
             break;
         }
             
+        case OP_SUB: {
+            uint16_t source = *m_decoded.source;
+            uint16_t target = *m_decoded.target;
+            
+            if(target < source) {
+                m_registers.EX = 0xffff;
+            } else {
+                m_registers.EX = 0;
+            }
+            
+            *m_decoded.target = target - source;
+            
+            break;
+        }
+            
         default:
             std::cout << "Unhandled opcode: " << std::hex << std::showbase << m_decoded.opcode << " from: " << m_current << std::endl;
             break;
