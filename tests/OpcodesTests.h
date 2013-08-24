@@ -50,7 +50,7 @@ TEST {
     meta.name = "OP_SET & [register + next word]";
     
     Instruction i[] = {
-        {OP_SET, 0x00, 0x11}, // SET A, [B + 2]
+        {OP_SET, 0x00, 0x11}, // SET A, [B + 4]
         {0x0004},             
         {OP_SET, 0x10, 0x20}, // SET [A + 5], 0xffff
         {0x0005},             
