@@ -41,7 +41,7 @@ TEST {
 },
 
 TEST {
-    meta.name = "Registers zero-initialisation";
+    meta.name = "Registers retrieval";
     
     core.registers().A = 0;
     core.registers().B = 1;
@@ -68,39 +68,6 @@ TEST {
     for(uint16_t i = 0; i != 0xffff; ++i) {
         REQUIRE_EQUAL(core.memory(i), 0, "Is memory 0 initialised");
     }
-},
-
-TEST {
-    meta.name = "OP_SET, PC & parameters 1";
-    
-    Instruction i[] = {
-        {OP_SET, 0x00, 0x20}, // SET A, 0xffff
-        {OP_SET, 0x09, 0x20}, // SET [B], 0xffff
-        {OP_SET, 0x02, 0x00}, // SET C, A
-        {OP_SET, 0x03, 0x0c}, // SET X, [Y]
-        {OP_SET, 0x00, 0x3f}, // SET A, 30
-    };
-    core.setInstructions(i, ARRAY_SIZE(i));
-    
-    core.doCycle();
-    CHECK_EQUAL(core.registers().A, 0xffff, "Is A set properly");
-    CHECK_EQUAL(core.registers().PC, 1, "Is program counter increasing 1");
-    
-    core.doCycle();
-    CHECK_EQUAL(core.memory(0), 0xffff, "Is memory register-addressed correctly");
-    CHECK_EQUAL(core.registers().PC, 2, "Is program counter increasing 2");
-    
-    core.doCycle();
-    CHECK_EQUAL(core.registers().C, 0xffff, "Can assign register to register");
-    CHECK_EQUAL(core.registers().PC, 3, "Is program counter increasing 3");
-    
-    core.doCycle();
-    CHECK_EQUAL(core.registers().X, 0xffff, "Can assing registers from memory");
-    CHECK_EQUAL(core.registers().PC, 4, "Is program counter increasing 3");
-    
-    core.doCycle();
-    CHECK_EQUAL(core.registers().A, 30, "Can assign register with different value");
-    CHECK_EQUAL(core.registers().PC, 5, "Is program counter increasing 3");
 }
 
 TESTS_END
