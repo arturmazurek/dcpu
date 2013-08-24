@@ -23,7 +23,7 @@ int main(int argc, const char * argv[])
     Core c;
     c.resetState();
     
-    c.printRegisters();
+//    c.printRegisters();
     
     Instruction m[] = {
         {OP_SET, 0x01, 0x22},
@@ -35,11 +35,11 @@ int main(int argc, const char * argv[])
     for(int i = 0; i < (sizeof(m) / sizeof(*m)); ++i) {
         c.doCycle();
         cout << endl;
-        c.printRegisters();
+//        c.printRegisters();
     }
     
     cout << endl;
-    c.printMemory(0, 10);
+//    c.printMemory(0, 10);
     
     return 0;
 }

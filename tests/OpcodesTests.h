@@ -50,14 +50,21 @@ TEST {
     meta.name = "OP_SET & [register + next word]";
     
     Instruction i[] = {
-        {OP_SET, 0x00, 0x11},
-        {0x0002},
-        {0x1010}
+        {OP_SET, 0x00, 0x11}, // SET A, [B + next word]
+        {0x0004},             // 0x2
+        {OP_SET, 0x10, 0x20}, // SET [A + next word], 0xffff
+        {0x0005},             // 0x5
+        {0x1010},             // 0x1010
     };
     
     core.setInstructions(i, ARRAY_SIZE(i));
     core.doCycle();
     CHECK_EQUAL(core.registers().A, 0x1010, "Can use [register + next word]");
+    CHECK_EQUAL(core.registers().PC, 2, "PC should skip data");
+    
+    core.doCycle();
+    CHECK_EQUAL(core.memory(0x1015), 0xffff, "Can address memory through [register + next word]");
+    CHECK_EQUAL(core.registers().PC, 4, "PC should skip data");
 }
 
 TESTS_END

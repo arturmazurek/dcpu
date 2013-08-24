@@ -145,7 +145,7 @@ uint16_t* Core::checkOperand(uint16_t& operand, bool inA) {
     } else if(operand <= 0x17) {
         // [register + next word]
         uint16_t nextWord = m_memory[m_registers.PC++];
-        return &m_memory[nextWord + m_registers.reg(operand - 0x16)];
+        return &m_memory[nextWord + m_registers.reg(operand - 0x10)];
     } else if(operand == 0x18) {
         // (PUSH / [--SP]) if in b, or (POP / [SP++]) if in a
         if(inA) {
@@ -205,7 +205,7 @@ void Core::executeNormal() {
             break;
             
         default:
-            std::cout << "Unhandled opcode: " << std::hex << m_decoded.opcode << std::endl;
+            std::cout << "Unhandled opcode: " << std::hex << std::showbase << m_decoded.opcode << " from: " << m_current << std::endl;
             break;
     }
 }

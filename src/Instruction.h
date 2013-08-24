@@ -11,6 +11,9 @@
 
 #include <cstdint>
 
+#include <bitset>
+#include <ostream>
+
 #include "Opcodes.h"
 
 struct Instruction final {
@@ -21,6 +24,11 @@ struct Instruction final {
     Instruction(Opcode op, uint8_t a);
     Instruction();
 };
+
+static inline std::ostream& operator<<(std::ostream& os, const Instruction& instr) {
+    os << std::bitset<8>(instr.raw[0]) << std::bitset<8>(instr.raw[1]);
+    return os;
+}
 
 static inline uint8_t element3(const Instruction& instr) {
     return instr.raw[1] & 0b00011111;
