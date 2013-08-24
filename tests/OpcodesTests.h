@@ -205,6 +205,36 @@ TEST {
     temp -= 0x20;
     CHECK_EQUAL(core.registers().A, temp, "Can subtract stuff with overflow");
     CHECK_EQUAL(core.registers().EX, 0xffff, "Is EX set correctly when there's an overflow");
+},
+
+TEST {
+    meta.name = "OP_MUL";
+    
+    Instruction i[] = {
+        {OP_SET, 0x1d, 0x20}, // SET EX, 0xffff
+        {OP_SET, 0x00, 0x1f}, // SET A, 0x20
+        { 0x0020 },
+        {OP_MUL, 0x00, 0x1f}, // MUL A, 0x20
+        { 0x0020 },
+        {OP_SET, 0x1e, 0x20}, // SET [0x8000], 0xffff
+        { 0x8000 },
+        {OP_MUL, 0x1e, 0x1f}, // MUL [0x8000], 0xffff
+        { 0xffff },
+        { 0x8000 }
+    };
+    core.setInstructions(i, ARRAY_SIZE(i));
+    
+    core.doCycle(3);
+    CHECK_EQUAL(core.registers().A, 0x20 * 0x20, "Is multiplying correct");
+    CHECK_EQUAL(core.registers().EX, 0, "Is EX set correctly after multiplying");
+    
+    core.doCycle();
+    CHECK_EQUAL(core.memory(0x8000), 0xffff, "Is memory set correctly before multiplying");
+    
+    core.doCycle();
+    uint32_t temp = 0xffff * 0xffff;
+    CHECK_EQUAL(core.memory(0x8000), temp & 0xffff, "Is multiplying working correctly with big numbers");
+    CHECK_EQUAL(core.registers().EX, temp >> 16, "Is EX set correctly after multiply overflow");
 }
 
 TESTS_END

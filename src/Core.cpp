@@ -238,6 +238,16 @@ void Core::executeNormal() {
             break;
         }
             
+        case OP_MUL: {
+            uint32_t temp = *m_decoded.target;
+            temp *= *m_decoded.source;
+            
+            *m_decoded.target = temp;
+            m_registers.EX = temp >> 16;
+            
+            break;
+        }
+            
         default:
             std::cout << "Unhandled opcode: " << std::hex << std::showbase << m_decoded.opcode << " from: " << m_current << std::endl;
             break;
