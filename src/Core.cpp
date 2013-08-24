@@ -21,10 +21,7 @@ Core::Core() : m_decoded{0} {
 
 void Core::resetState() {
     m_memory.fill(0);
-    
     memset(&m_registers, 0, sizeof(Registers));
-    m_registers.SP = STACK_START;
-    
     memset(&m_current, 0, sizeof(Instruction));
 }
 
@@ -50,21 +47,29 @@ void Core::setInstructions(Instruction* m, unsigned size, unsigned startingAt) {
     setMemory(reinterpret_cast<uint16_t*>(m), size, startingAt);
 }
 
-void Core::doCycle() {
-    if(m_decoded.costLeft > 1) {
-        --m_decoded.costLeft;
+void Core::doCycle(unsigned cycles) {
+    if(cycles == 0) {
         return;
     }
     
-    if(interruptsEnabled()) {
-        if(handleInterrupt()) {
+    while(cycles != 0) {
+        if(m_decoded.costLeft > 1) {
+            --m_decoded.costLeft;
             return;
         }
+        
+        if(interruptsEnabled()) {
+            if(handleInterrupt()) {
+                return;
+            }
+        }
+        
+        fetch();
+        decode();
+        execute();
+        
+        --cycles;
     }
-    
-    fetch();
-    decode();
-    execute();
 }
 
 void Core::printRegisters() const {

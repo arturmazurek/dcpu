@@ -43,7 +43,7 @@ TEST {
     REQUIRE_EQUAL(core.registers().J, 0, "Is register J properly initialised");
     
     REQUIRE_EQUAL(core.registers().PC, 0, "Is register PC properly initialised");
-    REQUIRE_EQUAL(core.registers().SP, 0xffff, "Is register SP properly initialised");
+    REQUIRE_EQUAL(core.registers().SP, 0, "Is register SP properly initialised");
     REQUIRE_EQUAL(core.registers().EX, 0, "Is register EX properly initialised");
     REQUIRE_EQUAL(core.registers().IA, 0, "Is register IA properly initialised");
 },

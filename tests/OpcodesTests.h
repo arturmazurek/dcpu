@@ -50,10 +50,10 @@ TEST {
     meta.name = "OP_SET & [register + next word]";
     
     Instruction i[] = {
-        {OP_SET, 0x00, 0x11}, // SET A, [B + next word]
-        {0x0004},             // 0x2
-        {OP_SET, 0x10, 0x20}, // SET [A + next word], 0xffff
-        {0x0005},             // 0x5
+        {OP_SET, 0x00, 0x11}, // SET A, [B + 2]
+        {0x0004},             
+        {OP_SET, 0x10, 0x20}, // SET [A + 5], 0xffff
+        {0x0005},             
         {0x1010},             // 0x1010
     };
     
@@ -65,6 +65,80 @@ TEST {
     core.doCycle();
     CHECK_EQUAL(core.memory(0x1015), 0xffff, "Can address memory through [register + next word]");
     CHECK_EQUAL(core.registers().PC, 4, "PC should skip data");
+},
+
+TEST {
+    meta.name = "PUSH & POP";
+    
+    Instruction i[] = {
+        { OP_SET, 0x18, 0x22 }, // PUSH 1
+        { OP_SET, 0x00, 0x18 }, // POP A
+        { OP_SET, 0x18, 0x23 }, // PUSH 2
+        { OP_SET, 0x18, 0x24 }, // PUSH 3
+        { OP_SET, 0x00, 0x18 }, // POP A
+        { OP_SET, 0x00, 0x18 }  // POP A
+    };
+    core.setInstructions(i, ARRAY_SIZE(i));
+    
+    core.doCycle();
+    CHECK_EQUAL(core.registers().SP, 0xffff, "Is stack pointer decreasing");
+    CHECK_EQUAL(core.memory(0xffff), 1, "Are values pushed correctly");
+    
+    core.doCycle();
+    CHECK_EQUAL(core.registers().SP, 0, "Is stack pointer increasing");
+    CHECK_EQUAL(core.registers().A, 1, "Is value retrieved from stack");
+    
+    core.doCycle(3);
+    CHECK_EQUAL(core.registers().A, 3, "Are multiple values pushed/popped correctly");
+    
+    core.doCycle();
+    CHECK_EQUAL(core.registers().A, 2, "Are multiple values pushed/popped correctly");
+},
+
+TEST {
+    meta.name = "PEEK & PICK";
+    
+    Instruction i[] = {
+        { OP_SET, 0x18, 0x23 }, // PUSH 2
+        { OP_SET, 0x00, 0x19 }, // SET A, [SP]
+        { OP_SET, 0x18, 0x24 }, // PUSH 3
+        { OP_SET, 0x18, 0x25 }, // PUSH 4
+        { OP_SET, 0x18, 0x26 }, // PUSH 5
+        { OP_SET, 0x18, 0x27 }, // PUSH 6
+        { OP_SET, 0x18, 0x28 }, // PUSH 7
+        { OP_SET, 0x00, 0x1a }, // SET A, [SP + 2]
+        { 0x0002 },
+        { OP_SET, 0x1a, 0x2a }, // SET [SP + 2], 9
+        { 0x0002 }
+    };
+    core.setInstructions(i, ARRAY_SIZE(i));
+    
+    core.doCycle(2);
+    CHECK_EQUAL(core.registers().A, 2, "Can you PEEK correctly?");
+    
+    core.doCycle(6);
+    CHECK_EQUAL(core.registers().A, 5, "Can you PICK to register correctly?");
+    
+    core.doCycle();
+    CHECK_EQUAL(core.memory(0xffff - 3), 9, "Can you PICK back to stack correctly?");
+},
+
+TEST {
+    meta.name = "Taking next values";
+    
+    Instruction i[] = {
+        { OP_SET, 0x00, 0x1f }, // SET A, 0xfafa
+        { 0xfafa },
+        { OP_SET, 0x1e, 0x1f }, // SET [0x0010], 0xabba
+        { 0xabba },
+        { 0x0010 }
+    };
+    core.setInstructions(i, ARRAY_SIZE(i));
+    
+    core.doCycle(2);
+    
+    CHECK_EQUAL(core.registers().A, 0xfafa, "Can set literal values to registers");
+    CHECK_EQUAL(core.memory(0x0010), 0xabba, "Can set literal values to memory");
 }
 
 TESTS_END
