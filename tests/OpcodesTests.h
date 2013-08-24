@@ -261,7 +261,9 @@ TEST {
         { OP_SET, 0x00, 0x1f }, // SET A, 100
         { 100 },
         { OP_DIV, 0x00, 0x2b }, // DIV A, 10
-        { OP_DIV, 0x01, 0x02 }  // DIV B, C
+        { OP_DIV, 0x01, 0x02 }, // DIV B, C
+        { OP_SET, 0x00, 0x22 }, // SET A, 1
+        { OP_DIV, 0x00, 0x23 }, // DIV A, 2
     };
     core.setInstructions(i, ARRAY_SIZE(i));
     
@@ -272,6 +274,10 @@ TEST {
     core.doCycle();
     CHECK_EQUAL(core.registers().C, 0, "Is division by 0 handled correctly");
     CHECK_EQUAL(core.registers().EX, 0, "Is division by 0 handled correctly");
+    
+    core.doCycle(2);
+    CHECK_EQUAL(core.registers().A, 0, "Is division 1/2 handled correctly");
+    CHECK_EQUAL(core.registers().EX, 0x10000/2, "Is division 1/2 handled correctly");
 }
 
 TESTS_END
