@@ -26,11 +26,13 @@ void TestsHolder::runTests() {
         c.resetState();
         
         bool s = true;
-        test(c, s);
+        TestMeta meta;
+        test(c, s, meta);
         
         if(s) {
             ++successful;
         } else {
+            std::cout << "Test \"" << (meta.name.size() ? meta.name : "<no-name>") << "\" failed." << std::endl;
             ++failed;
         }
     }

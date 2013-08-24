@@ -14,6 +14,8 @@
 TESTS_START(CoreTests)
 
 TEST {
+    meta.name = "Basics";
+    
     CHECK_TRUE(true, "Are tests working");
     CHECK_EQUAL(1, 1, "Basic checks");
 },
@@ -21,6 +23,8 @@ TEST {
 // initialisations
 
 TEST {
+    meta.name = "Registers zero-initialisation";
+    
     CHECK_EQUAL(core.registers().A, 0, "Is register A properly initialised");
     CHECK_EQUAL(core.registers().B, 0, "Is register B properly initialised");
     CHECK_EQUAL(core.registers().C, 0, "Is register C properly initialised");
@@ -37,6 +41,8 @@ TEST {
 },
 
 TEST {
+    meta.name = "Memory zero-initailisation";
+    
     for(uint16_t i = 0; i != 0xffff; ++i) {
         bool zero = core.memory(i) == 0;
         CHECK_TRUE(zero, "Is memory 0 initialised");
@@ -46,8 +52,10 @@ TEST {
     }
 },
 
-// basic opcodes
+// SET 1
 TEST {
+    meta.name = "OP_SET & parameters 1";
+    
     Instruction i[] = {
         {OP_SET, 0x00, 0x20}, // SET A, 0xffff
         {OP_SET, 0x09, 0x20}, // SET [B], 0xffff
@@ -71,9 +79,11 @@ TEST {
     
     core.doCycle();
     CHECK_EQUAL(core.registers().X, 0xffff, "Can assing registers from memory");
+    CHECK_EQUAL(core.registers().PC, 4, "Is program counter increasing 3");
     
     core.doCycle();
     CHECK_EQUAL(core.registers().A, 30, "Can assign register with different value");
+    CHECK_EQUAL(core.registers().PC, 5, "Is program counter increasing 3");
 }
 
 TESTS_END

@@ -11,12 +11,17 @@
 
 #include <functional>
 #include <list>
+#include <string>
 
 class Core;
 
 class TestsHolder {
 public:
-    typedef std::function<void(Core&, bool&)> TestFunction;
+    struct TestMeta {
+        std::string name;
+    };
+    
+    typedef std::function<void(Core&, bool&, TestMeta&)> TestFunction;
     
     static TestsHolder& instance();
     
