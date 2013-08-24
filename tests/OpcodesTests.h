@@ -158,6 +158,28 @@ TEST {
     CHECK_EQUAL(core.registers().SP, 30, "Can set stack pointer");
     CHECK_EQUAL(core.registers().PC, 6, "Can set program counter");
     CHECK_EQUAL(core.registers().EX, 0xffff, "Can set EX");
+},
+
+TEST {
+    meta.name = "OP_ADD";
+    
+    Instruction i[] = {
+        { OP_SET, 0x1d, 0x20 }, // SET EX, 0xffff
+        { OP_SET, 0x00, 0x26 }, // SET A, 5
+        { OP_ADD, 0x00, 0x3f }, // ADD A, 30
+        { OP_ADD, 0x00, 0x1f }, // ADD A, 0xfffe
+        { 0xfffe }
+    };
+    
+    core.setInstructions(i, ARRAY_SIZE(i));
+    
+    core.doCycle(3);
+    CHECK_EQUAL(core.registers().A, 35, "Is adding correct");
+    CHECK_EQUAL(core.registers().EX, 0, "Is EX set correctly when no overflow");
+    
+    core.doCycle();
+    CHECK_EQUAL(core.registers().A, static_cast<uint16_t>(0xfffe + 35), "Does adding overflow correctly");
+    CHECK_EQUAL(core.registers().EX, 1, "Is EX set correctly after overflow");
 }
 
 TESTS_END
