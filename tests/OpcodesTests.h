@@ -139,6 +139,25 @@ TEST {
     
     CHECK_EQUAL(core.registers().A, 0xfafa, "Can set literal values to registers");
     CHECK_EQUAL(core.memory(0x0010), 0xabba, "Can set literal values to memory");
+},
+
+TEST {
+    meta.name = "SP, PC, EX as values";
+    
+    Instruction i[] = {
+        { OP_SET, 0x1b, 0x3f }, // SET SP, 30
+        { OP_SET, 0x1c, 0x26 }, // SET PC, 5
+        { 0xabba },
+        { 0xabba },
+        { 0xabba },
+        { OP_SET, 0x1d, 0x20 }, // SET EX, 0xffff
+    };
+    core.setInstructions(i, ARRAY_SIZE(i));
+    
+    core.doCycle(3);
+    CHECK_EQUAL(core.registers().SP, 30, "Can set stack pointer");
+    CHECK_EQUAL(core.registers().PC, 6, "Can set program counter");
+    CHECK_EQUAL(core.registers().EX, 0xffff, "Can set EX");
 }
 
 TESTS_END
