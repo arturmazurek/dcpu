@@ -9,11 +9,13 @@
 #ifndef dcpu_tests_h
 #define dcpu_tests_h
 
-#include "CoreTests.h"
+#include "BaseTests.h"
+#include "OpcodesTests.h"
 #include "TestsHolder.h"
 
 static void runTests() {
-    ADD_TESTS(CoreTests);
+    ADD_TESTS(BaseTests);
+    ADD_TESTS(OpcodesTests);
     
     TestsHolder::instance().runTests();
 }

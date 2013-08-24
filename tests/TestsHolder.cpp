@@ -27,7 +27,13 @@ void TestsHolder::runTests() {
         
         bool s = true;
         TestMeta meta;
-        test(c, s, meta);
+        try {
+            test(c, s, meta);
+        } catch (TestException&) {
+            std::cout << "Test \"" << (meta.name.size() ? meta.name : "<no-name>") << "\" failed and stopped testing." << std::endl;
+            ++failed;
+            break;
+        }
         
         if(s) {
             ++successful;
@@ -37,7 +43,7 @@ void TestsHolder::runTests() {
         }
     }
     
-    std::cout << "Run " << (successful + failed) << " tests. " << successful << " passed." << std::endl;
+    std::cout << "Run " << (successful + failed) << " tests of " << m_tests.size() << ". " << successful << " passed." << std::endl;
 }
 
 void TestsHolder::addTest(TestFunction t) {

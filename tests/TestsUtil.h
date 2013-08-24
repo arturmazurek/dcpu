@@ -36,18 +36,31 @@ struct TestAdder {
 #define TEST \
     (TestsHolder::TestFunction)[](Core& core, bool& result, TestsHolder::TestMeta& meta)
 
-#define CHECK_EQUAL(a, b, msg) {\
+#define DO_CHECK_EQUAL(a, b, msg, require) {\
     auto a_ = (a);\
     auto b_ = (b);\
     if(a_ != b_) {\
         std::cout << "Check failed: " << msg << std::endl << "\t" << #a << " == " << a_ << " , " << #b << " == " << b_ << std::endl;\
         result = false;\
+        if(require) { \
+            throw TestsHolder::TestException(msg + std::string("failed"));\
+        }\
     }}
 
-#define CHECK_TRUE(x, msg) \
+#define CHECK_EQUAL(a, b, msg) DO_CHECK_EQUAL(a, b, msg, false)
+
+#define REQUIRE_EQUAL(a, b, msg) DO_CHECK_EQUAL(a, b, msg, true)
+
+#define DO_CHECK_TRUE(x, msg, require) \
 if(!(x)) {\
 std::cout << "Check failed: " << msg << std::endl;\
 result = false;\
-}
+if(require) { \
+    throw TestsHolder::TestException(msg + std::string("failed"));\
+}}
+
+#define CHECK_TRUE(x, msg) DO_CHECK_TRUE(x, msg, false)
+
+#define REQUIRE_TRUE(x, msg) DO_CHECK_TRUE(x, msg, true)
 
 #endif

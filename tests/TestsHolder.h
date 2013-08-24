@@ -12,6 +12,7 @@
 #include <functional>
 #include <list>
 #include <string>
+#include <stdexcept>
 
 class Core;
 
@@ -19,6 +20,11 @@ class TestsHolder {
 public:
     struct TestMeta {
         std::string name;
+    };
+    
+    class TestException : std::runtime_error {
+    public:
+        TestException(const std::string& why) : std::runtime_error(why) {}
     };
     
     typedef std::function<void(Core&, bool&, TestMeta&)> TestFunction;

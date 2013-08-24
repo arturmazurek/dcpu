@@ -26,10 +26,11 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		7500250D17C8D5DD008CC090 /* OpcodesTests.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OpcodesTests.h; sourceTree = "<group>"; };
 		7587BDAE17C798E700E0D416 /* tests.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = tests.h; sourceTree = "<group>"; };
 		7587BDB017C79A3600E0D416 /* TestsHolder.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TestsHolder.h; sourceTree = "<group>"; };
 		7587BDB417C79D4000E0D416 /* TestsHolder.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TestsHolder.cpp; sourceTree = "<group>"; };
-		7587BDB817C7A14600E0D416 /* CoreTests.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CoreTests.h; sourceTree = "<group>"; };
+		7587BDB817C7A14600E0D416 /* BaseTests.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BaseTests.h; sourceTree = "<group>"; };
 		7587BDB917C7BA1100E0D416 /* TestsUtil.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TestsUtil.h; sourceTree = "<group>"; };
 		75ABD72217C5253E00BED3AB /* Instruction.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Instruction.cpp; sourceTree = "<group>"; };
 		75C7E37D17C3CA00001247DA /* dcpu */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = dcpu; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -58,8 +59,9 @@
 				7587BDAE17C798E700E0D416 /* tests.h */,
 				7587BDB017C79A3600E0D416 /* TestsHolder.h */,
 				7587BDB417C79D4000E0D416 /* TestsHolder.cpp */,
-				7587BDB817C7A14600E0D416 /* CoreTests.h */,
+				7587BDB817C7A14600E0D416 /* BaseTests.h */,
 				7587BDB917C7BA1100E0D416 /* TestsUtil.h */,
+				7500250D17C8D5DD008CC090 /* OpcodesTests.h */,
 			);
 			name = test;
 			path = ../../tests;

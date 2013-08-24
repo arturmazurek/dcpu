@@ -29,6 +29,10 @@ void Core::resetState() {
 }
 
 const Registers& Core::registers() const {
+    return const_cast<Core*>(this)->registers();
+}
+
+Registers& Core::registers() {
     return m_registers;
 }
 
