@@ -235,6 +235,43 @@ TEST {
     uint32_t temp = 0xffff * 0xffff;
     CHECK_EQUAL(core.memory(0x8000), temp & 0xffff, "Is multiplying working correctly with big numbers");
     CHECK_EQUAL(core.registers().EX, temp >> 16, "Is EX set correctly after multiply overflow");
+},
+
+TEST {
+    meta.name = "OP_MLI";
+    
+    Instruction i[] = {
+        {OP_SET, 0x1d, 0x22}, // SET EX, 1
+        {OP_SET, 0x00, 0x1f}, // SET A, -10
+        { -10 },
+        {OP_MLI, 0x00, 0x23}, // MLI A, 2
+    };
+    core.setInstructions(i, ARRAY_SIZE(i));
+    
+    core.doCycle(3);
+    CHECK_EQUAL(static_cast<int16_t>(core.registers().A), -20, "Is multiply with sign working correctly");
+    CHECK_EQUAL(static_cast<int16_t>(core.registers().EX), (-20) >> 16, "Is EX filled correctly");
+},
+
+TEST {
+    meta.name = "OP_DIV";
+    
+    Instruction i[] = {
+        { OP_SET, 0x1d, 0x22 }, // SET EX, 1
+        { OP_SET, 0x00, 0x1f }, // SET A, 100
+        { 100 },
+        { OP_DIV, 0x00, 0x2b }, // DIV A, 10
+        { OP_DIV, 0x01, 0x02 }  // DIV B, C
+    };
+    core.setInstructions(i, ARRAY_SIZE(i));
+    
+    core.doCycle(3);
+    CHECK_EQUAL(core.registers().A, 10, "Division works");
+    CHECK_EQUAL(core.registers().EX, 0, "Is EX set correctly after division");
+    
+    core.doCycle();
+    CHECK_EQUAL(core.registers().C, 0, "Is division by 0 handled correctly");
+    CHECK_EQUAL(core.registers().EX, 0, "Is division by 0 handled correctly");
 }
 
 TESTS_END

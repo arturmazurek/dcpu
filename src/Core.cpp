@@ -248,6 +248,31 @@ void Core::executeNormal() {
             break;
         }
             
+        case OP_MLI: {
+            int32_t temp = *m_decoded.target;
+            temp *= *m_decoded.source;
+            
+            *m_decoded.target = static_cast<int16_t>(temp);
+            m_registers.EX = static_cast<int16_t>(temp) >> 16;
+            
+            break;
+        }
+            
+        case OP_DIV: {
+            if(*m_decoded.source == 0) {
+                *m_decoded.target = 0;
+                m_registers.EX = 0;
+                break;
+            }
+            
+            uint32_t temp = *m_decoded.target;
+            
+            *m_decoded.target = temp / *m_decoded.source;
+            m_registers.EX = (temp << 16) / *m_decoded.source;
+            
+            break;
+        }
+            
         default:
             std::cout << "Unhandled opcode: " << std::hex << std::showbase << m_decoded.opcode << " from: " << m_current << std::endl;
             break;

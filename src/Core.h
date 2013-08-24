@@ -17,7 +17,7 @@
 #include "Registers.h"
 
 class Core {
-public:
+public:    
     Core();
     
     void resetState();
