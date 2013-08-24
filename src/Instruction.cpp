@@ -10,8 +10,20 @@
 
 #include <cassert>
 
+#include "Util.h"
+
 Instruction::Instruction() : raw{0, 0} {
 
+}
+
+Instruction::Instruction(uint16_t data) {
+    if(isLittleEndian()) {
+        raw[0] = data;
+        raw[1] = data >> 8;
+    } else {
+        raw[0] = data >> 8;
+        raw[1] = data;
+    }
 }
 
 Instruction::Instruction(Opcode op, uint8_t b, uint8_t a) : Instruction{} {

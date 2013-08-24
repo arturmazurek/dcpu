@@ -44,6 +44,20 @@ TEST {
     core.doCycle();
     CHECK_EQUAL(core.registers().A, 30, "Can assign register with different value");
     CHECK_EQUAL(core.registers().PC, 5, "Is program counter increasing 3");
+},
+
+TEST {
+    meta.name = "OP_SET & [register + next word]";
+    
+    Instruction i[] = {
+        {OP_SET, 0x00, 0x11},
+        {0x0002},
+        {0x1010}
+    };
+    
+    core.setInstructions(i, ARRAY_SIZE(i));
+    core.doCycle();
+    CHECK_EQUAL(core.registers().A, 0x1010, "Can use [register + next word]");
 }
 
 TESTS_END

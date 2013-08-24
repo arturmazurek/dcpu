@@ -16,6 +16,7 @@
 struct Instruction final {
     uint8_t raw[2];
     
+    Instruction(uint16_t data);
     Instruction(Opcode op, uint8_t b, uint8_t a);
     Instruction(Opcode op, uint8_t a);
     Instruction();

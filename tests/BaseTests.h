@@ -20,6 +20,14 @@ TEST {
     REQUIRE_EQUAL(1, 1, "Basic checks");
 },
 
+TEST {
+    meta.name = "Endiannes handling";
+    
+    Instruction i = {0x00ff};
+    REQUIRE_EQUAL(i.raw[0], 0xff, "Is endianness handled correctly");
+    REQUIRE_EQUAL(i.raw[1], 0x00, "Is endianness handled correctly");
+},
+
 // initialisations
 
 TEST {

@@ -27,6 +27,7 @@
 
 /* Begin PBXFileReference section */
 		7500250D17C8D5DD008CC090 /* OpcodesTests.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OpcodesTests.h; sourceTree = "<group>"; };
+		7500250E17C8E1B7008CC090 /* Util.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Util.h; sourceTree = "<group>"; };
 		7587BDAE17C798E700E0D416 /* tests.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = tests.h; sourceTree = "<group>"; };
 		7587BDB017C79A3600E0D416 /* TestsHolder.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TestsHolder.h; sourceTree = "<group>"; };
 		7587BDB417C79D4000E0D416 /* TestsHolder.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TestsHolder.cpp; sourceTree = "<group>"; };
@@ -94,6 +95,7 @@
 				75C7E39017C3D9B9001247DA /* Registers.h */,
 				75C7E39117C3DF74001247DA /* Instruction.h */,
 				75ABD72217C5253E00BED3AB /* Instruction.cpp */,
+				7500250E17C8E1B7008CC090 /* Util.h */,
 			);
 			name = src;
 			path = ../../src;
