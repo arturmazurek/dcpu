@@ -278,6 +278,22 @@ TEST {
     core.doCycle(2);
     CHECK_EQUAL(core.registers().A, 0, "Is division 1/2 handled correctly");
     CHECK_EQUAL(core.registers().EX, 0x10000/2, "Is division 1/2 handled correctly");
+},
+
+TEST {
+    meta.name = "OP_DVI";
+    
+    Instruction i[] = {
+        { OP_SET, 0x00, 0x1f }, // SET A, -248
+        { -248 },
+        { OP_DVI, 0x00, 0x1f }, // DVI A, 16 // == -15.5
+        { 16 }
+    };
+    core.setInstructions(i, ARRAY_SIZE(i));
+    
+    core.doCycle(2);
+    CHECK_EQUAL(static_cast<int16_t>(core.registers().A), -15, "Is pre-decimal part handled correctly");
+    CHECK_EQUAL(core.registers().EX, 0x10000/2, "Is decimal part handled correctly");
 }
 
 TESTS_END

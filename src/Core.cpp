@@ -273,6 +273,21 @@ void Core::executeNormal() {
             break;
         }
             
+        case OP_DVI: {
+            if(*m_decoded.source == 0) {
+                *m_decoded.target = 0;
+                m_registers.EX = 0;
+                break;
+            }
+            
+            int32_t temp = static_cast<int16_t>(*m_decoded.target);
+            
+            *m_decoded.target = temp / static_cast<int32_t>(*m_decoded.source);
+            m_registers.EX = (temp << 16) / static_cast<int32_t>(*m_decoded.source);
+            
+            break;
+        }
+            
         default:
             std::cout << "Unhandled opcode: " << std::hex << std::showbase << m_decoded.opcode << " from: " << m_current << std::endl;
             break;
