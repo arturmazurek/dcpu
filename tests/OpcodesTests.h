@@ -294,6 +294,29 @@ TEST {
     core.doCycle(2);
     CHECK_EQUAL(static_cast<int16_t>(core.registers().A), -15, "Is pre-decimal part handled correctly");
     CHECK_EQUAL(core.registers().EX, 0x10000/2, "Is decimal part handled correctly");
+},
+
+TEST {
+    meta.name = "OP_MOD";
+    
+    Instruction i[] = {
+        { OP_SET, 0x00, 0x1f }, // SET A, 125
+        { 125 },
+        { OP_SET, 0x01, 0x1f }, // SET B, 2048
+        { 2048 },
+        { OP_SET, 0x02, 0x1f }, // SET C, 123
+        { 123 },
+        { OP_MOD, 0x00, 0x1f }, // MOD A, 120
+        { 120 },
+        { OP_MOD, 0x01, 0x23 },    // MOD B, 2
+        { OP_MOD, 0x02, 0x21 }  // MOB C, 0
+    };
+    core.setInstructions(i, ARRAY_SIZE(i));
+    
+    core.doCycle(6);
+    CHECK_EQUAL(core.registers().A, 5, "Is modulo working 1");
+    CHECK_EQUAL(core.registers().B, 0, "Is modulo working 2");
+    CHECK_EQUAL(core.registers().C, 0, "Is modulo by 0 working");
 }
 
 TESTS_END

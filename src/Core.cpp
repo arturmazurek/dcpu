@@ -288,6 +288,16 @@ void Core::executeNormal() {
             break;
         }
             
+        case OP_MOD: {
+            if(*m_decoded.source == 0) {
+                *m_decoded.target = 0;
+                break;
+            }
+            
+            *m_decoded.target %= *m_decoded.source;
+            break;
+        }
+            
         default:
             std::cout << "Unhandled opcode: " << std::hex << std::showbase << m_decoded.opcode << " from: " << m_current << std::endl;
             break;
