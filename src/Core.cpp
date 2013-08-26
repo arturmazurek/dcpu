@@ -219,7 +219,6 @@ void Core::executeNormal() {
             } else {
                 m_registers.EX = 0;
             }
-            
             break;
         }
             
@@ -234,7 +233,6 @@ void Core::executeNormal() {
             }
             
             *m_decoded.target = target - source;
-            
             break;
         }
             
@@ -244,7 +242,6 @@ void Core::executeNormal() {
             
             *m_decoded.target = temp;
             m_registers.EX = temp >> 16;
-            
             break;
         }
             
@@ -254,7 +251,6 @@ void Core::executeNormal() {
             
             *m_decoded.target = static_cast<int16_t>(temp);
             m_registers.EX = static_cast<int16_t>(temp) >> 16;
-            
             break;
         }
             
@@ -268,8 +264,7 @@ void Core::executeNormal() {
             uint32_t temp = *m_decoded.target;
             
             *m_decoded.target = temp / *m_decoded.source;
-            m_registers.EX = (temp << 16) / *m_decoded.source;
-            
+            m_registers.EX = (temp << 16) / *m_decoded.source;     
             break;
         }
             
@@ -284,7 +279,6 @@ void Core::executeNormal() {
             
             *m_decoded.target = temp / static_cast<int32_t>(*m_decoded.source);
             m_registers.EX = (temp << 16) / static_cast<int32_t>(*m_decoded.source);
-            
             break;
         }
             
@@ -307,7 +301,21 @@ void Core::executeNormal() {
             int16_t temp = *m_decoded.target;
             temp %= static_cast<int16_t>(*m_decoded.source);
             *m_decoded.target = temp;
+            break;
+        }
             
+        case OP_AND: {
+            *m_decoded.target &= *m_decoded.source;
+            break;
+        }
+            
+        case OP_BOR: {
+            *m_decoded.target |= *m_decoded.source;
+            break;
+        }
+
+        case OP_XOR: {
+            *m_decoded.target ^= *m_decoded.source;
             break;
         }
             

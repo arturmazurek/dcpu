@@ -336,6 +336,29 @@ TEST {
     core.doCycle(4);
     CHECK_EQUAL(static_cast<int16_t>(core.registers().A), -7, "Is signed modulo working");
     CHECK_EQUAL(core.registers().B, 0, "Is signed modulo by 0 working");
+},
+
+TEST {
+    meta.name = "Logical operations - OR, AND, XOR";
+    
+    Instruction i[] = {
+        { OP_SET, 0x00, 0x1f }, // SET A, 0xaaaa
+        { 0xaaaa },
+        { OP_SET, 0x01, 0x00 }, // SET B, A
+        { OP_SET, 0x02, 0x00 }, // SET C, A
+        { OP_AND, 0x00, 0x1f }, // AND A, 0x00ff
+        { 0x00ff },
+        { OP_BOR, 0x01, 0x1f }, // BOR B, 0x00ff
+        { 0x00ff },
+        { OP_XOR, 0x02, 0x1f }, // XOR C, 0x00ff
+        { 0x00ff }
+    };
+    core.setInstructions(i, ARRAY_SIZE(i));
+    
+    core.doCycle(6);
+    CHECK_EQUAL(core.registers().A, 0x00aa, "Is AND working correctly");
+    CHECK_EQUAL(core.registers().B, 0xaaff, "Is BOR working correctly");
+    CHECK_EQUAL(core.registers().C, 0xaa55, "Is XOR working correctly");
 }
 
 TESTS_END
