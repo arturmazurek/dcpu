@@ -15,6 +15,8 @@
 #include <iomanip>
 #include <iostream>
 
+#include "CostCalculator.h"
+
 Core::Core() : m_decoded{0} {
     
 }
@@ -123,17 +125,18 @@ void Core::fetch() {
 
 void Core::decode() {
     m_decoded.opcode = static_cast<Opcode>(element3(m_current));
-    m_decoded.costLeft = 1;
     
     if(m_decoded.opcode == OP_NONE) {
         // special opcode
         m_decoded.opcode = static_cast<Opcode>(element2(m_current));
         m_decoded.a = element1(m_current);
+        m_decoded.costLeft = CostCalculator::getSpecialCost(m_decoded.opcode, m_decoded.a);
         
         m_decoded.source = checkOperand(m_decoded.a, true);
     } else {
         m_decoded.b = element2(m_current);
         m_decoded.a = element1(m_current);
+        m_decoded.costLeft = CostCalculator::getNormalCost(m_decoded.opcode, m_decoded.b, m_decoded.a);
         
         m_decoded.source = checkOperand(m_decoded.a, true);
         m_decoded.target = checkOperand(m_decoded.b, false);

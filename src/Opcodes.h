@@ -53,4 +53,8 @@ enum Opcode {
     OP_HWI = 0x12  // sends an interrupt to hardware a
 };
 
+constexpr static inline bool isConditional(Opcode op) {
+    return op >= OP_IFB && op <= OP_IFU;
+}
+
 #endif

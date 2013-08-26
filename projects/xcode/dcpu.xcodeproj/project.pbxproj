@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		7500251217CB82FF008CC090 /* CostCalculator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7500251017CB82FF008CC090 /* CostCalculator.cpp */; };
 		7587BDB517C79D4000E0D416 /* TestsHolder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7587BDB417C79D4000E0D416 /* TestsHolder.cpp */; };
 		75ABD72317C5253E00BED3AB /* Instruction.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 75ABD72217C5253E00BED3AB /* Instruction.cpp */; };
 		75C7E38B17C3CA72001247DA /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 75C7E38A17C3CA72001247DA /* main.cpp */; };
@@ -28,6 +29,8 @@
 /* Begin PBXFileReference section */
 		7500250D17C8D5DD008CC090 /* OpcodesTests.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OpcodesTests.h; sourceTree = "<group>"; };
 		7500250E17C8E1B7008CC090 /* Util.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Util.h; sourceTree = "<group>"; };
+		7500251017CB82FF008CC090 /* CostCalculator.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CostCalculator.cpp; sourceTree = "<group>"; };
+		7500251117CB82FF008CC090 /* CostCalculator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CostCalculator.h; sourceTree = "<group>"; };
 		7587BDAE17C798E700E0D416 /* tests.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = tests.h; sourceTree = "<group>"; };
 		7587BDB017C79A3600E0D416 /* TestsHolder.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TestsHolder.h; sourceTree = "<group>"; };
 		7587BDB417C79D4000E0D416 /* TestsHolder.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TestsHolder.cpp; sourceTree = "<group>"; };
@@ -96,6 +99,8 @@
 				75C7E39117C3DF74001247DA /* Instruction.h */,
 				75ABD72217C5253E00BED3AB /* Instruction.cpp */,
 				7500250E17C8E1B7008CC090 /* Util.h */,
+				7500251017CB82FF008CC090 /* CostCalculator.cpp */,
+				7500251117CB82FF008CC090 /* CostCalculator.h */,
 			);
 			name = src;
 			path = ../../src;
@@ -155,6 +160,7 @@
 				75C7E38F17C3D49B001247DA /* Core.cpp in Sources */,
 				75C7E38B17C3CA72001247DA /* main.cpp in Sources */,
 				7587BDB517C79D4000E0D416 /* TestsHolder.cpp in Sources */,
+				7500251217CB82FF008CC090 /* CostCalculator.cpp in Sources */,
 				75ABD72317C5253E00BED3AB /* Instruction.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
