@@ -395,6 +395,74 @@ TEST {
     core.doCycle(3);
     CHECK_EQUAL(core.registers().A, 10, "Is shift left working correctly");
     CHECK_EQUAL(core.registers().EX, 1, "Is shift left working correctly (EX)");
+},
+
+TEST {
+    meta.name = "Conditional IFB";
+    
+    Instruction i[] = {
+        { OP_SET, 0x00, 0x22 }, // SET A, 1
+        { OP_SET, 0x01, 0x24 }, // SET B, 3
+        { OP_IFB, 0x00, 0x01 }, // IFB A, B - should be true
+        { OP_SET, 0x02, 0x20 }  // SET C, 0xffff
+    };
+    core.setInstructions(i, ARRAY_SIZE(i));
+    
+    core.doCycle(5);
+    CHECK_EQUAL(core.registers().C, 0xffff, "Is IFB success working");
+},
+
+TEST {
+    meta.name = "Conditional IFB 2";
+    
+    Instruction i[] = {
+        { OP_SET, 0x00, 0x22 }, // SET A, 1
+        { OP_SET, 0x01, 0x23 }, // SET B, 2
+        { OP_IFB, 0x00, 0x01 }, // IFB A, B - should be false
+        { OP_SET, 0x02, 0x20 }  // SET C, 0xffff
+    };
+    core.setInstructions(i, ARRAY_SIZE(i));
+    
+    core.doCycle(5);
+    CHECK_EQUAL(core.registers().C, 0, "Is IFB failure working");
+},
+
+TEST {
+    meta.name = "Conditionals IFB 3";
+    
+    Instruction i[] = {
+        { OP_SET, 0x00, 0x22 }, // SET A, 1
+        { OP_SET, 0x01, 0x24 }, // SET B, 3
+        { OP_IFB, 0x00, 0x01 }, // IFB A, B - should be true
+        { OP_IFB, 0x00, 0x01 }, // IFB A, B - should be true
+        { OP_IFB, 0x00, 0x01 }, // IFB A, B - should be true
+        { OP_IFB, 0x00, 0x01 }, // IFB A, B - should be true
+        { OP_SET, 0x02, 0x20 }  // SET C, 0xffff
+    };
+    core.setInstructions(i, ARRAY_SIZE(i));
+    
+    core.doCycle(11);
+    CHECK_EQUAL(core.registers().C, 0xffff, "Is IFB multiple successes working");
+},
+
+TEST {
+    meta.name = "Conditionals IFB 4";
+    
+    Instruction i[] = {
+        { OP_SET, 0x00, 0x22 }, // SET A, 1
+        { OP_SET, 0x01, 0x23 }, // SET B, 2
+        { OP_IFB, 0x00, 0x01 }, // IFB A, B - should be false
+        { OP_IFB, 0x00, 0x01 }, // IFB A, B - should be false
+        { OP_IFB, 0x00, 0x01 }, // IFB A, B - should be false
+        { OP_IFB, 0x00, 0x01 }, // IFB A, B - should be false
+        { OP_SET, 0x02, 0x20 }, // SET C, 0xffff
+        { OP_SET, 0x03, 0x20 }, // SET X, 0xffff
+    };
+    core.setInstructions(i, ARRAY_SIZE(i));
+    
+    core.doCycle(9);
+    CHECK_EQUAL(core.registers().C, 0, "Is IFB chaining working");
+    CHECK_EQUAL(core.registers().X, 0xffff, "Is IFB chaining working 2");
 }
 
 TESTS_END

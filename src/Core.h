@@ -64,6 +64,8 @@ private:
         uint16_t* target;
     } m_decoded;
     
+    bool m_skipping;
+    
     Registers m_registers;
 };
 

@@ -17,7 +17,7 @@
 
 #include "CostCalculator.h"
 
-Core::Core() : m_decoded{0} {
+Core::Core() : m_decoded{0}, m_skipping{false} {
     
 }
 
@@ -25,6 +25,7 @@ void Core::resetState() {
     m_memory.fill(0);
     memset(&m_registers, 0, sizeof(Registers));
     memset(&m_current, 0, sizeof(Instruction));
+    m_skipping = false;
 }
 
 const Registers& Core::registers() const {
@@ -57,11 +58,19 @@ void Core::doCycle(unsigned cycles) {
             fetch();
             decode();
             assert(m_decoded.costLeft != 0 && "No instruction can be worth 0");
+            
+            if (m_skipping) {
+                m_decoded.costLeft = 1;
+            }
         }
         
         --m_decoded.costLeft;
         if(m_decoded.costLeft == 0) {
-            execute();
+            if(!m_skipping) {
+                execute();
+            } else if(!isConditional(m_decoded.opcode)) {
+                m_skipping = false;
+            }
         }
         
         --cycles;
@@ -342,6 +351,15 @@ void Core::executeNormal() {
             m_registers.EX = temp;
             
             *m_decoded.target <<= *m_decoded.source;
+            break;
+        }
+            
+        case OP_IFB: {
+            bool success = (*m_decoded.source & *m_decoded.target) != 0;
+            if(!success) {
+                m_skipping = true;
+            }
+            
             break;
         }
             
