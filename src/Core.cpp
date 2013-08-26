@@ -319,6 +319,35 @@ void Core::executeNormal() {
             break;
         }
             
+        case OP_SHR: {
+            uint32_t temp = static_cast<uint32_t>(*m_decoded.target) << 16;
+            temp >>= *m_decoded.source;
+            m_registers.EX = temp;
+            
+            *m_decoded.target >>= *m_decoded.source;
+            break;
+        }
+            
+        case OP_ASR: {
+            int32_t temp = static_cast<int32_t>(*m_decoded.target) << 16;
+            temp >>= *m_decoded.source;
+            m_registers.EX = temp;
+            
+            int16_t tempVal = *m_decoded.target;
+            tempVal >>= *m_decoded.source;
+            *m_decoded.target = tempVal;
+            break;
+        }
+            
+        case OP_SHL: {
+            int32_t temp = static_cast<int32_t>(*m_decoded.target) << *m_decoded.source;
+            temp >>= 16;
+            m_registers.EX = temp;
+            
+            *m_decoded.target <<= *m_decoded.source;
+            break;
+        }
+            
         default:
             std::cout << "Unhandled opcode: " << std::hex << std::showbase << m_decoded.opcode << " from: " << m_current << std::endl;
             break;

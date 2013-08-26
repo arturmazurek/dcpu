@@ -359,6 +359,34 @@ TEST {
     CHECK_EQUAL(core.registers().A, 0x00aa, "Is AND working correctly");
     CHECK_EQUAL(core.registers().B, 0xaaff, "Is BOR working correctly");
     CHECK_EQUAL(core.registers().C, 0xaa55, "Is XOR working correctly");
+},
+
+TEST {
+    meta.name = "Shifting operators - SHR, ASR, SHL";
+    
+    Instruction i[] = {
+        { OP_SET, 0x00, 0x26 }, // SET A, 5
+        { OP_SHR, 0x00, 0x22 }, // SHR A, 1 -> 2
+        { OP_SET, 0x00, 0x1f }, // SET A, -27
+        { -0b11011 },
+        { OP_ASR, 0x00, 0x22 }, // ASR A, 1 -> -14
+        { OP_SET, 0x00, 0x1f }, // SET A, 0x8005
+        { 0x8005 },
+        { OP_SHL, 0x00, 0x22 }, // SHL A, 1 -> 10
+    };
+    core.setInstructions(i, ARRAY_SIZE(i));
+    
+    core.doCycle(2);
+    CHECK_EQUAL(core.registers().A, 2, "Is logical shift right working");
+    CHECK_EQUAL(core.registers().EX, 0x8000, "Is bit move handled correctly");
+    
+    core.doCycle(2);
+    CHECK_EQUAL(static_cast<int16_t>(core.registers().A), -14, "Is arithmetic shift right working correctly");
+    CHECK_EQUAL(core.registers().EX, 0x8000, "Is bit move handled correctly");
+    
+    core.doCycle(2);
+    CHECK_EQUAL(core.registers().A, 10, "Is shift left working correctly");
+    CHECK_EQUAL(core.registers().EX, 1, "Is shift left working correctly (EX)");
 }
 
 TESTS_END
