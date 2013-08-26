@@ -50,25 +50,19 @@ void Core::setInstructions(Instruction* m, unsigned size, unsigned startingAt) {
 }
 
 void Core::doCycle(unsigned cycles) {
-    if(cycles == 0) {
-        return;
-    }
-    
     while(cycles != 0) {
-        if(m_decoded.costLeft > 1) {
-            --m_decoded.costLeft;
-            return;
+        // TODO: interrupts
+        
+        if(m_decoded.costLeft == 0) {
+            fetch();
+            decode();
+            assert(m_decoded.costLeft != 0 && "No instruction can be worth 0");
         }
         
-        if(interruptsEnabled()) {
-            if(handleInterrupt()) {
-                return;
-            }
+        --m_decoded.costLeft;
+        if(m_decoded.costLeft == 0) {
+            execute();
         }
-        
-        fetch();
-        decode();
-        execute();
         
         --cycles;
     }
