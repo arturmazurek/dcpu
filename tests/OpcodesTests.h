@@ -317,6 +317,25 @@ TEST {
     CHECK_EQUAL(core.registers().A, 5, "Is modulo working 1");
     CHECK_EQUAL(core.registers().B, 0, "Is modulo working 2");
     CHECK_EQUAL(core.registers().C, 0, "Is modulo by 0 working");
+},
+
+TEST {
+    meta.name = "OP_MDI";
+    
+    Instruction i[] = {
+        { OP_SET, 0x00, 0x1f }, // SET A, -7
+        { -7 },
+        { OP_SET, 0x01, 0x1f }, // SET B, -12
+        { -12 },
+        { OP_MDI, 0x00, 0x1f }, // MDI A, 16
+        { 16 },
+        { OP_MDI, 0x01, 0x21 }  // MDI B, 0
+    };
+    core.setInstructions(i, ARRAY_SIZE(i));
+    
+    core.doCycle(4);
+    CHECK_EQUAL(static_cast<int16_t>(core.registers().A), -7, "Is signed modulo working");
+    CHECK_EQUAL(core.registers().B, 0, "Is signed modulo by 0 working");
 }
 
 TESTS_END

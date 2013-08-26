@@ -298,6 +298,19 @@ void Core::executeNormal() {
             break;
         }
             
+        case OP_MDI: {
+            if(*m_decoded.source == 0) {
+                *m_decoded.target = 0;
+                break;
+            }
+            
+            int16_t temp = *m_decoded.target;
+            temp %= static_cast<int16_t>(*m_decoded.source);
+            *m_decoded.target = temp;
+            
+            break;
+        }
+            
         default:
             std::cout << "Unhandled opcode: " << std::hex << std::showbase << m_decoded.opcode << " from: " << m_current << std::endl;
             break;
