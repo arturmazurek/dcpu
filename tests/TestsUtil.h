@@ -24,15 +24,6 @@ TestsHolder::instance().addTest(tests[i]);\
 
 #define ARRAY_SIZE(x) (sizeof(x)/sizeof(*x))
 
-struct TestAdder {
-    TestsHolder::TestFunction f;
-    
-    TestAdder(TestsHolder::TestFunction f) : f{f} {}
-    ~TestAdder() {
-        TestsHolder::instance().addTest(f);
-    }
-};
-
 #define TEST \
     (TestsHolder::TestFunction)[](Core& core, bool& result, TestsHolder::TestMeta& meta)
 
