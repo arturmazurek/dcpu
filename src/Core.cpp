@@ -363,6 +363,69 @@ void Core::executeNormal() {
             break;
         }
             
+        case OP_IFC: {
+            bool success = (*m_decoded.source & *m_decoded.target) == 0;
+            if(!success) {
+                m_skipping = true;
+            }
+            
+            break;
+        }
+            
+        case OP_IFE: {
+            bool success = *m_decoded.source == *m_decoded.target;
+            if(!success) {
+                m_skipping = true;
+            }
+            
+            break;
+        }
+            
+        case OP_IFN: {
+            bool success = *m_decoded.source != *m_decoded.target;
+            if(!success) {
+                m_skipping = true;
+            }
+            
+            break;
+        }
+            
+        case OP_IFG: {
+            bool success = *m_decoded.target > *m_decoded.source;
+            if(!success) {
+                m_skipping = true;
+            }
+            
+            break;
+        }
+            
+        case OP_IFA: {
+            bool success = static_cast<int16_t>(*m_decoded.target) > static_cast<int16_t>(*m_decoded.source);
+            if(!success) {
+                m_skipping = true;
+            }
+            
+            break;
+        }
+            
+        case OP_IFL: {
+            bool success = *m_decoded.target < *m_decoded.source;
+            if(!success) {
+                m_skipping = true;
+            }
+            
+            break;
+        }
+            
+        case OP_IFU: {
+            bool success = static_cast<int16_t>(*m_decoded.target) < static_cast<int16_t>(*m_decoded.source);
+            if(!success) {
+                m_skipping = true;
+            }
+            
+            break;
+        }
+            
         default:
             std::cout << "Unhandled opcode: " << std::hex << std::showbase << m_decoded.opcode << " from: " << m_current << std::endl;
             break;

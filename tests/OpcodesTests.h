@@ -463,6 +463,99 @@ TEST {
     core.doCycle(9);
     CHECK_EQUAL(core.registers().C, 0, "Is IFB chaining working");
     CHECK_EQUAL(core.registers().X, 0xffff, "Is IFB chaining working 2");
+},
+
+TEST {
+    meta.name = "Rest of conditionals - only successes";
+    
+    Instruction i[] = {
+        { OP_SET, 0x00, 0x22 }, // SET A, 1
+        { OP_IFC, 0x00, 0x23 }, // IFC A, 2
+        { OP_SET, 0x00, 0x20 }, // SET A, -1
+        
+        { OP_SET, 0x01, 0x28 }, // SET B, 7
+        { OP_IFE, 0x01, 0x28 }, // IFE B, 7
+        { OP_SET, 0x01, 0x20 }, // SET B, -1
+        
+        { OP_SET, 0x02, 0x28 }, // SET C, 7
+        { OP_IFN, 0x02, 0x27 }, // IFN C, 6
+        { OP_SET, 0x02, 0x20 }, // SET C, -1
+        
+        { OP_SET, 0x03, 0x26 }, // SET X, 5
+        { OP_IFG, 0x03, 0x25 }, // IFG X, 4
+        { OP_SET, 0x03, 0x20 }, // SET X, -1
+        
+        { OP_SET, 0x04, 0x21 }, // SET Y, 0
+        { OP_IFA, 0x04, 0x20 }, // IFA Y, -1
+        { OP_SET, 0x04, 0x20 }, // SET Y, -1
+        
+        { OP_SET, 0x05, 0x24 }, // SET Z, 3
+        { OP_IFL, 0x05, 0x25 }, // IFL Z, 4
+        { OP_SET, 0x05, 0x20 }, // SET Z, -1
+        
+        { OP_SET, 0x06, 0x1f }, // SET I, -32
+        { -32 },
+        { OP_IFU, 0x06, 0x1f }, // IFU I, -15
+        { -15 },
+        { OP_SET, 0x06, 0x20 }  // SET I, -1
+    };
+    core.setInstructions(i, ARRAY_SIZE(i));
+    
+    core.doCycle(30);
+    CHECK_EQUAL(core.registers().A, 0xffff, "Is IFC correct with success");
+    CHECK_EQUAL(core.registers().B, 0xffff, "Is IFE correct with success");
+    CHECK_EQUAL(core.registers().C, 0xffff, "Is IFN correct with success");
+    CHECK_EQUAL(core.registers().X, 0xffff, "Is IFG correct with success");
+    CHECK_EQUAL(core.registers().Y, 0xffff, "Is IFA correct with success");
+    CHECK_EQUAL(core.registers().Z, 0xffff, "Is IFL correct with success");
+    CHECK_EQUAL(core.registers().I, 0xffff, "Is IFU correct with success");
+},
+
+TEST {
+    meta.name = "Rest of conditionals - only failures";
+    
+    Instruction i[] = {
+        { OP_SET, 0x00, 0x22 }, // SET A, 1
+        { OP_IFC, 0x00, 0x24 }, // IFC A, 3
+        { OP_SET, 0x00, 0x20 }, // SET A, -1
+        
+        { OP_SET, 0x01, 0x29 }, // SET B, 8
+        { OP_IFE, 0x01, 0x28 }, // IFE B, 7
+        { OP_SET, 0x01, 0x20 }, // SET B, -1
+        
+        { OP_SET, 0x02, 0x28 }, // SET C, 7
+        { OP_IFN, 0x02, 0x28 }, // IFN C, 7
+        { OP_SET, 0x02, 0x20 }, // SET C, -1
+        
+        { OP_SET, 0x03, 0x24 }, // SET X, 3
+        { OP_IFG, 0x03, 0x25 }, // IFG X, 4
+        { OP_SET, 0x03, 0x20 }, // SET X, -1
+        
+        { OP_SET, 0x04, 0x1f }, // SET Y, -2
+        { -2 },
+        { OP_IFA, 0x04, 0x20 }, // IFA Y, -1
+        { OP_SET, 0x04, 0x20 }, // SET Y, -1
+        
+        { OP_SET, 0x05, 0x25 }, // SET Z, 4
+        { OP_IFL, 0x05, 0x25 }, // IFL Z, 4
+        { OP_SET, 0x05, 0x20 }, // SET Z, -1
+        
+        { OP_SET, 0x06, 0x1f }, // SET I, -14
+        { -14 },
+        { OP_IFU, 0x06, 0x1f }, // IFU I, -15
+        { -15 },
+        { OP_SET, 0x06, 0x20 }  // SET I, -1
+    };
+    core.setInstructions(i, ARRAY_SIZE(i));
+    
+    core.doCycle(31);
+    CHECK_EQUAL(core.registers().A, 1, "Is IFC correct with failure");
+    CHECK_EQUAL(core.registers().B, 8, "Is IFE correct with failure");
+    CHECK_EQUAL(core.registers().C, 7, "Is IFN correct with failure");
+    CHECK_EQUAL(core.registers().X, 3, "Is IFG correct with failure");
+    CHECK_EQUAL(core.registers().Y, static_cast<uint16_t>(-2), "Is IFA correct with failure");
+    CHECK_EQUAL(core.registers().Z, 4, "Is IFL correct with failure");
+    CHECK_EQUAL(core.registers().I, static_cast<uint16_t>(-14), "Is IFU correct with failure");
 }
 
 TESTS_END
