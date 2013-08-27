@@ -136,6 +136,8 @@ void Core::decode() {
         m_decoded.costLeft = CostCalculator::getSpecialCost(m_decoded.opcode, m_decoded.a);
         
         m_decoded.source = checkOperand(m_decoded.a, true);
+        
+        m_decoded.special = true;
     } else {
         m_decoded.b = element2(m_current);
         m_decoded.a = element1(m_current);
@@ -143,6 +145,8 @@ void Core::decode() {
         
         m_decoded.source = checkOperand(m_decoded.a, true);
         m_decoded.target = checkOperand(m_decoded.b, false);
+        
+        m_decoded.special = false;
     }
 }
 
@@ -475,5 +479,14 @@ void Core::executeNormal() {
 }
 
 void Core::executeSpecial() {
-    
+    switch (m_decoded.opcode) {
+        case OP_JSR:
+            m_memory[--m_registers.SP] = m_registers.PC;
+            m_registers.PC = *m_decoded.source;
+            break;
+            
+        default:
+            std::cout << "Unhandled special: " << std::hex << std::showbase << m_decoded.opcode << " from: " << m_current << std::endl;
+            break;
+    }
 }
