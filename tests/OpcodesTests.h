@@ -605,6 +605,34 @@ TEST {
     core.doCycle(4);
     CHECK_EQUAL(core.registers().A, 1, "Is SBX correctly subtracting again");
     CHECK_EQUAL(core.registers().EX, 1, "Is EX set correctly after overflow in SBX");
+},
+
+TEST {
+    meta.name = "STI and STD";
+    
+    Instruction i[] = {
+        { OP_STI, 0x00, 0x22 }, // STI A, 1
+        
+        { OP_STI, 0x00, 0x06 }, // STI A, I
+        
+        { OP_STD, 0x00, 0x29 }, // STD A, 8
+    };
+    core.setInstructions(i, ARRAY_SIZE(i));
+    
+    core.doCycle(2);
+    CHECK_EQUAL(core.registers().A, 1, "Is STI setting correctly");
+    CHECK_EQUAL(core.registers().I, 1, "Is STI increasing I correctly");
+    CHECK_EQUAL(core.registers().J, 1, "Is STI increasing J correctly");
+    
+    core.doCycle(2);
+    CHECK_EQUAL(core.registers().A, 1, "Is STI setting correctly again");
+    CHECK_EQUAL(core.registers().I, 2, "Is STI increasing I correctly again");
+    CHECK_EQUAL(core.registers().J, 2, "Is STI increasing J correctly again");
+    
+    core.doCycle(2);
+    CHECK_EQUAL(core.registers().A, 8, "Is STD setting correctly");
+    CHECK_EQUAL(core.registers().I, 1, "Is STD decreasing I correctly");
+    CHECK_EQUAL(core.registers().J, 1, "Is STD decreasing J correctly");
 }
 
 TESTS_END
