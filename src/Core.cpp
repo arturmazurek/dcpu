@@ -15,9 +15,10 @@
 #include <iomanip>
 #include <iostream>
 
+#include "CoreException.h"
 #include "CostCalculator.h"
 
-Core::Core() : m_decoded{0}, m_skipping{false} {
+Core::Core() : m_decoded{0}, m_skipping{false}, m_queueInterrupts{false} {
     
 }
 
@@ -52,9 +53,11 @@ void Core::setInstructions(Instruction* m, unsigned size, unsigned startingAt) {
 
 void Core::doCycle(unsigned cycles) {
     while(cycles != 0) {
-        // TODO: interrupts
-        
         if(m_decoded.costLeft == 0) {
+            if(!m_skipping && handleInterrupt()) {
+                continue;
+            }
+            
             fetch();
             decode();
             assert(m_decoded.costLeft != 0 && "No instruction can be worth 0");
@@ -112,11 +115,44 @@ void Core::printMemory(uint16_t start, uint16_t end) const {
 }
 
 bool Core::interruptsEnabled() const {
-    return false;
+    std::lock_guard<std::recursive_mutex> lock{m_interruptsMutex};
+    return m_registers.IA != 0;
+}
+
+bool Core::queueInterrupts() const {
+    std::lock_guard<std::recursive_mutex> lock{m_interruptsMutex};
+    return m_queueInterrupts;
+}
+
+void Core::setQueueInterrupts(bool queueInterrupts) {
+    std::lock_guard<std::recursive_mutex> lock{m_interruptsMutex};
+    m_queueInterrupts = queueInterrupts;
 }
 
 bool Core::handleInterrupt() {
-    return false;
+    std::lock_guard<std::recursive_mutex> lock(m_interruptsMutex);
+    
+    if(!interruptsEnabled()) {
+        return false;
+    }
+    
+    if(m_interruptsQueue.empty()) {
+        return false;
+    }
+    if(m_interruptsQueue.size() > MAX_INTERRUPTS) {
+        throw TooManyInterruptsException{};
+    }
+    
+    setQueueInterrupts(true);
+    
+    m_memory[--m_registers.SP] = m_registers.PC;
+    m_memory[--m_registers.SP] = m_registers.A;
+    
+    m_registers.A = m_interruptsQueue.front();
+    m_interruptsQueue.pop();
+    m_registers.PC = m_registers.IA;
+    
+    return true;
 }
 
 void Core::fetch() {
@@ -485,8 +521,35 @@ void Core::executeSpecial() {
             m_registers.PC = *m_decoded.source;
             break;
             
+        case OP_INT:
+            sendInterrupt(*m_decoded.source);
+            break;
+            
+        case OP_IAG:
+            *m_decoded.source = m_registers.IA;
+            break;
+            
+        case OP_IAS:
+            m_registers.IA = *m_decoded.source;
+            break;
+            
+        case OP_RFI:
+            setQueueInterrupts(false);
+            m_registers.A = m_memory[m_registers.SP++];
+            m_registers.PC = m_memory[m_registers.SP++];
+            break;
+            
+        case OP_IAQ:
+            setQueueInterrupts(*m_decoded.source == 0);
+            break;
+            
         default:
             std::cout << "Unhandled special: " << std::hex << std::showbase << m_decoded.opcode << " from: " << m_current << std::endl;
             break;
     }
+}
+
+void Core::sendInterrupt(uint16_t message) {
+    std::lock_guard<std::recursive_mutex> lock{m_interruptsMutex};
+    m_interruptsQueue.emplace(message);
 }

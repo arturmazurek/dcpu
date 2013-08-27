@@ -12,6 +12,8 @@
 #include <cstdint>
 
 #include <array>
+#include <queue>
+#include <thread>
 
 #include "Instruction.h"
 #include "Registers.h"
@@ -34,8 +36,14 @@ public:
     
     uint16_t memory(uint16_t at) const;
     
+    void sendInterrupt(uint16_t message);
+    
 private:
     bool interruptsEnabled() const;
+    
+    bool queueInterrupts() const;
+    void setQueueInterrupts(bool queueInterrupts);
+    
     bool handleInterrupt();
     
     void fetch();
@@ -67,6 +75,11 @@ private:
     bool m_skipping;
     
     Registers m_registers;
+    
+    static const int MAX_INTERRUPTS = 256;
+    mutable std::recursive_mutex m_interruptsMutex;
+    bool m_queueInterrupts;
+    std::queue<uint16_t> m_interruptsQueue;
 };
 
 #endif /* defined(__dcpu__Core__) */

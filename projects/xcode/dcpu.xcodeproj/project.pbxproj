@@ -28,6 +28,7 @@
 
 /* Begin PBXFileReference section */
 		6DF0DA9A17CCE6BA0048EBF5 /* SpecialOpcodesTests.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SpecialOpcodesTests.h; sourceTree = "<group>"; };
+		6DF0DA9B17CCEF240048EBF5 /* CoreException.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CoreException.h; sourceTree = "<group>"; };
 		7500250D17C8D5DD008CC090 /* OpcodesTests.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OpcodesTests.h; sourceTree = "<group>"; };
 		7500250E17C8E1B7008CC090 /* Util.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Util.h; sourceTree = "<group>"; };
 		7500251017CB82FF008CC090 /* CostCalculator.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CostCalculator.cpp; sourceTree = "<group>"; };
@@ -103,6 +104,7 @@
 				7500250E17C8E1B7008CC090 /* Util.h */,
 				7500251017CB82FF008CC090 /* CostCalculator.cpp */,
 				7500251117CB82FF008CC090 /* CostCalculator.h */,
+				6DF0DA9B17CCEF240048EBF5 /* CoreException.h */,
 			);
 			name = src;
 			path = ../../src;
