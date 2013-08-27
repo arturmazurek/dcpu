@@ -577,6 +577,34 @@ TEST {
     core.doCycle(4);
     CHECK_EQUAL(core.registers().A, 27, "Is ADX adding correctly with overflow");
     CHECK_EQUAL(core.registers().EX, 1, "Is EX set to 1 when there's an overflow in ADX");
+},
+
+TEST {
+    meta.name = "SBX";
+    
+    Instruction i[] = {
+        { OP_SET, 0x00, 0x29 }, // SET A, 8
+        { OP_SET, 0x1d, 0x25 }, // SET EX, 4
+        { OP_SBX, 0x00, 0x2b }, // SBX A, 10
+        
+        { OP_SBX, 0x00, 0x2b }, // SBX A, 10
+        
+        { OP_SET, 0x1d, 0x2b }, // SET EX, 10
+        { OP_SBX, 0x00, 0x22 }, // SBX A, 1
+    };
+    core.setInstructions(i, ARRAY_SIZE(i));
+    
+    core.doCycle(5);
+    CHECK_EQUAL(core.registers().A, 2, "Is SBX working correctly in normal circumstances");
+    CHECK_EQUAL(core.registers().EX, 0, "Is EX set to 0 when SBX didn't overflow or underflow");
+    
+    core.doCycle(3);
+    CHECK_EQUAL(core.registers().A, static_cast<uint16_t>(-8), "Is SBX correctly subtracting");
+    CHECK_EQUAL(core.registers().EX, 0xffff, "Is EX set correctly in case of underflow after SBX");
+    
+    core.doCycle(4);
+    CHECK_EQUAL(core.registers().A, 1, "Is SBX correctly subtracting again");
+    CHECK_EQUAL(core.registers().EX, 1, "Is EX set correctly after overflow in SBX");
 }
 
 TESTS_END
