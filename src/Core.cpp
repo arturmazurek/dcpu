@@ -426,6 +426,48 @@ void Core::executeNormal() {
             break;
         }
             
+        case OP_ADX: {
+            uint32_t temp = *m_decoded.source + *m_decoded.target + m_registers.EX;
+            if(temp > std::numeric_limits<uint16_t>::max()) {
+                m_registers.EX = 1;
+            } else {
+                m_registers.EX = 0;
+            }
+            
+            *m_decoded.target = temp;
+            break;
+        }
+            
+        case OP_SBX: {
+            uint32_t temp = *m_decoded.target - *m_decoded.source + m_registers.EX;
+            if(*m_decoded.target + m_registers.EX < *m_decoded.source) {
+                m_registers.EX = 0xffff;
+            } else if (temp > std::numeric_limits<uint16_t>::max()) {
+                m_registers.EX = 1;
+            } else {
+                m_registers.EX = 0;
+            }
+            
+            *m_decoded.target = temp;
+            break;
+        }
+            
+        case OP_STI: {
+            *m_decoded.target = *m_decoded.source;
+            ++m_registers.I;
+            ++m_registers.J;
+            
+            break;
+        }
+            
+        case OP_STD: {
+            *m_decoded.target = *m_decoded.source;
+            --m_registers.I;
+            --m_registers.J;
+            
+            break;
+        }
+            
         default:
             std::cout << "Unhandled opcode: " << std::hex << std::showbase << m_decoded.opcode << " from: " << m_current << std::endl;
             break;
