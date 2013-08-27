@@ -556,6 +556,27 @@ TEST {
     CHECK_EQUAL(core.registers().Y, static_cast<uint16_t>(-2), "Is IFA correct with failure");
     CHECK_EQUAL(core.registers().Z, 4, "Is IFL correct with failure");
     CHECK_EQUAL(core.registers().I, static_cast<uint16_t>(-14), "Is IFU correct with failure");
+},
+
+TEST {
+    meta.name = "ADX";
+    
+    Instruction i[] = {
+        { OP_SET, 0x00, 0x26 }, // SET A, 5
+        { OP_SET, 0x1d, 0x2a }, // SET EX, 9
+        { OP_ADX, 0x00, 0x26 }, // ADX A, 5
+        { OP_SET, 0x1d, 0x2a }, // SET EX, 9
+        { OP_ADX, 0x00, 0x20 }, // ADX A, 0xffff
+    };
+    core.setInstructions(i, ARRAY_SIZE(i));
+    
+    core.doCycle(5);
+    CHECK_EQUAL(core.registers().A, 19, "Is ADX adding correctly");
+    CHECK_EQUAL(core.registers().EX, 0, "Is EX set to 0 when there's no overflow in ADX");
+    
+    core.doCycle(4);
+    CHECK_EQUAL(core.registers().A, 27, "Is ADX adding correctly with overflow");
+    CHECK_EQUAL(core.registers().EX, 1, "Is EX set to 1 when there's an overflow in ADX");
 }
 
 TESTS_END
