@@ -53,11 +53,7 @@ void Core::setInstructions(Instruction* m, unsigned size, unsigned startingAt) {
 
 void Core::doCycle(unsigned cycles) {
     while(cycles != 0) {
-        if(m_decoded.costLeft == 0) {
-            if(!m_skipping && handleInterrupt()) {
-                continue;
-            }
-            
+        if(m_decoded.costLeft == 0) {            
             fetch();
             decode();
             assert(m_decoded.costLeft != 0 && "No instruction can be worth 0");
@@ -73,6 +69,10 @@ void Core::doCycle(unsigned cycles) {
                 execute();
             } else if(!isConditional(m_decoded.opcode)) {
                 m_skipping = false;
+            }
+            
+            if(!m_skipping) {
+                handleInterrupt();
             }
         }
         
@@ -129,15 +129,15 @@ void Core::setQueueInterrupts(bool queueInterrupts) {
     m_queueInterrupts = queueInterrupts;
 }
 
-bool Core::handleInterrupt() {
+void Core::handleInterrupt() {
     std::lock_guard<std::recursive_mutex> lock(m_interruptsMutex);
     
     if(!interruptsEnabled()) {
-        return false;
+        return;
     }
     
     if(m_interruptsQueue.empty()) {
-        return false;
+        return;
     }
     if(m_interruptsQueue.size() > MAX_INTERRUPTS) {
         throw TooManyInterruptsException{};
@@ -151,8 +151,6 @@ bool Core::handleInterrupt() {
     m_registers.A = m_interruptsQueue.front();
     m_interruptsQueue.pop();
     m_registers.PC = m_registers.IA;
-    
-    return true;
 }
 
 void Core::fetch() {

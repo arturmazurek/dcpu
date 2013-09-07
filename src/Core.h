@@ -44,7 +44,7 @@ private:
     bool queueInterrupts() const;
     void setQueueInterrupts(bool queueInterrupts);
     
-    bool handleInterrupt();
+    void handleInterrupt();
     
     void fetch();
     void decode();
