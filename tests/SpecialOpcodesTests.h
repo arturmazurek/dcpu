@@ -62,7 +62,7 @@ TEST {
     Instruction i[] = {
         { OP_IAS, 0x2b },       // IAS 10
         { OP_INT, 0x20 },       // INT 0xffff
-        { OP_SET, 0x01, 0x26 }, // SET A, 5
+        { OP_SET, 0x00, 0x26 }, // SET A, 5
         { 0 },
         { 0 },
         { 0 },
@@ -70,7 +70,7 @@ TEST {
         { 0 },
         { 0 },
         { 0 },
-        { OP_SET, 0x02, 0x26 }, // SET B, 5
+        { OP_SET, 0x01, 0x26 }, // SET B, 5
         { OP_RFI, 0x22 },       // RFI
     };
     core.setInstructions(i, ARRAY_SIZE(i));
@@ -81,6 +81,22 @@ TEST {
     core.doCycle(4);
     CHECK_EQUAL(core.registers().A, 0xffff, "Is A set correctly to interrupt message");
     CHECK_EQUAL(core.registers().PC, 10, "Is PC set correctly in interrupt");
+    CHECK_EQUAL(core.registers().B, 0, "Is INT taking enough time");
+    
+    core.sendInterrupt(0x1234);
+    
+    core.doCycle();
+    CHECK_EQUAL(core.registers().B, 5, "Are interrupts disabled in interrupt handler");
+    CHECK_EQUAL(core.registers().PC, 11, "Are interrupts correctly disabled in an interrupt handler");
+    
+    core.doCycle(3);
+    CHECK_EQUAL(core.registers().PC, 10, "Can trigger interrupt after RFI");
+    
+    core.doCycle(4);
+    CHECK_EQUAL(core.registers().PC, 2, "Is RFI working correctly");
+    
+    core.doCycle();
+    CHECK_EQUAL(core.registers().A, 5, "Is later on the core working correctly");
 }
 
 TESTS_END

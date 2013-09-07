@@ -136,6 +136,10 @@ void Core::handleInterrupt() {
         return;
     }
     
+    if(queueInterrupts()) {
+        return;
+    }
+    
     if(m_interruptsQueue.empty()) {
         return;
     }
