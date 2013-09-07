@@ -57,7 +57,7 @@ TEST {
 },
 
 TEST {
-    meta.name = "INT - software interrupt with interrupts enabled";
+    meta.name = "Interrupts 1";
     
     Instruction i[] = {
         { OP_IAS, 0x2b },       // IAS 10
@@ -97,6 +97,32 @@ TEST {
     
     core.doCycle();
     CHECK_EQUAL(core.registers().A, 5, "Is later on the core working correctly");
+},
+
+TEST {
+    meta.name = "Interrupts 2";
+    
+    Instruction i[] = {
+        { OP_IAS, 0x25 },       // IAG, 4
+        { OP_STI, 0x00, 0x06 }, // STI A, I
+        { OP_SET, 0x1c, 0x22 }, // SET PC, 1
+        { 0 },
+        { OP_RFI, 0x00 }        // RFI
+    };
+    core.setInstructions(i, ARRAY_SIZE(i));
+    
+    core.sendInterrupt(0x1234);
+    core.doCycle();
+    CHECK_EQUAL(core.registers().PC, 4, "Is interrupt correctly handled after setting interrupt address");
+    
+    int N = 5;
+    for(int i = 0; i < N; ++i) {
+        core.doCycle(3); // RFI
+        core.doCycle(2); // STI
+        CHECK_EQUAL(core.registers().A, i, "Is register A being correctly updated");
+        core.sendInterrupt(0x1234);
+        core.doCycle();  // SET & interrupt handled after ie
+    }
 }
 
 TESTS_END
