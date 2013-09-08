@@ -9,6 +9,9 @@
 #ifndef dcpu_SpecialOpcodesTests_h
 #define dcpu_SpecialOpcodesTests_h
 
+#include <memory>
+
+#include "GenericClock.h"
 #include "TestsUtil.h"
 
 TESTS_START(SpecialOpcodesTests)
@@ -123,6 +126,40 @@ TEST {
         core.sendInterrupt(0x1234);
         core.doCycle();  // SET & interrupt handled after ie
     }
+},
+
+TEST {
+    meta.name = "HWN";
+    
+    Instruction i[] = {
+        { OP_HWN, 0x00 }, // HWN A
+        { OP_HWN, 0x00 }, // HWN A
+        { OP_HWN, 0x00 }, // HWN A
+        { OP_HWN, 0x00 }  // HWN A
+    };
+    core.setInstructions(i, ARRAY_SIZE(i));
+    
+    core.doCycle(2);
+    CHECK_EQUAL(core.registers().A, 0, "No clocks attached in the beginning");
+    
+    std::shared_ptr<Hardware> c1{new GenericClock{}};
+    core.attachHardware(c1);
+    core.doCycle(2);
+    CHECK_EQUAL(core.registers().A, 1, "Is first clock correctly counted");
+    
+    std::shared_ptr<Hardware> c2{new GenericClock{}};
+    core.attachHardware(c2);
+    core.doCycle(2);
+    CHECK_EQUAL(core.registers().A, 2, "Is second clock correctly added");
+    
+    CHECK_TRUE(core.hasHardware(c1), "Does the core know it has clocks attached?");
+    CHECK_TRUE(core.hasHardware(c2), "Does the core know it has clocks attached?");
+    
+    core.detachHardware(c1);
+    core.doCycle(2);
+    CHECK_EQUAL(core.registers().A, 1, "Is HWN working correctly after detach");
+    
+    CHECK_TRUE(core.hasHardware(c2), "Is clock 2 still attached");
 }
 
 TESTS_END

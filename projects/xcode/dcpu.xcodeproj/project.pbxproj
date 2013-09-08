@@ -10,6 +10,7 @@
 		7500251217CB82FF008CC090 /* CostCalculator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7500251017CB82FF008CC090 /* CostCalculator.cpp */; };
 		7587BDB517C79D4000E0D416 /* TestsHolder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7587BDB417C79D4000E0D416 /* TestsHolder.cpp */; };
 		758875F617DC7ED1004D557F /* Hardware.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 758875F417DC7ED1004D557F /* Hardware.cpp */; };
+		758875F917DCD2E7004D557F /* GenericClock.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 758875F717DCD2E7004D557F /* GenericClock.cpp */; };
 		75ABD72317C5253E00BED3AB /* Instruction.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 75ABD72217C5253E00BED3AB /* Instruction.cpp */; };
 		75C7E38B17C3CA72001247DA /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 75C7E38A17C3CA72001247DA /* main.cpp */; };
 		75C7E38F17C3D49B001247DA /* Core.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 75C7E38D17C3D49B001247DA /* Core.cpp */; };
@@ -41,6 +42,9 @@
 		7587BDB917C7BA1100E0D416 /* TestsUtil.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TestsUtil.h; sourceTree = "<group>"; };
 		758875F417DC7ED1004D557F /* Hardware.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Hardware.cpp; sourceTree = "<group>"; };
 		758875F517DC7ED1004D557F /* Hardware.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Hardware.h; sourceTree = "<group>"; };
+		758875F717DCD2E7004D557F /* GenericClock.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GenericClock.cpp; sourceTree = "<group>"; };
+		758875F817DCD2E7004D557F /* GenericClock.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GenericClock.h; sourceTree = "<group>"; };
+		758875FA17DCD424004D557F /* Manufacturers.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Manufacturers.h; sourceTree = "<group>"; };
 		75ABD72217C5253E00BED3AB /* Instruction.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Instruction.cpp; sourceTree = "<group>"; };
 		75C7E37D17C3CA00001247DA /* dcpu */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = dcpu; sourceTree = BUILT_PRODUCTS_DIR; };
 		75C7E38A17C3CA72001247DA /* main.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
@@ -110,6 +114,9 @@
 				6DF0DA9B17CCEF240048EBF5 /* DCPUException.h */,
 				758875F417DC7ED1004D557F /* Hardware.cpp */,
 				758875F517DC7ED1004D557F /* Hardware.h */,
+				758875F717DCD2E7004D557F /* GenericClock.cpp */,
+				758875F817DCD2E7004D557F /* GenericClock.h */,
+				758875FA17DCD424004D557F /* Manufacturers.h */,
 			);
 			name = src;
 			path = ../../src;
@@ -167,6 +174,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				75C7E38F17C3D49B001247DA /* Core.cpp in Sources */,
+				758875F917DCD2E7004D557F /* GenericClock.cpp in Sources */,
 				758875F617DC7ED1004D557F /* Hardware.cpp in Sources */,
 				75C7E38B17C3CA72001247DA /* main.cpp in Sources */,
 				7587BDB517C79D4000E0D416 /* TestsHolder.cpp in Sources */,

@@ -12,11 +12,14 @@
 #include <cstdint>
 
 #include <array>
+#include <memory>
 #include <queue>
 #include <thread>
 
 #include "Instruction.h"
 #include "Registers.h"
+
+class Hardware;
 
 class Core {
 public:    
@@ -25,6 +28,10 @@ public:
     void resetState();
     void setMemory(uint16_t* m, unsigned size, unsigned startingAt = 0);
     void setInstructions(Instruction* m, unsigned size, unsigned startingAt = 0);
+    
+    void attachHardware(std::shared_ptr<Hardware> hardware);
+    bool hasHardware(std::shared_ptr<Hardware> hardware) const;
+    void detachHardware(std::shared_ptr<Hardware> hardware);
     
     void doCycle(unsigned cycles = 1);
     
@@ -80,6 +87,9 @@ private:
     mutable std::recursive_mutex m_interruptsMutex;
     bool m_queueInterrupts;
     std::queue<uint16_t> m_interruptsQueue;
+    
+    mutable std::recursive_mutex m_hardwareMutex;
+    std::vector<std::shared_ptr<Hardware>> m_attachedHardware;
 };
 
 #endif /* defined(__dcpu__Core__) */

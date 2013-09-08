@@ -51,6 +51,32 @@ void Core::setInstructions(Instruction* m, unsigned size, unsigned startingAt) {
     setMemory(reinterpret_cast<uint16_t*>(m), size, startingAt);
 }
 
+void Core::attachHardware(std::shared_ptr<Hardware> hardware) {
+    std::lock_guard<decltype(m_hardwareMutex)> lock{m_hardwareMutex};
+    
+    assert(m_attachedHardware.size() <= std::numeric_limits<uint16_t>::max() && "Too much hardware added");
+    
+    auto location = std::find(m_attachedHardware.begin(), m_attachedHardware.end(), hardware);
+    assert(location == m_attachedHardware.end() && "Cannot attach hardware twice");
+
+    m_attachedHardware.emplace_back(hardware);
+}
+
+bool Core::hasHardware(std::shared_ptr<Hardware> hardware) const {
+    std::lock_guard<decltype(m_hardwareMutex)> lock{m_hardwareMutex};
+    
+    return std::find(m_attachedHardware.begin(), m_attachedHardware.end(), hardware) != m_attachedHardware.end();
+}
+
+void Core::detachHardware(std::shared_ptr<Hardware> hardware) {
+    std::lock_guard<decltype(m_hardwareMutex)> lock{m_hardwareMutex};
+    
+    auto location = std::find(m_attachedHardware.begin(), m_attachedHardware.end(), hardware);
+    assert(location != m_attachedHardware.end() && "Cannot detach unattached hardware");
+    
+    m_attachedHardware.erase(location);
+}
+
 void Core::doCycle(unsigned cycles) {
     while(cycles != 0) {
         if(m_decoded.costLeft == 0) {            
@@ -115,17 +141,17 @@ void Core::printMemory(uint16_t start, uint16_t end) const {
 }
 
 bool Core::interruptsEnabled() const {
-    std::lock_guard<std::recursive_mutex> lock{m_interruptsMutex};
+    std::lock_guard<decltype(m_interruptsMutex)> lock{m_interruptsMutex};
     return m_registers.IA != 0;
 }
 
 bool Core::queueInterrupts() const {
-    std::lock_guard<std::recursive_mutex> lock{m_interruptsMutex};
+    std::lock_guard<decltype(m_interruptsMutex)> lock{m_interruptsMutex};
     return m_queueInterrupts;
 }
 
 void Core::setQueueInterrupts(bool queueInterrupts) {
-    std::lock_guard<std::recursive_mutex> lock{m_interruptsMutex};
+    std::lock_guard<decltype(m_interruptsMutex)> lock{m_interruptsMutex};
     m_queueInterrupts = queueInterrupts;
 }
 
@@ -543,6 +569,12 @@ void Core::executeSpecial() {
             
         case OP_IAQ:
             setQueueInterrupts(*m_decoded.source == 0);
+            break;
+            
+        case OP_HWN:
+            m_hardwareMutex.lock();
+            *m_decoded.source = m_attachedHardware.size();
+            m_hardwareMutex.unlock();
             break;
             
         default:
