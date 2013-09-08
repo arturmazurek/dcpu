@@ -15,8 +15,8 @@
 #include <iomanip>
 #include <iostream>
 
-#include "CoreException.h"
 #include "CostCalculator.h"
+#include "DCPUException.h"
 
 Core::Core() : m_decoded{0}, m_skipping{false}, m_queueInterrupts{false} {
     
