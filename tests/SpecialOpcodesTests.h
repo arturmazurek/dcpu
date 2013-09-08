@@ -12,6 +12,7 @@
 #include <memory>
 
 #include "GenericClock.h"
+#include "Manufacturers.h"
 #include "TestsUtil.h"
 
 TESTS_START(SpecialOpcodesTests)
@@ -160,6 +161,25 @@ TEST {
     CHECK_EQUAL(core.registers().A, 1, "Is HWN working correctly after detach");
     
     CHECK_TRUE(core.hasHardware(c2), "Is clock 2 still attached");
+},
+
+TEST {
+    meta.name = "Hardware query";
+    
+    Instruction i[] = {
+        { OP_HWQ, 0x00 }
+    };
+    core.setInstructions(i, ARRAY_SIZE(i));
+
+    std::shared_ptr<Hardware> c{new GenericClock{}};
+    core.attachHardware(c);
+    core.doCycle(4);
+    
+    CHECK_EQUAL(core.registers().A, GenericClock::HARDWARE_ID & 0xffff, "Is lower half of hardware id correct");
+    CHECK_EQUAL(core.registers().B, GenericClock::HARDWARE_ID >> 16, "Is lower half of hardware id correct");
+    CHECK_EQUAL(core.registers().C, GenericClock::VERSION, "Is version retrieved correctly");
+    CHECK_EQUAL(core.registers().X, Manufacturers::NYA_ELEKTRISKA & 0xffff, "Is manufacturer's lower half correct");
+    CHECK_EQUAL(core.registers().Y, Manufacturers::NYA_ELEKTRISKA >> 16, "Is manufacturer's higher half correct");
 }
 
 TESTS_END

@@ -17,6 +17,7 @@
 
 #include "CostCalculator.h"
 #include "DCPUException.h"
+#include "Hardware.h"
 
 Core::Core() : m_decoded{0}, m_skipping{false}, m_queueInterrupts{false} {
     
@@ -576,6 +577,22 @@ void Core::executeSpecial() {
             *m_decoded.source = m_attachedHardware.size();
             m_hardwareMutex.unlock();
             break;
+            
+        case OP_HWQ: {
+            std::lock_guard<decltype(m_hardwareMutex)> lock{m_hardwareMutex};
+            
+            uint16_t index = *m_decoded.source;
+            if(index >= m_attachedHardware.size()) {
+                std::cout << "Malformed program - trying to access unexistent hardware" << std::endl;
+                break;
+            }
+            
+            m_registers.A = m_attachedHardware[index]->hardwareId();
+            m_registers.B = m_attachedHardware[index]->hardwareId() >> 16;
+            m_registers.C = m_attachedHardware[index]->version();
+            m_registers.X = m_attachedHardware[index]->manufacturer();
+            m_registers.Y = m_attachedHardware[index]->manufacturer() >> 16;
+        } break;
             
         default:
             std::cout << "Unhandled special: " << std::hex << std::showbase << m_decoded.opcode << " from: " << m_current << std::endl;

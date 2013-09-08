@@ -19,7 +19,7 @@ public:
 private:
     void doReceiveInterrupt(Core& from) override;
     
-private:
+public:
     static constexpr uint32_t HARDWARE_ID = 0x12d0b402;
     static constexpr uint16_t VERSION = 1;
 };
