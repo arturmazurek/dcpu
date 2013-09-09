@@ -157,7 +157,7 @@ void Core::setQueueInterrupts(bool queueInterrupts) {
 }
 
 void Core::handleInterrupt() {
-    std::lock_guard<std::recursive_mutex> lock(m_interruptsMutex);
+    std::lock_guard<decltype(m_interruptsMutex)> lock(m_interruptsMutex);
     
     if(!interruptsEnabled()) {
         return;
@@ -601,6 +601,6 @@ void Core::executeSpecial() {
 }
 
 void Core::sendInterrupt(uint16_t message) {
-    std::lock_guard<std::recursive_mutex> lock{m_interruptsMutex};
+    std::lock_guard<decltype(m_interruptsMutex)> lock{m_interruptsMutex};
     m_interruptsQueue.emplace(message);
 }
