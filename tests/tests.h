@@ -10,6 +10,7 @@
 #define dcpu_tests_h
 
 #include "BaseTests.h"
+#include "CoreTests.h"
 #include "OpcodesTests.h"
 #include "SpecialOpcodesTests.h"
 #include "TestsHolder.h"
@@ -18,6 +19,7 @@ static void runTests() {
     ADD_TESTS(BaseTests);
     ADD_TESTS(OpcodesTests);
     ADD_TESTS(SpecialOpcodesTests);
+    ADD_TESTS(CoreTests);
     
     TestsHolder::instance().runTests();
 }

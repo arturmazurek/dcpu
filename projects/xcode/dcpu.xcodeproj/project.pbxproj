@@ -53,6 +53,7 @@
 		75C7E38E17C3D49B001247DA /* Core.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Core.h; sourceTree = "<group>"; };
 		75C7E39017C3D9B9001247DA /* Registers.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Registers.h; sourceTree = "<group>"; };
 		75C7E39117C3DF74001247DA /* Instruction.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Instruction.h; sourceTree = "<group>"; };
+		75E60CFB17DE6B240039618A /* CoreTests.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CoreTests.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -76,6 +77,7 @@
 				7587BDB917C7BA1100E0D416 /* TestsUtil.h */,
 				7500250D17C8D5DD008CC090 /* OpcodesTests.h */,
 				6DF0DA9A17CCE6BA0048EBF5 /* SpecialOpcodesTests.h */,
+				75E60CFB17DE6B240039618A /* CoreTests.h */,
 			);
 			name = test;
 			path = ../../tests;

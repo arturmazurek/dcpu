@@ -26,6 +26,13 @@ Core::Core() : m_decoded{0}, m_skipping{false}, m_queueInterrupts{false}, m_peri
     
 }
 
+Core::~Core() {
+    m_shouldRun = false;
+    if(m_runThread.joinable()) {
+        m_runThread.join();
+    }
+}
+
 void Core::resetState() {
     m_memory.fill(0);
     memset(&m_registers, 0, sizeof(Registers));
@@ -103,10 +110,6 @@ void Core::run(std::chrono::microseconds microseconds) {
     };
     
     m_runThread = std::thread{runFn};
-}
-
-void Core::run(std::chrono::milliseconds milliseconds) {
-    run(std::chrono::microseconds{milliseconds});
 }
 
 void Core::stop() {

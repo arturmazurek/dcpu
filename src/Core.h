@@ -25,6 +25,7 @@ class Hardware;
 class Core {
 public:    
     Core();
+    ~Core();
     
     void resetState();
     void setMemory(uint16_t* m, unsigned size, unsigned startingAt = 0);
@@ -37,7 +38,6 @@ public:
     // Starts a new thread that does processor's cycles with the given
     // period
     void run(std::chrono::microseconds microseconds);
-    void run(std::chrono::milliseconds milliseconds);
     void stop();
     // Must not be called if the core is running
     void cycle(unsigned cycles = 1);
