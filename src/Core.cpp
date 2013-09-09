@@ -19,7 +19,10 @@
 #include "DCPUException.h"
 #include "Hardware.h"
 
-Core::Core() : m_decoded{0}, m_skipping{false}, m_queueInterrupts{false} {
+static constexpr std::chrono::milliseconds DEFAULT_PERIOD{1};
+static constexpr std::chrono::microseconds MINIMUM_PERIOD{10};
+
+Core::Core() : m_decoded{0}, m_skipping{false}, m_queueInterrupts{false}, m_period{DEFAULT_PERIOD}, m_minimumPeriod{MINIMUM_PERIOD}, m_running{false}, m_shouldRun{false} {
     
 }
 
@@ -79,7 +82,39 @@ void Core::detachHardware(std::shared_ptr<Hardware> hardware) {
     m_attachedHardware.erase(location);
 }
 
+void Core::run(std::chrono::microseconds microseconds) {
+    m_running = true;
+    m_shouldRun = true;
+    
+    auto runFn = [&]() {
+        while (m_shouldRun) {
+            auto start = std::chrono::high_resolution_clock::now();
+            this->doCycle();
+            auto end = std::chrono::high_resolution_clock::now();
+            
+            // assumes monotonic clock
+            auto duration = end - start;
+            auto sleepTime = m_period - duration;
+            sleepTime = sleepTime < m_minimumPeriod ? m_minimumPeriod : sleepTime;
+            
+            std::this_thread::sleep_for(sleepTime);
+        }
+        m_running = false;
+    };
+    
+    m_runThread = std::thread{runFn};
+}
+
+void Core::run(std::chrono::milliseconds milliseconds) {
+    run(std::chrono::microseconds{milliseconds});
+}
+
+void Core::stop() {
+    m_shouldRun = false;
+}
+
 void Core::cycle(unsigned cycles) {
+    assert(!m_running);
     while(cycles != 0) {
         doCycle();
         --cycles;

@@ -12,6 +12,7 @@
 #include <cstdint>
 
 #include <array>
+#include <chrono>
 #include <memory>
 #include <queue>
 #include <thread>
@@ -35,8 +36,10 @@ public:
     
     // Starts a new thread that does processor's cycles with the given
     // period
-    void run();
+    void run(std::chrono::microseconds microseconds);
+    void run(std::chrono::milliseconds milliseconds);
     void stop();
+    // Must not be called if the core is running
     void cycle(unsigned cycles = 1);
     
     void printRegisters() const;
@@ -96,6 +99,13 @@ private:
     
     mutable std::recursive_mutex m_hardwareMutex;
     std::vector<std::shared_ptr<Hardware>> m_attachedHardware;
+    
+    std::chrono::microseconds m_period;
+    const std::chrono::microseconds m_minimumPeriod;
+    
+    std::atomic<bool> m_running;
+    std::atomic<bool> m_shouldRun;
+    std::thread m_runThread;
 };
 
 #endif /* defined(__dcpu__Core__) */
