@@ -18,19 +18,17 @@ m_hardwareId{hardwareId}, m_version{version}, m_manufacturer{manufacturer} {
     
 }
 
-void Hardware::attachedTo(std::weak_ptr<Core> ownerCore) {
+void Hardware::attachedTo(Core* ownerCore) {
     m_ownerCore = ownerCore;
 }
 
-void Hardware::receiveInterrupt() {
-    auto shared = m_ownerCore.lock();
-    
-    assert(shared);
-    if(!shared) {
+void Hardware::receiveInterrupt() {    
+    assert(m_ownerCore);
+    if(!m_ownerCore) {
         throw UnattachedHardware("Sending interrupt to unattached hardware");
     }
     
-    doReceiveInterrupt(*shared);
+    doReceiveInterrupt(*m_ownerCore);
 }
 
 void Hardware::sendInterrupt(uint16_t message) const {

@@ -19,7 +19,7 @@ class Hardware {
 public:
     Hardware(uint32_t hardwareId, uint16_t version, uint32_t manufacturer);
     
-    void attachedTo(std::weak_ptr<Core> ownerCore);
+    void attachedTo(Core* ownerCore);
     
     // blocks caller until the hardware finishes its doing
     void receiveInterrupt();
@@ -34,7 +34,7 @@ protected:
     virtual void doReceiveInterrupt(Core& from) = 0;
     
 private:
-    std::weak_ptr<Core> m_ownerCore;
+    Core* m_ownerCore;
     
     const uint32_t m_hardwareId;
     const uint16_t m_version;

@@ -43,7 +43,7 @@ public:
     
     uint16_t memory(uint16_t at) const;
     
-    void sendInterrupt(uint16_t message);
+    void receiveInterrupt(uint16_t message);
     
 private:
     bool interruptsEnabled() const;

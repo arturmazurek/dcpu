@@ -12,6 +12,7 @@
 #include <memory>
 
 #include "GenericClock.h"
+#include "Hardware.h"
 #include "Manufacturers.h"
 #include "TestsUtil.h"
 
@@ -87,7 +88,7 @@ TEST {
     CHECK_EQUAL(core.registers().PC, 10, "Is PC set correctly in interrupt");
     CHECK_EQUAL(core.registers().B, 0, "Is INT taking enough time");
     
-    core.sendInterrupt(0x1234);
+    core.receiveInterrupt(0x1234);
     
     core.doCycle();
     CHECK_EQUAL(core.registers().B, 5, "Are interrupts disabled in interrupt handler");
@@ -115,7 +116,7 @@ TEST {
     };
     core.setInstructions(i, ARRAY_SIZE(i));
     
-    core.sendInterrupt(0x1234);
+    core.receiveInterrupt(0x1234);
     core.doCycle();
     CHECK_EQUAL(core.registers().PC, 4, "Is interrupt correctly handled after setting interrupt address");
     
@@ -124,7 +125,7 @@ TEST {
         core.doCycle(3); // RFI
         core.doCycle(2); // STI
         CHECK_EQUAL(core.registers().A, i, "Is register A being correctly updated");
-        core.sendInterrupt(0x1234);
+        core.receiveInterrupt(0x1234);
         core.doCycle();  // SET & interrupt handled after ie
     }
 },
@@ -180,6 +181,34 @@ TEST {
     CHECK_EQUAL(core.registers().C, GenericClock::VERSION, "Is version retrieved correctly");
     CHECK_EQUAL(core.registers().X, Manufacturers::NYA_ELEKTRISKA & 0xffff, "Is manufacturer's lower half correct");
     CHECK_EQUAL(core.registers().Y, Manufacturers::NYA_ELEKTRISKA >> 16, "Is manufacturer's higher half correct");
+},
+
+TEST {
+    meta.name = "Sending interrupts to hardware";
+    
+    class TestHardware : public Hardware {
+    public:
+        bool received;
+        
+        TestHardware() : Hardware{1, 1, 1}, received{false} {}
+        
+        void doReceiveInterrupt(Core& from) {
+            received = true;
+            from.registers().A = 16;
+        }
+    };
+    
+    Instruction i[] = {
+        { OP_HWI, 0x21 } // HWI 0
+    };
+    core.setInstructions(i, ARRAY_SIZE(i));
+    
+    std::shared_ptr<TestHardware> h{new TestHardware{}};
+    core.attachHardware(h);
+    core.doCycle(4);
+    
+    CHECK_TRUE(h->received, "Are hardware interrupts sent to hardware");
+    CHECK_EQUAL(core.registers().A, 16, "Is the processor correctly updated");
 }
 
 TESTS_END

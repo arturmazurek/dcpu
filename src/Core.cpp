@@ -61,6 +61,7 @@ void Core::attachHardware(std::shared_ptr<Hardware> hardware) {
     assert(location == m_attachedHardware.end() && "Cannot attach hardware twice");
 
     m_attachedHardware.emplace_back(hardware);
+    hardware->attachedTo(this);
 }
 
 bool Core::hasHardware(std::shared_ptr<Hardware> hardware) const {
@@ -551,7 +552,7 @@ void Core::executeSpecial() {
             break;
             
         case OP_INT:
-            sendInterrupt(*m_decoded.source);
+            receiveInterrupt(*m_decoded.source);
             break;
             
         case OP_IAG:
@@ -594,13 +595,25 @@ void Core::executeSpecial() {
             m_registers.Y = m_attachedHardware[index]->manufacturer() >> 16;
         } break;
             
+        case OP_HWI: {
+            std::lock_guard<decltype(m_hardwareMutex)> lock{m_hardwareMutex};
+            
+            uint16_t index = *m_decoded.source;
+            if(index >= m_attachedHardware.size()) {
+                std::cout << "Malformed program - trying to access unexistent hardware" << std::endl;
+                break;
+            }
+            
+            m_attachedHardware[index]->receiveInterrupt();
+        } break;
+            
         default:
             std::cout << "Unhandled special: " << std::hex << std::showbase << m_decoded.opcode << " from: " << m_current << std::endl;
             break;
     }
 }
 
-void Core::sendInterrupt(uint16_t message) {
+void Core::receiveInterrupt(uint16_t message) {
     std::lock_guard<decltype(m_interruptsMutex)> lock{m_interruptsMutex};
     m_interruptsQueue.emplace(message);
 }
