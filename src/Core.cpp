@@ -79,32 +79,35 @@ void Core::detachHardware(std::shared_ptr<Hardware> hardware) {
     m_attachedHardware.erase(location);
 }
 
-void Core::doCycle(unsigned cycles) {
+void Core::cycle(unsigned cycles) {
     while(cycles != 0) {
-        if(m_decoded.costLeft == 0) {            
-            fetch();
-            decode();
-            assert(m_decoded.costLeft != 0 && "No instruction can be worth 0");
-            
-            if (m_skipping) {
-                m_decoded.costLeft = 1;
-            }
-        }
-        
-        --m_decoded.costLeft;
-        if(m_decoded.costLeft == 0) {
-            if(!m_skipping) {
-                execute();
-            } else if(!isConditional(m_decoded.opcode)) {
-                m_skipping = false;
-            }
-            
-            if(!m_skipping) {
-                handleInterrupt();
-            }
-        }
-        
+        doCycle();
         --cycles;
+    }
+}
+
+void Core::doCycle() {
+    if(m_decoded.costLeft == 0) {            
+        fetch();
+        decode();
+        assert(m_decoded.costLeft != 0 && "No instruction can be worth 0");
+        
+        if (m_skipping) {
+            m_decoded.costLeft = 1;
+        }
+    }
+    
+    --m_decoded.costLeft;
+    if(m_decoded.costLeft == 0) {
+        if(!m_skipping) {
+            execute();
+        } else if(!isConditional(m_decoded.opcode)) {
+            m_skipping = false;
+        }
+        
+        if(!m_skipping) {
+            handleInterrupt();
+        }
     }
 }
 

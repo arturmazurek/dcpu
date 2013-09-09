@@ -33,7 +33,11 @@ public:
     bool hasHardware(std::shared_ptr<Hardware> hardware) const;
     void detachHardware(std::shared_ptr<Hardware> hardware);
     
-    void doCycle(unsigned cycles = 1);
+    // Starts a new thread that does processor's cycles with the given
+    // period
+    void run();
+    void stop();
+    void cycle(unsigned cycles = 1);
     
     void printRegisters() const;
     void printMemory(uint16_t start, uint16_t end) const;
@@ -46,6 +50,8 @@ public:
     void receiveInterrupt(uint16_t message);
     
 private:
+    void doCycle();
+    
     bool interruptsEnabled() const;
     
     bool queueInterrupts() const;

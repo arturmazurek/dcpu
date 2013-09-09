@@ -25,23 +25,23 @@ TEST {
     };
     core.setInstructions(i, ARRAY_SIZE(i));
     
-    core.doCycle();
+    core.cycle();
     CHECK_EQUAL(core.registers().A, 0xffff, "Is A set properly");
     CHECK_EQUAL(core.registers().PC, 1, "Is program counter increasing 1"   );
     
-    core.doCycle();
+    core.cycle();
     CHECK_EQUAL(core.memory(0), 0xffff, "Is memory register-addressed correctly");
     CHECK_EQUAL(core.registers().PC, 2, "Is program counter increasing 2");
     
-    core.doCycle();
+    core.cycle();
     CHECK_EQUAL(core.registers().C, 0xffff, "Can assign register to register");
     CHECK_EQUAL(core.registers().PC, 3, "Is program counter increasing 3");
     
-    core.doCycle();
+    core.cycle();
     CHECK_EQUAL(core.registers().X, 0xffff, "Can assing registers from memory");
     CHECK_EQUAL(core.registers().PC, 4, "Is program counter increasing 3");
     
-    core.doCycle();
+    core.cycle();
     CHECK_EQUAL(core.registers().A, 30, "Can assign register with different value");
     CHECK_EQUAL(core.registers().PC, 5, "Is program counter increasing 3");
 },
@@ -58,11 +58,11 @@ TEST {
     };
     
     core.setInstructions(i, ARRAY_SIZE(i));
-    core.doCycle(2);
+    core.cycle(2);
     CHECK_EQUAL(core.registers().A, 0x1010, "Can use [register + next word]");
     CHECK_EQUAL(core.registers().PC, 2, "PC should skip data");
     
-    core.doCycle(2);
+    core.cycle(2);
     CHECK_EQUAL(core.memory(0x1015), 0xffff, "Can address memory through [register + next word]");
     CHECK_EQUAL(core.registers().PC, 4, "PC should skip data");
 },
@@ -80,18 +80,18 @@ TEST {
     };
     core.setInstructions(i, ARRAY_SIZE(i));
     
-    core.doCycle();
+    core.cycle();
     CHECK_EQUAL(core.registers().SP, 0xffff, "Is stack pointer decreasing");
     CHECK_EQUAL(core.memory(0xffff), 1, "Are values pushed correctly");
     
-    core.doCycle();
+    core.cycle();
     CHECK_EQUAL(core.registers().SP, 0, "Is stack pointer increasing");
     CHECK_EQUAL(core.registers().A, 1, "Is value retrieved from stack");
     
-    core.doCycle(3);
+    core.cycle(3);
     CHECK_EQUAL(core.registers().A, 3, "Are multiple values pushed/popped correctly");
     
-    core.doCycle();
+    core.cycle();
     CHECK_EQUAL(core.registers().A, 2, "Are multiple values pushed/popped correctly");
 },
 
@@ -113,13 +113,13 @@ TEST {
     };
     core.setInstructions(i, ARRAY_SIZE(i));
     
-    core.doCycle(2);
+    core.cycle(2);
     CHECK_EQUAL(core.registers().A, 2, "Can you PEEK correctly?");
     
-    core.doCycle(7);
+    core.cycle(7);
     CHECK_EQUAL(core.registers().A, 5, "Can you PICK to register correctly?");
     
-    core.doCycle(2);
+    core.cycle(2);
     CHECK_EQUAL(core.memory(0xffff - 3), 9, "Can you PICK back to stack correctly?");
 },
 
@@ -135,7 +135,7 @@ TEST {
     };
     core.setInstructions(i, ARRAY_SIZE(i));
     
-    core.doCycle(5);
+    core.cycle(5);
     
     CHECK_EQUAL(core.registers().A, 0xfafa, "Can set literal values to registers");
     CHECK_EQUAL(core.memory(0x0010), 0xabba, "Can set literal values to memory");
@@ -154,7 +154,7 @@ TEST {
     };
     core.setInstructions(i, ARRAY_SIZE(i));
     
-    core.doCycle(3);
+    core.cycle(3);
     CHECK_EQUAL(core.registers().SP, 30, "Can set stack pointer");
     CHECK_EQUAL(core.registers().PC, 6, "Can set program counter");
     CHECK_EQUAL(core.registers().EX, 0xffff, "Can set EX");
@@ -174,11 +174,11 @@ TEST {
     
     core.setInstructions(i, ARRAY_SIZE(i));
     
-    core.doCycle(4);
+    core.cycle(4);
     CHECK_EQUAL(core.registers().A, 35, "Is adding correct");
     CHECK_EQUAL(core.registers().EX, 0, "Is EX set correctly when no overflow");
     
-    core.doCycle(3);
+    core.cycle(3);
     CHECK_EQUAL(core.registers().A, static_cast<uint16_t>(0xfffe + 35), "Does adding overflow correctly");
     CHECK_EQUAL(core.registers().EX, 1, "Is EX set correctly after overflow");
 },
@@ -198,11 +198,11 @@ TEST {
     };
     core.setInstructions(i, ARRAY_SIZE(i));
     
-    core.doCycle(6);
+    core.cycle(6);
     CHECK_EQUAL(core.registers().A, 0x10, "Can subtract stuff");
     CHECK_EQUAL(core.registers().EX, 0, "Is EX set correctly when there's no overflow");
     
-    core.doCycle(3);
+    core.cycle(3);
     uint16_t temp = 0x10;
     temp -= 0x20;
     CHECK_EQUAL(core.registers().A, temp, "Can subtract stuff with overflow");
@@ -228,14 +228,14 @@ TEST {
     };
     core.setInstructions(i, ARRAY_SIZE(i));
     
-    core.doCycle(6);
+    core.cycle(6);
     CHECK_EQUAL(core.registers().A, 0x20 * 0x20, "Is multiplying correct");
     CHECK_EQUAL(core.registers().EX, 0, "Is EX set correctly after multiplying");
     
-    core.doCycle(2);
+    core.cycle(2);
     CHECK_EQUAL(core.memory(0x8000), 0xffff, "Is memory set correctly before multiplying");
     
-    core.doCycle(4);
+    core.cycle(4);
     uint32_t temp = 0xffff * 0xffff;
     CHECK_EQUAL(core.memory(0x8000), temp & 0xffff, "Is multiplying working correctly with big numbers");
     CHECK_EQUAL(core.registers().EX, temp >> 16, "Is EX set correctly after multiply overflow");
@@ -252,7 +252,7 @@ TEST {
     };
     core.setInstructions(i, ARRAY_SIZE(i));
     
-    core.doCycle(5);
+    core.cycle(5);
     CHECK_EQUAL(static_cast<int16_t>(core.registers().A), -20, "Is multiply with sign working correctly");
     CHECK_EQUAL(static_cast<int16_t>(core.registers().EX), (-20) >> 16, "Is EX filled correctly");
 },
@@ -273,15 +273,15 @@ TEST {
     };
     core.setInstructions(i, ARRAY_SIZE(i));
     
-    core.doCycle(6);
+    core.cycle(6);
     CHECK_EQUAL(core.registers().A, 10, "Division works");
     CHECK_EQUAL(core.registers().EX, 0, "Is EX set correctly after division");
     
-    core.doCycle(3);
+    core.cycle(3);
     CHECK_EQUAL(core.registers().C, 0, "Is division by 0 handled correctly");
     CHECK_EQUAL(core.registers().EX, 0, "Is division by 0 handled correctly");
     
-    core.doCycle(4);
+    core.cycle(4);
     CHECK_EQUAL(core.registers().A, 0, "Is division 1/2 handled correctly");
     CHECK_EQUAL(core.registers().EX, 0x10000/2, "Is division 1/2 handled correctly");
 },
@@ -297,7 +297,7 @@ TEST {
     };
     core.setInstructions(i, ARRAY_SIZE(i));
     
-    core.doCycle(6);
+    core.cycle(6);
     CHECK_EQUAL(static_cast<int16_t>(core.registers().A), -15, "Is pre-decimal part handled correctly");
     CHECK_EQUAL(core.registers().EX, 0x10000/2, "Is decimal part handled correctly");
 },
@@ -319,7 +319,7 @@ TEST {
     };
     core.setInstructions(i, ARRAY_SIZE(i));
     
-    core.doCycle(16);
+    core.cycle(16);
     CHECK_EQUAL(core.registers().A, 5, "Is modulo working 1");
     CHECK_EQUAL(core.registers().B, 0, "Is modulo working 2");
     CHECK_EQUAL(core.registers().C, 0, "Is modulo by 0 working");
@@ -339,7 +339,7 @@ TEST {
     };
     core.setInstructions(i, ARRAY_SIZE(i));
     
-    core.doCycle(11);
+    core.cycle(11);
     CHECK_EQUAL(static_cast<int16_t>(core.registers().A), -7, "Is signed modulo working");
     CHECK_EQUAL(core.registers().B, 0, "Is signed modulo by 0 working");
 },
@@ -361,7 +361,7 @@ TEST {
     };
     core.setInstructions(i, ARRAY_SIZE(i));
     
-    core.doCycle(10);
+    core.cycle(10);
     CHECK_EQUAL(core.registers().A, 0x00aa, "Is AND working correctly");
     CHECK_EQUAL(core.registers().B, 0xaaff, "Is BOR working correctly");
     CHECK_EQUAL(core.registers().C, 0xaa55, "Is XOR working correctly");
@@ -384,15 +384,15 @@ TEST {
     };
     core.setInstructions(i, ARRAY_SIZE(i));
     
-    core.doCycle(2);
+    core.cycle(2);
     CHECK_EQUAL(core.registers().A, 2, "Is logical shift right working");
     CHECK_EQUAL(core.registers().EX, 0x8000, "Is bit move handled correctly");
     
-    core.doCycle(3);
+    core.cycle(3);
     CHECK_EQUAL(static_cast<int16_t>(core.registers().A), -14, "Is arithmetic shift right working correctly");
     CHECK_EQUAL(core.registers().EX, 0x8000, "Is bit move handled correctly");
     
-    core.doCycle(3);
+    core.cycle(3);
     CHECK_EQUAL(core.registers().A, 10, "Is shift left working correctly");
     CHECK_EQUAL(core.registers().EX, 1, "Is shift left working correctly (EX)");
 },
@@ -408,7 +408,7 @@ TEST {
     };
     core.setInstructions(i, ARRAY_SIZE(i));
     
-    core.doCycle(5);
+    core.cycle(5);
     CHECK_EQUAL(core.registers().C, 0xffff, "Is IFB success working");
 },
 
@@ -423,7 +423,7 @@ TEST {
     };
     core.setInstructions(i, ARRAY_SIZE(i));
     
-    core.doCycle(5);
+    core.cycle(5);
     CHECK_EQUAL(core.registers().C, 0, "Is IFB failure working");
 },
 
@@ -441,7 +441,7 @@ TEST {
     };
     core.setInstructions(i, ARRAY_SIZE(i));
     
-    core.doCycle(11);
+    core.cycle(11);
     CHECK_EQUAL(core.registers().C, 0xffff, "Is IFB multiple successes working");
 },
 
@@ -460,7 +460,7 @@ TEST {
     };
     core.setInstructions(i, ARRAY_SIZE(i));
     
-    core.doCycle(9);
+    core.cycle(9);
     CHECK_EQUAL(core.registers().C, 0, "Is IFB chaining working");
     CHECK_EQUAL(core.registers().X, 0xffff, "Is IFB chaining working 2");
 },
@@ -501,7 +501,7 @@ TEST {
     };
     core.setInstructions(i, ARRAY_SIZE(i));
     
-    core.doCycle(30);
+    core.cycle(30);
     CHECK_EQUAL(core.registers().A, 0xffff, "Is IFC correct with success");
     CHECK_EQUAL(core.registers().B, 0xffff, "Is IFE correct with success");
     CHECK_EQUAL(core.registers().C, 0xffff, "Is IFN correct with success");
@@ -548,7 +548,7 @@ TEST {
     };
     core.setInstructions(i, ARRAY_SIZE(i));
     
-    core.doCycle(31);
+    core.cycle(31);
     CHECK_EQUAL(core.registers().A, 1, "Is IFC correct with failure");
     CHECK_EQUAL(core.registers().B, 8, "Is IFE correct with failure");
     CHECK_EQUAL(core.registers().C, 7, "Is IFN correct with failure");
@@ -570,11 +570,11 @@ TEST {
     };
     core.setInstructions(i, ARRAY_SIZE(i));
     
-    core.doCycle(5);
+    core.cycle(5);
     CHECK_EQUAL(core.registers().A, 19, "Is ADX adding correctly");
     CHECK_EQUAL(core.registers().EX, 0, "Is EX set to 0 when there's no overflow in ADX");
     
-    core.doCycle(4);
+    core.cycle(4);
     CHECK_EQUAL(core.registers().A, 27, "Is ADX adding correctly with overflow");
     CHECK_EQUAL(core.registers().EX, 1, "Is EX set to 1 when there's an overflow in ADX");
 },
@@ -594,15 +594,15 @@ TEST {
     };
     core.setInstructions(i, ARRAY_SIZE(i));
     
-    core.doCycle(5);
+    core.cycle(5);
     CHECK_EQUAL(core.registers().A, 2, "Is SBX working correctly in normal circumstances");
     CHECK_EQUAL(core.registers().EX, 0, "Is EX set to 0 when SBX didn't overflow or underflow");
     
-    core.doCycle(3);
+    core.cycle(3);
     CHECK_EQUAL(core.registers().A, static_cast<uint16_t>(-8), "Is SBX correctly subtracting");
     CHECK_EQUAL(core.registers().EX, 0xffff, "Is EX set correctly in case of underflow after SBX");
     
-    core.doCycle(4);
+    core.cycle(4);
     CHECK_EQUAL(core.registers().A, 1, "Is SBX correctly subtracting again");
     CHECK_EQUAL(core.registers().EX, 1, "Is EX set correctly after overflow in SBX");
 },
@@ -619,17 +619,17 @@ TEST {
     };
     core.setInstructions(i, ARRAY_SIZE(i));
     
-    core.doCycle(2);
+    core.cycle(2);
     CHECK_EQUAL(core.registers().A, 1, "Is STI setting correctly");
     CHECK_EQUAL(core.registers().I, 1, "Is STI increasing I correctly");
     CHECK_EQUAL(core.registers().J, 1, "Is STI increasing J correctly");
     
-    core.doCycle(2);
+    core.cycle(2);
     CHECK_EQUAL(core.registers().A, 1, "Is STI setting correctly again");
     CHECK_EQUAL(core.registers().I, 2, "Is STI increasing I correctly again");
     CHECK_EQUAL(core.registers().J, 2, "Is STI increasing J correctly again");
     
-    core.doCycle(2);
+    core.cycle(2);
     CHECK_EQUAL(core.registers().A, 8, "Is STD setting correctly");
     CHECK_EQUAL(core.registers().I, 1, "Is STD decreasing I correctly");
     CHECK_EQUAL(core.registers().J, 1, "Is STD decreasing J correctly");

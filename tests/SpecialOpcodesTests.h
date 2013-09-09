@@ -32,13 +32,13 @@ TEST {
     };
     core.setInstructions(i, ARRAY_SIZE(i));
     
-    core.doCycle(4);
+    core.cycle(4);
     CHECK_EQUAL(core.registers().A, 1, "Is JSR working");
     CHECK_EQUAL(core.registers().PC, 6, "Is JSR working");
     CHECK_EQUAL(core.registers().SP, 0xffff, "Is SP correctly updated");
     CHECK_EQUAL(core.memory(0xffff), 1, "Is next instruction's address correctly pushed");
     
-    core.doCycle(4);
+    core.cycle(4);
     CHECK_EQUAL(core.registers().A, 7, "Is JSR working 2");
     CHECK_EQUAL(core.registers().PC, 2, "Is JSR working 2");
     CHECK_EQUAL(core.registers().SP, 0xfffe, "Is SP correctly updated 2");
@@ -57,7 +57,7 @@ TEST {
     };
     core.setInstructions(i, ARRAY_SIZE(i));
     
-    core.doCycle(8);
+    core.cycle(8);
     CHECK_EQUAL(core.registers().A, 3, "Is execution happening as normal with interrupts disabled");
 },
 
@@ -80,27 +80,27 @@ TEST {
     };
     core.setInstructions(i, ARRAY_SIZE(i));
     
-    core.doCycle();
+    core.cycle();
     CHECK_EQUAL(core.registers().IA, 10, "Is IAS working correctly");
     
-    core.doCycle(4);
+    core.cycle(4);
     CHECK_EQUAL(core.registers().A, 0xffff, "Is A set correctly to interrupt message");
     CHECK_EQUAL(core.registers().PC, 10, "Is PC set correctly in interrupt");
     CHECK_EQUAL(core.registers().B, 0, "Is INT taking enough time");
     
     core.receiveInterrupt(0x1234);
     
-    core.doCycle();
+    core.cycle();
     CHECK_EQUAL(core.registers().B, 5, "Are interrupts disabled in interrupt handler");
     CHECK_EQUAL(core.registers().PC, 11, "Are interrupts correctly disabled in an interrupt handler");
     
-    core.doCycle(3);
+    core.cycle(3);
     CHECK_EQUAL(core.registers().PC, 10, "Can trigger interrupt after RFI");
     
-    core.doCycle(4);
+    core.cycle(4);
     CHECK_EQUAL(core.registers().PC, 2, "Is RFI working correctly");
     
-    core.doCycle();
+    core.cycle();
     CHECK_EQUAL(core.registers().A, 5, "Is later on the core working correctly");
 },
 
@@ -117,16 +117,16 @@ TEST {
     core.setInstructions(i, ARRAY_SIZE(i));
     
     core.receiveInterrupt(0x1234);
-    core.doCycle();
+    core.cycle();
     CHECK_EQUAL(core.registers().PC, 4, "Is interrupt correctly handled after setting interrupt address");
     
     int N = 5;
     for(int i = 0; i < N; ++i) {
-        core.doCycle(3); // RFI
-        core.doCycle(2); // STI
+        core.cycle(3); // RFI
+        core.cycle(2); // STI
         CHECK_EQUAL(core.registers().A, i, "Is register A being correctly updated");
         core.receiveInterrupt(0x1234);
-        core.doCycle();  // SET & interrupt handled after ie
+        core.cycle();  // SET & interrupt handled after ie
     }
 },
 
@@ -141,24 +141,24 @@ TEST {
     };
     core.setInstructions(i, ARRAY_SIZE(i));
     
-    core.doCycle(2);
+    core.cycle(2);
     CHECK_EQUAL(core.registers().A, 0, "No clocks attached in the beginning");
     
     std::shared_ptr<Hardware> c1{new GenericClock{}};
     core.attachHardware(c1);
-    core.doCycle(2);
+    core.cycle(2);
     CHECK_EQUAL(core.registers().A, 1, "Is first clock correctly counted");
     
     std::shared_ptr<Hardware> c2{new GenericClock{}};
     core.attachHardware(c2);
-    core.doCycle(2);
+    core.cycle(2);
     CHECK_EQUAL(core.registers().A, 2, "Is second clock correctly added");
     
     CHECK_TRUE(core.hasHardware(c1), "Does the core know it has clocks attached?");
     CHECK_TRUE(core.hasHardware(c2), "Does the core know it has clocks attached?");
     
     core.detachHardware(c1);
-    core.doCycle(2);
+    core.cycle(2);
     CHECK_EQUAL(core.registers().A, 1, "Is HWN working correctly after detach");
     
     CHECK_TRUE(core.hasHardware(c2), "Is clock 2 still attached");
@@ -174,7 +174,7 @@ TEST {
 
     std::shared_ptr<Hardware> c{new GenericClock{}};
     core.attachHardware(c);
-    core.doCycle(4);
+    core.cycle(4);
     
     CHECK_EQUAL(core.registers().A, GenericClock::HARDWARE_ID & 0xffff, "Is lower half of hardware id correct");
     CHECK_EQUAL(core.registers().B, GenericClock::HARDWARE_ID >> 16, "Is lower half of hardware id correct");
@@ -205,7 +205,7 @@ TEST {
     
     std::shared_ptr<TestHardware> h{new TestHardware{}};
     core.attachHardware(h);
-    core.doCycle(4);
+    core.cycle(4);
     
     CHECK_TRUE(h->received, "Are hardware interrupts sent to hardware");
     CHECK_EQUAL(core.registers().A, 16, "Is the processor correctly updated");
