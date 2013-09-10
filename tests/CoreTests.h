@@ -25,8 +25,8 @@ TEST {
     core.setInstructions(i, ARRAY_SIZE(i));
     
     int N = 5;
-    std::chrono::milliseconds period{100};
-    core.run(period);
+    std::chrono::milliseconds period{100}; 
+    core.run(period / 3); // 3 because it takes 3 cycles to do the instructions
     std::this_thread::sleep_for(5.5 * period);
     
     // this thread may sometimes fail due to scheduling, so need to always worry

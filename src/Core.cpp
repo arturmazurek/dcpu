@@ -92,6 +92,7 @@ void Core::detachHardware(std::shared_ptr<Hardware> hardware) {
 void Core::run(std::chrono::microseconds microseconds) {
     m_running = true;
     m_shouldRun = true;
+    m_period = microseconds;
     
     auto runFn = [&]() {
         while (m_shouldRun) {
