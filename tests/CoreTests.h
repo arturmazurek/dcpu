@@ -38,7 +38,7 @@ TEST {
 },
 
 TEST {
-    meta.name = "Running interrupts";
+    meta.name = "Running sending interrupts";
     
     class InterruptCounter : public Hardware {
     public:
@@ -73,6 +73,54 @@ TEST {
     core.stop();
     
     CHECK_TRUE(counter->counter.load() > N, "Are interrupts called in a core's runloop?");
+},
+
+TEST {
+    meta.name = "Running core receiving interrupts";
+    
+    class Ender : public Hardware {
+    public:
+        bool ended;
+        std::condition_variable cv;
+        
+        Ender() : Hardware{1, 1, 1}, ended{false} {}
+        
+        void doReceiveInterrupt(Core& from) override {
+            ended = true;
+            cv.notify_one();
+        }
+    };
+    std::shared_ptr<Ender> ender{new Ender{}};
+    
+    static constexpr uint16_t N = 20;
+    
+    Instruction i[] = {
+        { OP_IAS, 0x26 },               // IAS 5
+        { OP_IFE, 0x01, 0x21 + (N-1) }, // IFE B, (20 - 1)
+        { OP_HWI, 0x21 },               // HWI 0
+        { OP_SET, 0x1c, 0x22 },         // SET PC, 1
+        { 0 },
+        { OP_STI, 0x01, 0x06 },         // STI B, I
+        { OP_RFI, 0x00 }                // RFI
+    };
+    core.setInstructions(i, ARRAY_SIZE(i));
+    core.attachHardware(ender);
+    
+    core.run();
+    for(uint16_t i = 0; i < N; ++i) {
+        core.receiveInterrupt(i);
+    }
+
+    std::mutex m;
+    std::unique_lock<decltype(m)> lock{m};
+    ender->cv.wait(lock, [&]() {
+        return ender->ended;
+    });
+
+    core.stop();
+
+    CHECK_EQUAL(core.registers().I, N, "Where core's registers properly updated in the loop");
+    CHECK_EQUAL(core.registers().B, N-1, "Where core's registers properly updated in the loop 2");
 }
 
 TESTS_END
