@@ -14,7 +14,7 @@
 #include <string>
 #include <stdexcept>
 
-class Core;
+#include "Core.h"
 
 class TestsHolder {
 public:

@@ -40,7 +40,7 @@ public:
     
     // Starts a new thread that does processor's cycles with the given
     // period
-    void run(std::chrono::microseconds microseconds);
+    void run(std::chrono::microseconds microseconds = DEFAULT_PERIOD);
     void stop();
     // Must not be called if the core is running
     void cycle(unsigned cycles = 1);
@@ -75,6 +75,8 @@ private:
     uint16_t* checkOperand(uint16_t& operand, bool inA);
     
 private:
+    static const std::chrono::milliseconds DEFAULT_PERIOD;
+    
     static const int MEMORY_SIZE = 0x10000;
     std::array<uint16_t, MEMORY_SIZE> m_memory;
     

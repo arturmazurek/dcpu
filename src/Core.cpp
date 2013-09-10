@@ -19,7 +19,7 @@
 #include "DCPUException.h"
 #include "Hardware.h"
 
-static constexpr std::chrono::milliseconds DEFAULT_PERIOD{1};
+const std::chrono::milliseconds Core::DEFAULT_PERIOD{1};
 static constexpr std::chrono::microseconds MINIMUM_PERIOD{10};
 
 Core::Core() : m_decoded{0}, m_skipping{false}, m_queueInterrupts{false}, m_period{DEFAULT_PERIOD}, m_minimumPeriod{MINIMUM_PERIOD}, m_running{false}, m_shouldRun{false} {
@@ -27,7 +27,7 @@ Core::Core() : m_decoded{0}, m_skipping{false}, m_queueInterrupts{false}, m_peri
 }
 
 Core::~Core() {
-    m_shouldRun = false;
+    stop();
     if(m_runThread.joinable()) {
         m_runThread.join();
     }

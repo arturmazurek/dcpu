@@ -10,8 +10,6 @@
 
 #include <iostream>
 
-#include "Core.h"
-
 TestsHolder& TestsHolder::instance() {
     static TestsHolder inst;
     return inst;
