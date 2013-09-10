@@ -41,8 +41,8 @@ private:
     const uint32_t m_manufacturer;
     
 private:
-    Hardware(const Hardware&);
-    Hardware& operator=(const Hardware&);
+    Hardware(const Hardware&) = delete;
+    Hardware& operator=(const Hardware&) = delete;
 
 };
 

@@ -22,6 +22,9 @@ public:
     
 private:
     static unsigned argumentCost(uint8_t arg);
+    
+    CostCalculator() = delete;
+    ~CostCalculator() = delete;
 };
 
 #endif /* defined(__dcpu__CostCalculator__) */

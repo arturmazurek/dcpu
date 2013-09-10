@@ -27,6 +27,9 @@ public:
     Core();
     ~Core();
     
+    Core(const Core&) = delete;
+    Core& operator=(const Core&) = delete;
+    
     void resetState();
     void setMemory(uint16_t* m, unsigned size, unsigned startingAt = 0);
     void setInstructions(Instruction* m, unsigned size, unsigned startingAt = 0);
