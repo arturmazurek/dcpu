@@ -119,8 +119,8 @@ TEST {
 
     core.stop();
 
-    CHECK_EQUAL(core.registers().I, N, "Where core's registers properly updated in the loop");
-    CHECK_EQUAL(core.registers().B, N-1, "Where core's registers properly updated in the loop 2");
+    CHECK_EQUAL(core.registers().I, N, "Were core's registers properly updated in the loop");
+    CHECK_EQUAL(core.registers().B, N-1, "Were core's registers properly updated in the loop 2");
 }
 
 TESTS_END
