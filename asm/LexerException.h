@@ -15,6 +15,6 @@
 class LexerException : public std::runtime_error {
 public:
     LexerException(const std::string& why) : std::runtime_error{why} {}
-}
+};
 
 #endif

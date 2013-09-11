@@ -7,11 +7,42 @@
 //
 
 #include <iostream>
+#include <sstream>
+
+#include "Lexer.h"
+#include "LexerException.h"
+
+using std::cout;
+using std::endl;
 
 int main(int argc, const char * argv[])
 {
-    // insert code here...
-    std::cout << "Hello, World!\n";
+    std::stringstream ss;
+    ss << "  dsa ddd 76 s76 076 "; // should throw on the last one
+
+    Lexer l{ss};
+
+    try {
+        char tok = 0;
+        while((tok = l.nextToken()) != Lexer::TOK_EOF) {
+            switch (tok) {
+                case Lexer::TOK_IDENTIFIER:
+                    cout << "Identifier: " << l.identifier() << endl;
+                    break;
+                    
+                case Lexer::TOK_NUMBER:
+                    cout << "Number: " << l.number() << endl;
+                    break;
+                    
+                default:
+                    cout << "Unknown something: " << tok << endl;
+                    break;
+            }
+        }
+    } catch (LexerException& e) {
+        cout << "Lexer exception: " << e.what() << endl;
+    }
+    
     return 0;
 }
 

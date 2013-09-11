@@ -10,7 +10,9 @@
 
 #include <cctype>
 
-Lexer::Lexer(Lexer::input_iterator input) : m_input{input}, m_lastChar{' '} {
+#include "LexerException.h"
+
+Lexer::Lexer(std::istream& input) : m_input{input}, m_lastChar{' '}, m_number{0} {
     
 }
 
@@ -18,25 +20,37 @@ const std::string& Lexer::identifier() const {
     return m_identifier;
 }
 
-Lexer::Token Lexer::nextToken() {
+int Lexer::number() const {
+    return m_number;
+}
+
+Lexer::Token Lexer::nextToken() {    
     while(isspace(m_lastChar)) {
-        m_lastChar = *m_input;
-        ++m_input;
+        m_lastChar = m_input.get();
     }
     
     // identifier: [a-zA-Z][a-zA-Z0-9]*
     if(isalpha(m_lastChar)) {
         m_identifier = m_lastChar;
-        while(m_input != input_iterator{}) {
-            m_identifier += *m_input;
-            ++m_input;
+        while(isalnum(m_lastChar = m_input.get())) {
+            m_identifier += m_lastChar;
         }
         return TOK_IDENTIFIER;
     }
     
     // digit - [1-9][0-9]*
     if(isdigit(m_lastChar)) {
+        if(m_lastChar == '0') {
+            throw LexerException("Only the following format of digits - [1-9][0-9]* currently allowed - tried '0'");
+        }
+        std::string number;
+        do {
+            number += m_lastChar;
+            m_lastChar = m_input.get();
+        } while (isdigit(m_lastChar));
         
+        m_number = std::stoi(number);
+        return TOK_NUMBER;
     }
     
     return TOK_EOF;

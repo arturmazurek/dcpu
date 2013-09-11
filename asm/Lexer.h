@@ -23,19 +23,20 @@ public:
     };
     
 public:
-    typedef std::istream_iterator<char> input_iterator;
-    Lexer(input_iterator input);
+    Lexer(std::istream& input);
     
     Token nextToken();
     
     const std::string& identifier() const;
+    int number() const;
     
 private:
-    input_iterator m_input;
+    std::istream& m_input;
     
     char m_lastChar;
     
     std::string m_identifier;
+    int m_number;
 };
 
 #endif /* defined(__dcpu__Lexer__) */
