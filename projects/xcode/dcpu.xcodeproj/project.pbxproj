@@ -7,8 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		6D1B541817E0C8FC005B3239 /* Lexer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6D1B541617E0C8FC005B3239 /* Lexer.cpp */; };
 		7500251217CB82FF008CC090 /* CostCalculator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7500251017CB82FF008CC090 /* CostCalculator.cpp */; };
+		7500538717E106D900A3C08F /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7500538617E106D900A3C08F /* main.cpp */; };
+		7500538D17E1073800A3C08F /* Lexer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6D1B541617E0C8FC005B3239 /* Lexer.cpp */; };
 		7587BDB517C79D4000E0D416 /* TestsHolder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7587BDB417C79D4000E0D416 /* TestsHolder.cpp */; };
 		758875F617DC7ED1004D557F /* Hardware.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 758875F417DC7ED1004D557F /* Hardware.cpp */; };
 		758875F917DCD2E7004D557F /* GenericClock.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 758875F717DCD2E7004D557F /* GenericClock.cpp */; };
@@ -18,6 +19,15 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
+		7500538217E106D800A3C08F /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = /usr/share/man/man1/;
+			dstSubfolderSpec = 0;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 1;
+		};
 		75C7E37B17C3CA00001247DA /* CopyFiles */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
@@ -38,6 +48,9 @@
 		7500250E17C8E1B7008CC090 /* Util.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Util.h; sourceTree = "<group>"; };
 		7500251017CB82FF008CC090 /* CostCalculator.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CostCalculator.cpp; sourceTree = "<group>"; };
 		7500251117CB82FF008CC090 /* CostCalculator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CostCalculator.h; sourceTree = "<group>"; };
+		7500537F17E1068900A3C08F /* LexerException.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LexerException.h; sourceTree = "<group>"; };
+		7500538417E106D800A3C08F /* dcpu-asm */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "dcpu-asm"; sourceTree = BUILT_PRODUCTS_DIR; };
+		7500538617E106D900A3C08F /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		7587BDAE17C798E700E0D416 /* tests.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = tests.h; sourceTree = "<group>"; };
 		7587BDB017C79A3600E0D416 /* TestsHolder.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TestsHolder.h; sourceTree = "<group>"; };
 		7587BDB417C79D4000E0D416 /* TestsHolder.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TestsHolder.cpp; sourceTree = "<group>"; };
@@ -60,6 +73,13 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		7500538117E106D800A3C08F /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		75C7E37A17C3CA00001247DA /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -73,8 +93,10 @@
 		6D1B541917E0CA49005B3239 /* asm */ = {
 			isa = PBXGroup;
 			children = (
+				7500538617E106D900A3C08F /* main.cpp */,
 				6D1B541617E0C8FC005B3239 /* Lexer.cpp */,
 				6D1B541717E0C8FC005B3239 /* Lexer.h */,
+				7500537F17E1068900A3C08F /* LexerException.h */,
 			);
 			name = asm;
 			path = ../../asm;
@@ -110,6 +132,7 @@
 			isa = PBXGroup;
 			children = (
 				75C7E37D17C3CA00001247DA /* dcpu */,
+				7500538417E106D800A3C08F /* dcpu-asm */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -141,6 +164,23 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		7500538317E106D800A3C08F /* dcpu-asm */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 7500538A17E106D900A3C08F /* Build configuration list for PBXNativeTarget "dcpu-asm" */;
+			buildPhases = (
+				7500538017E106D800A3C08F /* Sources */,
+				7500538117E106D800A3C08F /* Frameworks */,
+				7500538217E106D800A3C08F /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "dcpu-asm";
+			productName = "dcpu-asm";
+			productReference = 7500538417E106D800A3C08F /* dcpu-asm */;
+			productType = "com.apple.product-type.tool";
+		};
 		75C7E37C17C3CA00001247DA /* dcpu */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 75C7E38617C3CA00001247DA /* Build configuration list for PBXNativeTarget "dcpu" */;
@@ -180,11 +220,21 @@
 			projectRoot = "";
 			targets = (
 				75C7E37C17C3CA00001247DA /* dcpu */,
+				7500538317E106D800A3C08F /* dcpu-asm */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXSourcesBuildPhase section */
+		7500538017E106D800A3C08F /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7500538D17E1073800A3C08F /* Lexer.cpp in Sources */,
+				7500538717E106D900A3C08F /* main.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		75C7E37917C3CA00001247DA /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -196,13 +246,30 @@
 				7587BDB517C79D4000E0D416 /* TestsHolder.cpp in Sources */,
 				7500251217CB82FF008CC090 /* CostCalculator.cpp in Sources */,
 				75ABD72317C5253E00BED3AB /* Instruction.cpp in Sources */,
-				6D1B541817E0C8FC005B3239 /* Lexer.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin XCBuildConfiguration section */
+		7500538B17E106D900A3C08F /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		7500538C17E106D900A3C08F /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
 		75C7E38417C3CA00001247DA /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -292,6 +359,14 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		7500538A17E106D900A3C08F /* Build configuration list for PBXNativeTarget "dcpu-asm" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				7500538B17E106D900A3C08F /* Debug */,
+				7500538C17E106D900A3C08F /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
 		75C7E37817C3CA00001247DA /* Build configuration list for PBXProject "dcpu" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (

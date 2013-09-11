@@ -10,28 +10,32 @@
 #define __dcpu__Lexer__
 
 #include <istream>
+#include <string>
 
+// This takes a lot from the llvm's kaleidoscope tutorial
 class Lexer {
 public:
     enum Token {
         TOK_EOF = -1,
         
-        TOK_IDENT = -2,
+        TOK_IDENTIFIER = -2,
         TOK_NUMBER = -3
     };
     
 public:
-    Lexer(std::istream_iterator<char> input);
+    typedef std::istream_iterator<char> input_iterator;
+    Lexer(input_iterator input);
     
     Token nextToken();
     
-private:
-    bool isWhitespace(char c) const;
+    const std::string& identifier() const;
     
 private:
-    std::istream_iterator<char> m_input;
+    input_iterator m_input;
     
     char m_lastChar;
+    
+    std::string m_identifier;
 };
 
 #endif /* defined(__dcpu__Lexer__) */
