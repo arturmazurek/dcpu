@@ -1,4 +1,4 @@
 dcpu
 ====
 
-My take on a DCPU-16 emulator
+My take on a DCPU-16 emulator and assembler
