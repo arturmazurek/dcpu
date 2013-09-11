@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		6D1B541817E0C8FC005B3239 /* Lexer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6D1B541617E0C8FC005B3239 /* Lexer.cpp */; };
 		7500251217CB82FF008CC090 /* CostCalculator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7500251017CB82FF008CC090 /* CostCalculator.cpp */; };
 		7587BDB517C79D4000E0D416 /* TestsHolder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7587BDB417C79D4000E0D416 /* TestsHolder.cpp */; };
 		758875F617DC7ED1004D557F /* Hardware.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 758875F417DC7ED1004D557F /* Hardware.cpp */; };
@@ -29,6 +30,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		6D1B541617E0C8FC005B3239 /* Lexer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Lexer.cpp; sourceTree = "<group>"; };
+		6D1B541717E0C8FC005B3239 /* Lexer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Lexer.h; sourceTree = "<group>"; };
 		6DF0DA9A17CCE6BA0048EBF5 /* SpecialOpcodesTests.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SpecialOpcodesTests.h; sourceTree = "<group>"; };
 		6DF0DA9B17CCEF240048EBF5 /* DCPUException.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DCPUException.h; sourceTree = "<group>"; };
 		7500250D17C8D5DD008CC090 /* OpcodesTests.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OpcodesTests.h; sourceTree = "<group>"; };
@@ -67,6 +70,16 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		6D1B541917E0CA49005B3239 /* asm */ = {
+			isa = PBXGroup;
+			children = (
+				6D1B541617E0C8FC005B3239 /* Lexer.cpp */,
+				6D1B541717E0C8FC005B3239 /* Lexer.h */,
+			);
+			name = asm;
+			path = ../../asm;
+			sourceTree = "<group>";
+		};
 		7587BDAF17C7994800E0D416 /* test */ = {
 			isa = PBXGroup;
 			children = (
@@ -86,6 +99,7 @@
 		75C7E37417C3CA00001247DA = {
 			isa = PBXGroup;
 			children = (
+				6D1B541917E0CA49005B3239 /* asm */,
 				7587BDAF17C7994800E0D416 /* test */,
 				75C7E38917C3CA5F001247DA /* src */,
 				75C7E37E17C3CA00001247DA /* Products */,
@@ -182,6 +196,7 @@
 				7587BDB517C79D4000E0D416 /* TestsHolder.cpp in Sources */,
 				7500251217CB82FF008CC090 /* CostCalculator.cpp in Sources */,
 				75ABD72317C5253E00BED3AB /* Instruction.cpp in Sources */,
+				6D1B541817E0C8FC005B3239 /* Lexer.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
