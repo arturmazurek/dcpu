@@ -18,7 +18,7 @@ using std::endl;
 int main(int argc, const char * argv[])
 {
     std::stringstream ss;
-    ss << "  dsa ddd 76 s76 076 "; // should throw on the last one
+    ss << "  dsa ddd 76 s76 repeat 076 repeat "; // should throw on the last but one
 
     Lexer l{ss};
 
@@ -32,6 +32,10 @@ int main(int argc, const char * argv[])
                     
                 case Lexer::TOK_NUMBER:
                     cout << "Number: " << l.number() << endl;
+                    break;
+                    
+                case Lexer::TOK_REPEAT:
+                    cout << "Repeat" << endl;
                     break;
                     
                 default:

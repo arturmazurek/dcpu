@@ -10,6 +10,7 @@
 #define __dcpu__Lexer__
 
 #include <istream>
+#include <map>
 #include <string>
 
 // This takes a lot from the llvm's kaleidoscope tutorial
@@ -19,7 +20,9 @@ public:
         TOK_EOF = -1,
         
         TOK_IDENTIFIER = -2,
-        TOK_NUMBER = -3
+        TOK_NUMBER = -3,
+        
+        TOK_REPEAT = -4,
     };
     
 public:
@@ -31,6 +34,8 @@ public:
     int number() const;
     
 private:
+    static const std::map<std::string, Token> s_keywords;
+    
     std::istream& m_input;
     
     char m_lastChar;

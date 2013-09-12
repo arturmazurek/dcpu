@@ -9,8 +9,13 @@
 #include "Lexer.h"
 
 #include <cctype>
+#include <map>
 
 #include "LexerException.h"
+
+const std::map<std::string, Lexer::Token> Lexer::s_keywords{
+    { "repeat", TOK_REPEAT }
+};
 
 Lexer::Lexer(std::istream& input) : m_input{input}, m_lastChar{' '}, m_number{0} {
     
@@ -35,6 +40,12 @@ Lexer::Token Lexer::nextToken() {
         while(isalnum(m_lastChar = m_input.get())) {
             m_identifier += m_lastChar;
         }
+        
+        auto it = s_keywords.find(m_identifier);
+        if(it != s_keywords.end()) {
+            return it->second;
+        }
+        
         return TOK_IDENTIFIER;
     }
     
