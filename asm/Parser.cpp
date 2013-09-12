@@ -45,6 +45,8 @@ std::unique_ptr<CommandExprAST> Parser::parseCommand(Lexer& l) {
             m_currentToken = l.nextToken();
             if(m_currentToken == ':') {
                 result->label = std::move(ident);
+            } else {
+                result->op = std::move(ident);
             }
         }
         
