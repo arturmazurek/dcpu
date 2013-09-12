@@ -93,6 +93,7 @@
 		6D0CD75217E1C1AB0002D2E1 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		6D0CD75417E1C1AB0002D2E1 /* tests.1 */ = {isa = PBXFileReference; lastKnownFileType = text.man; path = tests.1; sourceTree = "<group>"; };
 		6D0CD75917E1C2130002D2E1 /* test_main.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = test_main.cpp; sourceTree = "<group>"; };
+		6D0CD76117E1C8730002D2E1 /* LexerTests.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LexerTests.h; sourceTree = "<group>"; };
 		6D1B541617E0C8FC005B3239 /* Lexer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Lexer.cpp; sourceTree = "<group>"; };
 		6D1B541717E0C8FC005B3239 /* Lexer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Lexer.h; sourceTree = "<group>"; };
 		6DF0DA9A17CCE6BA0048EBF5 /* SpecialOpcodesTests.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SpecialOpcodesTests.h; sourceTree = "<group>"; };
@@ -201,6 +202,7 @@
 				6DF0DA9A17CCE6BA0048EBF5 /* SpecialOpcodesTests.h */,
 				75E60CFB17DE6B240039618A /* CoreTests.h */,
 				6D0CD75917E1C2130002D2E1 /* test_main.cpp */,
+				6D0CD76117E1C8730002D2E1 /* LexerTests.h */,
 			);
 			name = test;
 			path = ../../tests;

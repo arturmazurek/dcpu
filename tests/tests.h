@@ -11,6 +11,7 @@
 
 #include "BaseTests.h"
 #include "CoreTests.h"
+#include "LexerTests.h"
 #include "OpcodesTests.h"
 #include "SpecialOpcodesTests.h"
 #include "TestsHolder.h"
@@ -20,6 +21,8 @@ static void runTests() {
     ADD_TESTS(OpcodesTests);
     ADD_TESTS(SpecialOpcodesTests);
     ADD_TESTS(CoreTests);
+    
+    ADD_TESTS(LexerTests);
     
     TestsHolder::instance().runTests();
 }
