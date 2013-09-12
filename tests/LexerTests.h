@@ -12,7 +12,6 @@
 #include <sstream>
 
 #include "Lexer.h"
-#include "LexerException.h"
 #include "TestsUtil.h"
 
 TESTS_START(LexerTests)

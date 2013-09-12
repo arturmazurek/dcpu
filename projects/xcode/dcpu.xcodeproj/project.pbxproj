@@ -18,6 +18,9 @@
 		6D0CD75A17E1C2130002D2E1 /* test_main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6D0CD75917E1C2130002D2E1 /* test_main.cpp */; };
 		6D0CD75F17E1C2680002D2E1 /* libdcpu-asm.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 6D0CD73317E1BD9B0002D2E1 /* libdcpu-asm.a */; };
 		6D0CD76017E1C2680002D2E1 /* libdcpu.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 6D0CD73F17E1C08B0002D2E1 /* libdcpu.a */; };
+		6D0CD76517E1EBBF0002D2E1 /* ASTNodes.h in Headers */ = {isa = PBXBuildFile; fileRef = 6D0CD76317E1EBBF0002D2E1 /* ASTNodes.h */; };
+		6D0CD76817E1EFF90002D2E1 /* Parser.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6D0CD76617E1EFF90002D2E1 /* Parser.cpp */; };
+		6D0CD76917E1EFF90002D2E1 /* Parser.h in Headers */ = {isa = PBXBuildFile; fileRef = 6D0CD76717E1EFF90002D2E1 /* Parser.h */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -58,6 +61,11 @@
 		6D0CD75417E1C1AB0002D2E1 /* tests.1 */ = {isa = PBXFileReference; lastKnownFileType = text.man; path = tests.1; sourceTree = "<group>"; };
 		6D0CD75917E1C2130002D2E1 /* test_main.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = test_main.cpp; sourceTree = "<group>"; };
 		6D0CD76117E1C8730002D2E1 /* LexerTests.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LexerTests.h; sourceTree = "<group>"; };
+		6D0CD76317E1EBBF0002D2E1 /* ASTNodes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ASTNodes.h; sourceTree = "<group>"; };
+		6D0CD76617E1EFF90002D2E1 /* Parser.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Parser.cpp; sourceTree = "<group>"; };
+		6D0CD76717E1EFF90002D2E1 /* Parser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Parser.h; sourceTree = "<group>"; };
+		6D0CD76A17E200570002D2E1 /* ParserException.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ParserException.h; sourceTree = "<group>"; };
+		6D0CD76B17E201AB0002D2E1 /* ParserTests.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ParserTests.h; sourceTree = "<group>"; };
 		6D1B541617E0C8FC005B3239 /* Lexer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Lexer.cpp; sourceTree = "<group>"; };
 		6D1B541717E0C8FC005B3239 /* Lexer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Lexer.h; sourceTree = "<group>"; };
 		6DF0DA9A17CCE6BA0048EBF5 /* SpecialOpcodesTests.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SpecialOpcodesTests.h; sourceTree = "<group>"; };
@@ -128,6 +136,10 @@
 				6D1B541617E0C8FC005B3239 /* Lexer.cpp */,
 				6D1B541717E0C8FC005B3239 /* Lexer.h */,
 				7500537F17E1068900A3C08F /* LexerException.h */,
+				6D0CD76317E1EBBF0002D2E1 /* ASTNodes.h */,
+				6D0CD76617E1EFF90002D2E1 /* Parser.cpp */,
+				6D0CD76717E1EFF90002D2E1 /* Parser.h */,
+				6D0CD76A17E200570002D2E1 /* ParserException.h */,
 			);
 			name = asm;
 			path = ../../asm;
@@ -146,6 +158,7 @@
 				75E60CFB17DE6B240039618A /* CoreTests.h */,
 				6D0CD75917E1C2130002D2E1 /* test_main.cpp */,
 				6D0CD76117E1C8730002D2E1 /* LexerTests.h */,
+				6D0CD76B17E201AB0002D2E1 /* ParserTests.h */,
 			);
 			name = test;
 			path = ../../tests;
@@ -202,6 +215,8 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6D0CD76517E1EBBF0002D2E1 /* ASTNodes.h in Headers */,
+				6D0CD76917E1EFF90002D2E1 /* Parser.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -302,6 +317,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				6D0CD73717E1BDC20002D2E1 /* Lexer.cpp in Sources */,
+				6D0CD76817E1EFF90002D2E1 /* Parser.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

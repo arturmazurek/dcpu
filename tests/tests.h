@@ -13,6 +13,7 @@
 #include "CoreTests.h"
 #include "LexerTests.h"
 #include "OpcodesTests.h"
+#include "ParserTests.h"
 #include "SpecialOpcodesTests.h"
 #include "TestsHolder.h"
 
@@ -23,6 +24,7 @@ static void runTests() {
     ADD_TESTS(CoreTests);
     
     ADD_TESTS(LexerTests);
+    ADD_TESTS(ParserTests);
     
     TestsHolder::instance().runTests();
 }

@@ -13,6 +13,8 @@
 #include <map>
 #include <string>
 
+#include "LexerException.h"
+
 // This takes a lot from the llvm's kaleidoscope tutorial
 class Lexer {
 public:

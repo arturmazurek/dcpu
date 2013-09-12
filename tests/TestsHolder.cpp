@@ -31,6 +31,10 @@ void TestsHolder::runTests() {
             std::cout << "Test \"" << (meta.name.size() ? meta.name : "<no-name>") << "\" failed and stopped testing." << std::endl;
             ++failed;
             break;
+        } catch (std::exception& e) {
+            std::cout << "Test \"" << (meta.name.size() ? meta.name : "<no-name>") << "\" failed with exception: \"" << e.what() << "\"" << std::endl;
+            ++failed;
+            break;
         }
         
         if(s) {
