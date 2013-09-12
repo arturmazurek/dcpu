@@ -14,7 +14,9 @@
 #include "LexerException.h"
 
 const std::map<std::string, Lexer::Token> Lexer::KEYWORDS{
-    { "repeat", TOK_REPEAT }
+    { "repeat", TOK_REPEAT },
+    { "db", TOK_DB },
+    { "dw", TOK_DW }
 };
 const char Lexer::COMMENT{';'};
 
@@ -30,7 +32,7 @@ int Lexer::number() const {
     return m_number;
 }
 
-Lexer::Token Lexer::nextToken() {    
+int Lexer::nextToken() {
     while(isspace(m_lastChar)) {
         m_lastChar = m_input.get();
     }
@@ -75,5 +77,11 @@ Lexer::Token Lexer::nextToken() {
         }
     }
     
-    return TOK_EOF;
+    if(!m_input) {
+        return TOK_EOF;
+    }
+    
+    char c = m_lastChar;
+    m_lastChar = m_input.get();
+    return c;
 }

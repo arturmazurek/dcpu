@@ -18,12 +18,12 @@ using std::endl;
 int main(int argc, const char * argv[])
 {
     std::stringstream ss;
-    ss << " ddd ;commented out \n  dsa ddd 76 s76 repeat 076 repeat "; // should throw on the last but one
+    ss << " ddd ;commented out \n  dsa ddd 76 s76 repeat [] ** s 076 repeat "; // should throw on the last but one
 
     Lexer l{ss};
 
     try {
-        char tok = 0;
+        int tok = 0;
         while((tok = l.nextToken()) != Lexer::TOK_EOF) {
             switch (tok) {
                 case Lexer::TOK_IDENTIFIER:
@@ -39,7 +39,7 @@ int main(int argc, const char * argv[])
                     break;
                     
                 default:
-                    cout << "Unknown something: " << tok << endl;
+                    cout << "Unknown something: " << (char)tok << endl;
                     break;
             }
         }

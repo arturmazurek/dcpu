@@ -23,12 +23,14 @@ public:
         TOK_NUMBER = -3,
         
         TOK_REPEAT = -4,
+        TOK_DB = -5,
+        TOK_DW = -6,
     };
     
 public:
     Lexer(std::istream& input);
     
-    Token nextToken();
+    int nextToken();
     
     const std::string& identifier() const;
     int number() const;
