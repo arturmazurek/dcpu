@@ -108,7 +108,7 @@ TEST {
     meta.name = "Interrupts 2";
     
     Instruction i[] = {
-        { OP_IAS, 0x25 },       // IAG, 4
+        { OP_IAS, 0x25 },       // IAS, 4
         { OP_STI, 0x00, 0x06 }, // STI A, I
         { OP_SET, 0x1c, 0x22 }, // SET PC, 1
         { 0 },
