@@ -11,6 +11,8 @@
 
 #include "TestsHolder.h"
 
+#include <iostream>
+
 #define ADD_TESTS(name) prepare##name()
 
 #define TESTS_START(name) void prepare##name() {\
