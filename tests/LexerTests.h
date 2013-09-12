@@ -105,6 +105,25 @@ TEST {
     CHECK_TRUE(caught, "Is a lexer exception thrown and caught");
 },
 
+TEST {
+    meta.name = "Lexer line breaks";
+    
+    std::stringstream s{"12 \n as \n"};
+    Lexer l{s};
+    
+    CHECK_EQUAL(l.nextToken(), Lexer::TOK_NUMBER, "Are numbers properly recognised");
+    CHECK_EQUAL(l.number(), 12, "Are numbers properly returned");
+    
+    CHECK_EQUAL(l.nextToken(), Lexer::TOK_ENDLINE, "Are endlines properly recognised");
+    
+    CHECK_EQUAL(l.nextToken(), Lexer::TOK_IDENTIFIER, "Are identifiers properly recognised");
+    CHECK_EQUAL(l.identifier(), "as", "Are identifiers properly returned");
+    
+    CHECK_EQUAL(l.nextToken(), Lexer::TOK_ENDLINE, "Are endlines properly recognised");
+    
+    CHECK_EQUAL(l.nextToken(), Lexer::TOK_EOF, "Is input end properly recognised");
+},
+
 TESTS_END
 
 #endif

@@ -33,8 +33,23 @@ int Lexer::number() const {
 }
 
 int Lexer::nextToken() {
-    while(isspace(m_lastChar)) {
+    while(m_lastChar == ' ' || m_lastChar == '\t') {
         m_lastChar = m_input.get();
+    }
+    
+    // OS X / Linux type endline
+    if(m_lastChar == '\n') {
+        m_lastChar = m_input.get();
+        return TOK_ENDLINE;
+    }
+    
+    // Windows type endline
+    if(m_lastChar == '\r') {
+        m_lastChar = m_input.get();
+        if(m_lastChar == '\n') {
+            m_lastChar = m_input.get();
+        }
+        return TOK_ENDLINE;
     }
     
     // identifier: [a-zA-Z][a-zA-Z0-9]*
@@ -70,10 +85,13 @@ int Lexer::nextToken() {
     if(m_lastChar == COMMENT) {
         do {
             m_lastChar = m_input.get();
-        } while (m_input && m_lastChar != '\n' && m_lastChar != '\r');
+            
+        } while(m_input && m_lastChar != '\n');
         
-        if(m_input) {
-            return nextToken();
+        if(!m_input) {
+            return TOK_EOF;
+        } else {
+            return TOK_ENDLINE;
         }
     }
     

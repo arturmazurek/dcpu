@@ -18,13 +18,14 @@ class Lexer {
 public:
     enum Token {
         TOK_EOF = -1,
+        TOK_ENDLINE = -2,
         
-        TOK_IDENTIFIER = -2,
-        TOK_NUMBER = -3,
+        TOK_IDENTIFIER = -3,
+        TOK_NUMBER = -4,
         
-        TOK_REPEAT = -4,
-        TOK_DB = -5,
-        TOK_DW = -6,
+        TOK_REPEAT = -5,
+        TOK_DB = -6,
+        TOK_DW = -7,
     };
     
 public:
