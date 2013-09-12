@@ -62,21 +62,6 @@ std::unique_ptr<OperandExprAST> Parser::parseOperand(Lexer& l) {
         m_currentToken = l.nextToken();
     }
     
-//    if(m_currentToken == Lexer::TOK_IDENTIFIER) {   
-//        return std::make_unique<OperandExprAST>();
-//    } else if(m_currentToken == Lexer::TOK_NUMBER) {
-//        return std::make_unique<OperandExprAST>();
-//    } else {
-//        std::stringstream s;
-//        s << "Expected identifier or number, found token - '";
-//        if(m_currentToken < 0) {
-//            s << m_currentToken;
-//        } else {
-//            s << static_cast<char>(m_currentToken);
-//        }
-//        s << "'";
-//        throw ParserException{s.str()};
-//    }
     result->expression = parseExpression(l);
     
     if(result->addressing) {
