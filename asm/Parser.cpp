@@ -55,21 +55,42 @@ std::unique_ptr<CommandExprAST> Parser::parseCommand(Lexer& l) {
 }
 
 std::unique_ptr<OperandExprAST> Parser::parseOperand(Lexer& l) {
-    if(m_currentToken == Lexer::TOK_IDENTIFIER) {   
-        return std::make_unique<OperandExprAST>();
-    } else if(m_currentToken == Lexer::TOK_NUMBER) {
-        return std::make_unique<OperandExprAST>();
-    } else {
-        std::stringstream s;
-        s << "Expected identifier or number, found token - '";
-        if(m_currentToken < 0) {
-            s << m_currentToken;
-        } else {
-            s << static_cast<char>(m_currentToken);
-        }
-        s << "'";
-        throw ParserException{s.str()};
+    auto result = std::make_unique<OperandExprAST>();
+    
+    if(m_currentToken == '[') {
+        result->addressing = true;
+        m_currentToken = l.nextToken();
     }
+    
+//    if(m_currentToken == Lexer::TOK_IDENTIFIER) {   
+//        return std::make_unique<OperandExprAST>();
+//    } else if(m_currentToken == Lexer::TOK_NUMBER) {
+//        return std::make_unique<OperandExprAST>();
+//    } else {
+//        std::stringstream s;
+//        s << "Expected identifier or number, found token - '";
+//        if(m_currentToken < 0) {
+//            s << m_currentToken;
+//        } else {
+//            s << static_cast<char>(m_currentToken);
+//        }
+//        s << "'";
+//        throw ParserException{s.str()};
+//    }
+    result->expression = parseExpression(l);
+    
+    if(result->addressing) {
+        if(m_currentToken == ']') {
+            // consume ']'
+            m_currentToken = l.nextToken();
+        } else {
+            std::stringstream s;
+            s << "Expected ']', found: '" << (char)m_currentToken << "'";
+            throw LexerException(s.str());
+        }
+    }
+    
+    return result;
 }
 
 std::unique_ptr<IdentifierExprAST> Parser::parseIdentifier(Lexer& l) {
@@ -86,4 +107,8 @@ std::unique_ptr<IdentifierExprAST> Parser::parseIdentifier(Lexer& l) {
     }
     
     return std::make_unique<IdentifierExprAST>(l.identifier());
+}
+
+std::unique_ptr<ExprAST> Parser::parseExpression(Lexer& l) {
+    return nullptr;
 }

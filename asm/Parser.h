@@ -26,6 +26,7 @@ public:
 private:
     std::unique_ptr<OperandExprAST> parseOperand(Lexer& l);
     std::unique_ptr<IdentifierExprAST> parseIdentifier(Lexer& l);
+    std::unique_ptr<ExprAST> parseExpression(Lexer& l);
     
 private:
     int m_currentToken;

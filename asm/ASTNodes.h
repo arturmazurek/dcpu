@@ -36,7 +36,11 @@ private:
 
 class OperandExprAST : public ExprAST {
 public:
-    OperandExprAST() {}
+    OperandExprAST() : addressing{false} {}
+    
+public:
+    std::unique_ptr<ExprAST> expression;
+    bool addressing;
 };
 
 class CommandExprAST : public ExprAST {
