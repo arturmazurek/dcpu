@@ -26,8 +26,6 @@ public:
         TOK_NUMBER = -4,
         
         TOK_REPEAT = -5,
-        TOK_DB = -6,
-        TOK_DW = -7,
     };
     
 public:

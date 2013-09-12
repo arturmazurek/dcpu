@@ -14,9 +14,7 @@
 #include "LexerException.h"
 
 const std::map<std::string, Lexer::Token> Lexer::KEYWORDS{
-    { "repeat", TOK_REPEAT },
-    { "db", TOK_DB },
-    { "dw", TOK_DW }
+    { "repeat", TOK_REPEAT }
 };
 const char Lexer::COMMENT{';'};
 
