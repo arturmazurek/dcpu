@@ -20,6 +20,13 @@ namespace std {
     }
 }
 
+std::map<char, int> Parser::BINOP_PRECEDENCE {
+    { '+', 10 },
+    { '-', 10 },
+    { '*', 20 },
+    { '/', 20 }
+};
+
 Parser::Parser() : m_currentToken{0} {
     
 }
@@ -94,7 +101,7 @@ std::unique_ptr<IdentifierExprAST> Parser::parseIdentifier(Lexer& l) {
     }
     
     auto result = std::make_unique<IdentifierExprAST>(l.identifier());
-    
+     
     // consume token
     m_currentToken = l.nextToken();
     
@@ -102,6 +109,111 @@ std::unique_ptr<IdentifierExprAST> Parser::parseIdentifier(Lexer& l) {
 }
 
 std::unique_ptr<ExprAST> Parser::parseExpression(Lexer& l) {
-    m_currentToken = l.nextToken(); // consume
+    auto lhs = parsePrimary(l);
+    return parseBinOpRhs(0, std::move(lhs), l);
+}
+
+std::unique_ptr<ExprAST> Parser::parsePrimary(Lexer& l) {
+    switch (m_currentToken) {
+        case Lexer::TOK_IDENTIFIER:
+            return parseIdentifier(l);
+
+        case Lexer::TOK_NUMBER:
+            return parseNumber(l);
+            
+        case '(':
+            return parseParenExpr(l);
+            
+        default: {
+            std::stringstream s;
+            s << "Unknown token '";
+            if(m_currentToken < 0) {
+                s << m_currentToken;
+            } else {
+                s << static_cast<char>(m_currentToken);
+            }
+            s << "' when expecting expression";
+            throw ParserException(s.str());
+        }
+    }
+}
+
+int Parser::getTokenPrecedence(int token) const {
+    if(!isascii(token)) {
+        return -1;
+    }
+    
+    int prec = BINOP_PRECEDENCE[token];
+    if(prec <= 0) {
+        return -1;
+    } else {
+        return prec;
+    }
+}
+
+std::unique_ptr<ExprAST> Parser::parseBinOpRhs(int precedence, std::unique_ptr<ExprAST> lhs, Lexer& l) {
+    while(true) {
+        int tokPrec = getTokenPrecedence(m_currentToken);
+        
+        if(tokPrec < precedence) {
+            return std::move(lhs);
+        }
+        
+        int binOp = m_currentToken;
+        m_currentToken = l.nextToken();
+        
+        auto rhs = parsePrimary(l);
+        if(!rhs) {
+            return nullptr;
+        }
+        
+        int nextPrecedence = getTokenPrecedence(m_currentToken);
+        if(tokPrec < nextPrecedence) {
+            rhs = parseBinOpRhs(tokPrec+1, std::move(rhs), l);
+            if(!rhs) {
+                return nullptr;
+            }
+        }
+        
+        lhs = std::make_unique<BinaryExprAST>(binOp, std::move(lhs), std::move(rhs));
+    }
+    
+    return nullptr;
+}
+
+std::unique_ptr<NumberExprAST> Parser::parseNumber(Lexer& l) {
+    if(m_currentToken != Lexer::TOK_NUMBER) {
+        std::stringstream s;
+        s << "Expected number, found token - '";
+        if(m_currentToken < 0) {
+            s << m_currentToken;
+        } else {
+            s << static_cast<char>(m_currentToken);
+        }
+        s << "'";
+        throw ParserException{s.str()};
+    }
+    
+    auto result = std::make_unique<NumberExprAST>(l.number());
+    
+    // consume token
+    m_currentToken = l.nextToken();
+    
+    return result;
+}
+
+std::unique_ptr<ExprAST> Parser::parseParenExpr(Lexer& l) {
+    // TODO
+    
+    m_currentToken = l.nextToken(); // eat '('
+    auto expr = parseExpression(l);
+    if(!expr) {
+        return nullptr;
+    }
+    
+    if(m_currentToken != '(') {
+        
+    }
+    
     return nullptr;
 }

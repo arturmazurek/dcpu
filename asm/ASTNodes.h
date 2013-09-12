@@ -43,6 +43,11 @@ public:
     bool addressing;
 };
 
+class BinaryExprAST : public ExprAST {
+public:
+    BinaryExprAST(int binop, std::unique_ptr<ExprAST> lhs, std::unique_ptr<ExprAST> rhs) {}
+};
+
 class CommandExprAST : public ExprAST {
 public:
     CommandExprAST() {}
