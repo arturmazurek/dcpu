@@ -34,7 +34,8 @@ public:
     int number() const;
     
 private:
-    static const std::map<std::string, Token> s_keywords;
+    static const std::map<std::string, Token> KEYWORDS;
+    static const char COMMENT;
     
     std::istream& m_input;
     

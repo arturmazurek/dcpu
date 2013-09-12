@@ -18,7 +18,7 @@ using std::endl;
 int main(int argc, const char * argv[])
 {
     std::stringstream ss;
-    ss << "  dsa ddd 76 s76 repeat 076 repeat "; // should throw on the last but one
+    ss << " ddd ;commented out \n  dsa ddd 76 s76 repeat 076 repeat "; // should throw on the last but one
 
     Lexer l{ss};
 

@@ -13,9 +13,10 @@
 
 #include "LexerException.h"
 
-const std::map<std::string, Lexer::Token> Lexer::s_keywords{
+const std::map<std::string, Lexer::Token> Lexer::KEYWORDS{
     { "repeat", TOK_REPEAT }
 };
+const char Lexer::COMMENT{';'};
 
 Lexer::Lexer(std::istream& input) : m_input{input}, m_lastChar{' '}, m_number{0} {
     
@@ -41,8 +42,8 @@ Lexer::Token Lexer::nextToken() {
             m_identifier += m_lastChar;
         }
         
-        auto it = s_keywords.find(m_identifier);
-        if(it != s_keywords.end()) {
+        auto it = KEYWORDS.find(m_identifier);
+        if(it != KEYWORDS.end()) {
             return it->second;
         }
         
@@ -62,6 +63,16 @@ Lexer::Token Lexer::nextToken() {
         
         m_number = std::stoi(number);
         return TOK_NUMBER;
+    }
+    
+    if(m_lastChar == COMMENT) {
+        do {
+            m_lastChar = m_input.get();
+        } while (m_input && m_lastChar != '\n' && m_lastChar != '\r');
+        
+        if(m_input) {
+            return nextToken();
+        }
     }
     
     return TOK_EOF;
