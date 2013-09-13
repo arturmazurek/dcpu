@@ -42,15 +42,13 @@ std::unique_ptr<CommandExprAST> Parser::parseCommand(Lexer& l) {
             result->op = parseIdentifier(l);
         } else {
             auto ident = parseIdentifier(l);
-            m_currentToken = l.nextToken();
             if(m_currentToken == ':') {
                 result->label = std::move(ident);
+                m_currentToken = l.nextToken();
             } else {
                 result->op = std::move(ident);
             }
         }
-        
-        m_currentToken = l.nextToken();
     }
     
     return result;
@@ -77,6 +75,8 @@ std::unique_ptr<OperandExprAST> Parser::parseOperand(Lexer& l) {
         }
     }
     
+    // token was consumed in parse expression
+    
     return result;
 }
 
@@ -93,9 +93,15 @@ std::unique_ptr<IdentifierExprAST> Parser::parseIdentifier(Lexer& l) {
         throw ParserException{s.str()};
     }
     
-    return std::make_unique<IdentifierExprAST>(l.identifier());
+    auto result = std::make_unique<IdentifierExprAST>(l.identifier());
+    
+    // consume token
+    m_currentToken = l.nextToken();
+    
+    return result;
 }
 
 std::unique_ptr<ExprAST> Parser::parseExpression(Lexer& l) {
+    m_currentToken = l.nextToken(); // consume
     return nullptr;
 }

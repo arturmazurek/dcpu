@@ -86,7 +86,7 @@ TEST {
     CHECK_EQUAL(ast->label->ident(), "label", "Is label retrieved properly");
     
     REQUIRE_TRUE(ast->op != nullptr, "Is operation properly found");
-    CHECK_EQUAL(ast->op->ident(), "dddd", "Is operation retrieved properly");
+    CHECK_EQUAL(ast->op->ident(), "op", "Is operation retrieved properly");
     
     REQUIRE_TRUE(ast->a != nullptr, "Is operator a properly found");
     CHECK_TRUE(!(ast->a->addressing), "Is operator a non-addressing");
