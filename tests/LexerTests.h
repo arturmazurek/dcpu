@@ -57,7 +57,7 @@ TEST {
 TEST {
     meta.name = "Mixed lexing";
     
-    std::stringstream s{"123 dsa &* dw1 repeat repeat1"};
+    std::stringstream s{"123 dsa, , &* dw1 repeat repeat1"};
     Lexer l{s};
     
     CHECK_EQUAL(l.nextToken(), Lexer::TOK_NUMBER, "Are numbers properly recognised");
@@ -65,6 +65,10 @@ TEST {
     
     CHECK_EQUAL(l.nextToken(), Lexer::TOK_IDENTIFIER, "Are identifiers properly recognised");
     CHECK_EQUAL(l.identifier(), "dsa", "Are proper identifiers returned");
+    
+    CHECK_EQUAL(l.nextToken(), ',', "Are commas properly recognised");
+    
+    CHECK_EQUAL(l.nextToken(), ',', "Are commas properly recognised 2");
 
     CHECK_EQUAL(l.nextToken(), '&', "Are special characters properly recognised & returned");
 

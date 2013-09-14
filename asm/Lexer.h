@@ -25,7 +25,7 @@ public:
         TOK_IDENTIFIER = -3,
         TOK_NUMBER = -4,
         
-        TOK_REPEAT = -5,
+        TOK_REPEAT = -5
     };
     
 public:

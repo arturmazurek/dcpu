@@ -71,10 +71,28 @@ TEST {
 },
 
 TEST {
+    meta.name = "No comma";
+    
+    std::stringstream s{"op a b"};
+    Lexer l{s};
+    Parser p;
+    
+    bool caught = false;
+    try {
+        auto ast = p.parseCommand(l);
+    } catch(const ParserException& e) {
+        caught = true;
+    }
+    
+    CHECK_TRUE(caught, "An exception must be thrown when there's no comma");
+},
+
+TEST {
     meta.name = "Full line parsing";
     
     std::stringstream s{
-        "label: op a [b]"
+        "label1: op1 a, [b] \n"\
+        "label2: op2 [c],d"
     };
     
     Lexer l{s};
@@ -83,16 +101,38 @@ TEST {
     auto ast = p.parseCommand(l);
     
     REQUIRE_TRUE(ast->label != nullptr, "Is label properly found");
-    CHECK_EQUAL(ast->label->ident(), "label", "Is label retrieved properly");
+    CHECK_EQUAL(ast->label->ident(), "label1", "Is label retrieved properly");
     
     REQUIRE_TRUE(ast->op != nullptr, "Is operation properly found");
-    CHECK_EQUAL(ast->op->ident(), "op", "Is operation retrieved properly");
+    CHECK_EQUAL(ast->op->ident(), "op1", "Is operation retrieved properly");
     
     REQUIRE_TRUE(ast->a != nullptr, "Is operator a properly found");
     CHECK_TRUE(!(ast->a->addressing), "Is operator a non-addressing");
 
     REQUIRE_TRUE(ast->b != nullptr, "Is operator b properly found");
     CHECK_TRUE(ast->b->addressing, "Is operator b addressing");
+    
+    ast = p.parseCommand(l);
+    
+    REQUIRE_TRUE(ast->label != nullptr, "Is label properly found 2");
+    CHECK_EQUAL(ast->label->ident(), "label2", "Is label retrieved properly 2");
+    
+    REQUIRE_TRUE(ast->op != nullptr, "Is operation properly found 2");
+    CHECK_EQUAL(ast->op->ident(), "op2", "Is operation retrieved properly 2");
+    
+    REQUIRE_TRUE(ast->a != nullptr, "Is operator c properly found");
+    CHECK_TRUE(ast->a->addressing, "Is operator c non-addressing");
+    
+    REQUIRE_TRUE(ast->b != nullptr, "Is operator d properly found");
+    CHECK_TRUE(!(ast->b->addressing), "Is operator d non-addressing");
+},
+
+TEST {
+    meta.name = "Binary ops";
+    
+    std::stringstream s{
+        "op a+1,b"
+    };
 },
 
 TESTS_END
