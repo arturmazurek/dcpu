@@ -27,30 +27,39 @@ TestsHolder::instance().addTest(tests[i]);\
 #define ARRAY_SIZE(x) (sizeof(x)/sizeof(*x))
 
 #define TEST \
-    (TestsHolder::TestFunction)[](Core& core, bool& result, TestsHolder::TestMeta& meta)
+    (TestsHolder::TestFunction)[](Core& core, TestsHolder::TestMeta& meta)
 
-#define DO_CHECK_EQUAL(a, b, msg, require) {\
-    auto a_ = (a);\
-    auto b_ = (b);\
-    if(a_ != b_) {\
-        std::cout << "Check failed: " << msg << std::endl << "\t" << #a << " == " << a_ << " , " << #b << " == " << b_ << std::endl;\
-        result = false;\
-        if(require) { \
-            throw TestsHolder::TestException(msg + std::string("failed"));\
-        }\
-    }}
+template <typename aT, typename bT>
+static inline void _doCheckEqual(const aT& a, const bT& b, const std::string& aMsg, const std::string& bMsg, const std::string& msg, bool require) {
+    if(a != b) {
+        std::cout << "Check failed: " << msg << std::endl << "\t" << aMsg << " == " << a << " , " << bMsg << " == " << b << std::endl;
+        TestsHolder::instance().failed();
+        if(require) {
+            throw TestsHolder::TestException(msg + " failed");
+        }
+    }
+}
+
+#define DO_CHECK_EQUAL(a, b, msg, require) \
+    _doCheckEqual(a, b, #a, #b, msg, require)
 
 #define CHECK_EQUAL(a, b, msg) DO_CHECK_EQUAL(a, b, msg, false)
 
 #define REQUIRE_EQUAL(a, b, msg) DO_CHECK_EQUAL(a, b, msg, true)
 
+template <typename T>
+static inline void _doCheckTrue(const T& x, const std::string& xMsg, const std::string& msg, bool require) {
+    if(!x) {
+        std::cout << "Check failed (\"" << xMsg << "\"):" << msg << std::endl;
+        TestsHolder::instance().failed();
+        if(require) {
+            throw TestsHolder::TestException(msg + "failed");
+        }
+    }
+}
+
 #define DO_CHECK_TRUE(x, msg, require) \
-if(!(x)) {\
-std::cout << "Check failed: " << msg << std::endl;\
-result = false;\
-if(require) { \
-    throw TestsHolder::TestException(msg + std::string("failed"));\
-}}
+    _doCheckTrue(x, #x, msg, require)
 
 #define CHECK_TRUE(x, msg) DO_CHECK_TRUE(x, msg, false)
 

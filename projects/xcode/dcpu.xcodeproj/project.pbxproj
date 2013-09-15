@@ -21,6 +21,7 @@
 		6D0CD76517E1EBBF0002D2E1 /* ASTNodes.h in Headers */ = {isa = PBXBuildFile; fileRef = 6D0CD76317E1EBBF0002D2E1 /* ASTNodes.h */; };
 		6D0CD76817E1EFF90002D2E1 /* Parser.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6D0CD76617E1EFF90002D2E1 /* Parser.cpp */; };
 		6D0CD76917E1EFF90002D2E1 /* Parser.h in Headers */ = {isa = PBXBuildFile; fileRef = 6D0CD76717E1EFF90002D2E1 /* Parser.h */; };
+		75B52E6E17E4B99700295E66 /* ASTVisitor.h in Headers */ = {isa = PBXBuildFile; fileRef = 75B52E6C17E4B99700295E66 /* ASTVisitor.h */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -86,6 +87,7 @@
 		758875F817DCD2E7004D557F /* GenericClock.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GenericClock.h; sourceTree = "<group>"; };
 		758875FA17DCD424004D557F /* Manufacturers.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Manufacturers.h; sourceTree = "<group>"; };
 		75ABD72217C5253E00BED3AB /* Instruction.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Instruction.cpp; sourceTree = "<group>"; };
+		75B52E6C17E4B99700295E66 /* ASTVisitor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ASTVisitor.h; sourceTree = "<group>"; };
 		75C7E38C17C3CDF3001247DA /* Opcodes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Opcodes.h; sourceTree = "<group>"; };
 		75C7E38D17C3D49B001247DA /* Core.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Core.cpp; sourceTree = "<group>"; };
 		75C7E38E17C3D49B001247DA /* Core.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Core.h; sourceTree = "<group>"; };
@@ -140,6 +142,7 @@
 				6D0CD76617E1EFF90002D2E1 /* Parser.cpp */,
 				6D0CD76717E1EFF90002D2E1 /* Parser.h */,
 				6D0CD76A17E200570002D2E1 /* ParserException.h */,
+				75B52E6C17E4B99700295E66 /* ASTVisitor.h */,
 			);
 			name = asm;
 			path = ../../asm;
@@ -217,6 +220,7 @@
 			files = (
 				6D0CD76517E1EBBF0002D2E1 /* ASTNodes.h in Headers */,
 				6D0CD76917E1EFF90002D2E1 /* Parser.h in Headers */,
+				75B52E6E17E4B99700295E66 /* ASTVisitor.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -496,6 +500,7 @@
 				6D0CD73517E1BD9B0002D2E1 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		6D0CD74017E1C08B0002D2E1 /* Build configuration list for PBXNativeTarget "lib-dcpu" */ = {
 			isa = XCConfigurationList;
@@ -504,6 +509,7 @@
 				6D0CD74217E1C08B0002D2E1 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		6D0CD75617E1C1AB0002D2E1 /* Build configuration list for PBXNativeTarget "tests" */ = {
 			isa = XCConfigurationList;
@@ -512,6 +518,7 @@
 				6D0CD75817E1C1AB0002D2E1 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		75C7E37817C3CA00001247DA /* Build configuration list for PBXProject "dcpu" */ = {
 			isa = XCConfigurationList;

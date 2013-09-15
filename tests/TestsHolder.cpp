@@ -23,19 +23,19 @@ void TestsHolder::runTests() {
         Core c;
         c.resetState();
         
-        bool s = true;
+        m_currentSucceeded = true;
         TestMeta meta;
         try {
-            test(c, s, meta);
+            test(c, meta);
         } catch (TestException&) {
             std::cout << "Test \"" << (meta.name.size() ? meta.name : "<no-name>") << "\" failed and stopped testing." << std::endl;
-            s = false;
+            m_currentSucceeded = false;
         } catch (std::exception& e) {
             std::cout << "Test \"" << (meta.name.size() ? meta.name : "<no-name>") << "\" failed with exception: \"" << e.what() << "\"" << std::endl;
-            s = false;
+            m_currentSucceeded = false;
         }
         
-        if(s) {
+        if(m_currentSucceeded) {
             ++successful;
         } else {
             std::cout << "Test \"" << (meta.name.size() ? meta.name : "<no-name>") << "\" failed." << std::endl;
@@ -44,6 +44,10 @@ void TestsHolder::runTests() {
     }
     
     std::cout << "Run " << (successful + failed) << " tests of " << m_tests.size() << ". " << successful << " passed." << std::endl;
+}
+
+void TestsHolder::failed() {
+    m_currentSucceeded = false;
 }
 
 void TestsHolder::addTest(TestFunction t) {

@@ -12,31 +12,52 @@
 #include <memory>
 #include <string>
 
+#include "ASTVisitor.h"
+
 // A lot of this is taken from llvm's Kaleidoscope tutorial
 
 class ExprAST {
 public:
     virtual ~ExprAST() {}
+    
+    virtual void accept(ASTVisitor& visitor) {}
+    
+protected:
+    template <class T>
+    static void acceptVisitor(T& visited, ASTVisitor& visitor) {
+        if(ASTVisitorType<T> *p = dynamic_cast<ASTVisitorType<T>*>(&visitor)) {
+            p->visit(visited);
+        }
+    }
 };
+
+#define VISITABLE() \
+virtual void accept(ASTVisitor &v) override \
+{ return acceptVisitor(*this, v); }
 
 class NumberExprAST : public ExprAST {
 public:
-    NumberExprAST(int val) {}
+    NumberExprAST(int value) : value{value} {}
+    
+    VISITABLE();
+    
+    const int value;
 };
 
 class IdentifierExprAST : public ExprAST {
 public:
-    IdentifierExprAST(const std::string& ident) : m_ident{ident} {}
+    IdentifierExprAST(const std::string& identifier) : identifier{identifier} {}
     
-    const std::string& ident() const { return m_ident; }
+    VISITABLE();
     
-private:
-    std::string m_ident;
+    const std::string identifier;
 };
 
 class OperandExprAST : public ExprAST {
 public:
     OperandExprAST() : addressing{false} {}
+    
+    VISITABLE();
     
 public:
     std::unique_ptr<ExprAST> expression;
@@ -45,7 +66,14 @@ public:
 
 class BinaryExprAST : public ExprAST {
 public:
-    BinaryExprAST(int binop, std::unique_ptr<ExprAST> lhs, std::unique_ptr<ExprAST> rhs) {}
+    BinaryExprAST(int binop, std::unique_ptr<ExprAST> lhs, std::unique_ptr<ExprAST> rhs) : binop{binop}, lhs{std::move(lhs)}, rhs{std::move(rhs)} {}
+    
+    VISITABLE();
+    
+public:
+    const int binop;
+    std::unique_ptr<ExprAST> lhs;
+    std::unique_ptr<ExprAST> rhs;
 };
 
 class CommandExprAST : public ExprAST {
@@ -57,5 +85,7 @@ public:
     std::unique_ptr<OperandExprAST> a;
     std::unique_ptr<OperandExprAST> b;
 };
+
+#undef VISITABLE
 
 #endif /* defined(__dcpu__ASTNodes__) */
