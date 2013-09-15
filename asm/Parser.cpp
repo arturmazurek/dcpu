@@ -46,9 +46,11 @@ std::unique_ptr<CommandExprAST> Parser::parseCommand(Lexer& l) {
             if(m_currentToken == ',') {
                 m_currentToken = l.nextToken();
                 result->b = parseOperand(l);
+            } else if(m_currentToken == Lexer::TOK_ENDLINE || m_currentToken == Lexer::TOK_EOF) {
+                break;
             } else {
                 std::stringstream s;
-                s << "Expected comma, found: '" << ((m_currentToken > 0) ? static_cast<char>(m_currentToken) : m_currentToken) << "'";
+                s << "Expected comma or line end, found: '" << ((m_currentToken > 0) ? static_cast<char>(m_currentToken) : m_currentToken) << "'";
                 throw ParserException(s.str());
             }
         } else if(result->label) {
