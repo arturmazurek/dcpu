@@ -20,8 +20,8 @@ private:
     void doReceiveInterrupt(Core& from) override;
     
 public:
-    static constexpr uint32_t HARDWARE_ID = 0x12d0b402;
-    static constexpr uint16_t VERSION = 1;
+    static const uint32_t HARDWARE_ID;
+    static const uint16_t VERSION;
 };
 
 #endif /* defined(__dcpu__GenericClock__) */

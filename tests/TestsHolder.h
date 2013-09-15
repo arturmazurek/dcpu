@@ -27,12 +27,14 @@ public:
         TestException(const std::string& why) : std::runtime_error(why) {}
     };
     
-    typedef std::function<void(Core&, bool&, TestMeta&)> TestFunction;
+    typedef std::function<void(Core&, TestMeta&)> TestFunction;
     
     static TestsHolder& instance();
     
     void runTests();
     void addTest(TestFunction t);
+    
+    void failed();
     
 private:
     TestsHolder() {}
@@ -41,6 +43,7 @@ private:
     
 private:
     std::list<TestFunction> m_tests;
+    bool m_currentSucceeded;
 };
 
 #endif

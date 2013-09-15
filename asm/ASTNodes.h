@@ -20,7 +20,7 @@ class ExprAST {
 public:
     virtual ~ExprAST() {}
     
-    virtual void accept(ASTVisitor* visitor) {}
+    virtual void accept(ASTVisitor& visitor) {}
     
 protected:
     template <class T>
@@ -32,7 +32,7 @@ protected:
 };
 
 #define VISITABLE() \
-virtual void accept(ASTVisitor &v) \
+virtual void accept(ASTVisitor &v) override \
 { return acceptVisitor(*this, v); }
 
 class NumberExprAST : public ExprAST {

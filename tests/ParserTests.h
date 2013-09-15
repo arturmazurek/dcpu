@@ -131,8 +131,66 @@ TEST {
 TEST {
     meta.name = "Binary ops";
     
+    class TestVisitorA :
+    public ASTVisitor,
+    public ASTVisitorType<IdentifierExprAST>,
+    public ASTVisitorType<NumberExprAST>,
+    public ASTVisitorType<OperandExprAST>,
+    public ASTVisitorType<BinaryExprAST> {
+    public:
+        TestVisitorA() : count{0} {}
+        int count;
+        
+        virtual void visit(IdentifierExprAST& node) override {
+            ++count;
+            CHECK_EQUAL(node.identifier, "a", "Is a found");
+        }
+    
+        virtual void visit(NumberExprAST& node) override {
+            ++count;
+            CHECK_EQUAL(node.value, 1, "Is 1 properly found");
+        }
+    
+        virtual void visit(BinaryExprAST& node) override {
+            ++count;
+            CHECK_EQUAL(node.binop, '+', "Is the binary operation an addition");
+            REQUIRE_TRUE(node.lhs != nullptr, "Left hand must be parsed");
+            REQUIRE_TRUE(node.rhs != nullptr, "Right hand must be parsed");
+            node.lhs->accept(*this);
+            node.rhs->accept(*this);
+        }
+
+        virtual void visit(OperandExprAST& node) override {
+            ++count;
+            CHECK_TRUE(node.addressing, "Is [a+1] addressing");
+            REQUIRE_TRUE(node.expression != nullptr, "Is there an expression");
+            node.expression->accept(*this);
+        }
+    } visitorA;
+    
+    class TestVisitorB :
+    public ASTVisitor,
+    public ASTVisitorType<IdentifierExprAST>,
+    public ASTVisitorType<OperandExprAST> {
+    public:
+        TestVisitorB() : count{0} {}
+        int count;
+        
+        virtual void visit(IdentifierExprAST& node) override {
+            ++count;
+            CHECK_EQUAL(node.identifier, "b", "Is b found");
+        }
+        
+        virtual void visit(OperandExprAST& node) override {
+            ++count;
+            CHECK_TRUE(!(node.addressing), "Is b non addressing");
+            REQUIRE_TRUE(node.expression != nullptr, "Is there an expression 2");
+            node.expression->accept(*this);
+        }
+    } visitorB;
+    
     std::stringstream s{
-        "op a+1,b"
+        "op [a+1],b"
     };
     
     Lexer l{s};
@@ -146,8 +204,12 @@ TEST {
     CHECK_EQUAL(ast->op->identifier, "op", "Is operation properly retrieved");
     
     REQUIRE_TRUE(ast->a != nullptr, "Is operand a retrieved");
-    
+    ast->a->accept(visitorA);
+    CHECK_EQUAL(visitorA.count, 4, "Is visitorA visited appropriate number of times");
+
     REQUIRE_TRUE(ast->b != nullptr, "Is operand b retrieved");
+    ast->b->accept(visitorB);
+    CHECK_EQUAL(visitorB.count, 2, "Is visitor B visited appropriate number of times");
 },
 
 TESTS_END
