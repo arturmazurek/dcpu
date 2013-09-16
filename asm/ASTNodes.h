@@ -87,6 +87,8 @@ public:
     std::unique_ptr<IdentifierExprAST> op;
     std::unique_ptr<OperandExprAST> a;
     std::unique_ptr<OperandExprAST> b;
+    
+    VISITABLE();
 };
 
 #undef VISITABLE

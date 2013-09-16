@@ -24,6 +24,9 @@
 		75B52E6E17E4B99700295E66 /* ASTVisitor.h in Headers */ = {isa = PBXBuildFile; fileRef = 75B52E6C17E4B99700295E66 /* ASTVisitor.h */; };
 		75B52E7117E7327700295E66 /* Assembler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 75B52E6F17E7327700295E66 /* Assembler.cpp */; };
 		75B52E7217E7327700295E66 /* Assembler.h in Headers */ = {isa = PBXBuildFile; fileRef = 75B52E7017E7327700295E66 /* Assembler.h */; };
+		75B52E7717E7616400295E66 /* Constants.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 75B52E7617E7616400295E66 /* Constants.cpp */; };
+		75B52E7A17E777B500295E66 /* CodegenVisitor.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 75B52E7817E777B500295E66 /* CodegenVisitor.cpp */; };
+		75B52E7B17E777B500295E66 /* CodegenVisitor.h in Headers */ = {isa = PBXBuildFile; fileRef = 75B52E7917E777B500295E66 /* CodegenVisitor.h */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -94,6 +97,10 @@
 		75B52E7017E7327700295E66 /* Assembler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Assembler.h; sourceTree = "<group>"; };
 		75B52E7317E7420800295E66 /* AssemblerException.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AssemblerException.h; sourceTree = "<group>"; };
 		75B52E7417E75ABE00295E66 /* ASMUtils.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ASMUtils.h; sourceTree = "<group>"; };
+		75B52E7517E7614200295E66 /* Constants.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Constants.h; sourceTree = "<group>"; };
+		75B52E7617E7616400295E66 /* Constants.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Constants.cpp; sourceTree = "<group>"; };
+		75B52E7817E777B500295E66 /* CodegenVisitor.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CodegenVisitor.cpp; sourceTree = "<group>"; };
+		75B52E7917E777B500295E66 /* CodegenVisitor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CodegenVisitor.h; sourceTree = "<group>"; };
 		75C7E38C17C3CDF3001247DA /* Opcodes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Opcodes.h; sourceTree = "<group>"; };
 		75C7E38D17C3D49B001247DA /* Core.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Core.cpp; sourceTree = "<group>"; };
 		75C7E38E17C3D49B001247DA /* Core.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Core.h; sourceTree = "<group>"; };
@@ -153,6 +160,10 @@
 				75B52E7017E7327700295E66 /* Assembler.h */,
 				75B52E7317E7420800295E66 /* AssemblerException.h */,
 				75B52E7417E75ABE00295E66 /* ASMUtils.h */,
+				75B52E7517E7614200295E66 /* Constants.h */,
+				75B52E7617E7616400295E66 /* Constants.cpp */,
+				75B52E7817E777B500295E66 /* CodegenVisitor.cpp */,
+				75B52E7917E777B500295E66 /* CodegenVisitor.h */,
 			);
 			name = asm;
 			path = ../../asm;
@@ -229,6 +240,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				6D0CD76517E1EBBF0002D2E1 /* ASTNodes.h in Headers */,
+				75B52E7B17E777B500295E66 /* CodegenVisitor.h in Headers */,
 				6D0CD76917E1EFF90002D2E1 /* Parser.h in Headers */,
 				75B52E6E17E4B99700295E66 /* ASTVisitor.h in Headers */,
 				75B52E7217E7327700295E66 /* Assembler.h in Headers */,
@@ -332,8 +344,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				6D0CD73717E1BDC20002D2E1 /* Lexer.cpp in Sources */,
+				75B52E7A17E777B500295E66 /* CodegenVisitor.cpp in Sources */,
 				6D0CD76817E1EFF90002D2E1 /* Parser.cpp in Sources */,
 				75B52E7117E7327700295E66 /* Assembler.cpp in Sources */,
+				75B52E7717E7616400295E66 /* Constants.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

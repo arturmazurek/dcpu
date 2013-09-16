@@ -24,6 +24,7 @@ class Assembler {
 public:
     void setLexer(std::unique_ptr<Lexer> lexer);
     void assemble();
+    const std::vector<uint16_t>& binary() const;
     
 private:
     struct Assembled;
@@ -33,6 +34,7 @@ private:
     void simplify(OperandExprAST* node) const;
     void assembleProgram();
     void resolveJumps();
+    void createBinary();
     
     void codegen(Assembled& source);
     // Generates code for a jump (if to a code-static place)
@@ -52,15 +54,16 @@ private:
         Assembled(std::unique_ptr<CommandExprAST> from) : parsed{std::move(from)}, jumpsTo{nullptr}, size{0}, offset{0} {}
     };
     
-    static const std::map<std::string, Registers::Code> REGISTER_NAMES;
     static const std::string JUMP_IDENTIFIER;
     static const unsigned JUMP_LENGTH;
     
     Parser m_parser;
     std::unique_ptr<Lexer> m_lexer;
-    std::map<std::string, CommandExprAST*> m_labels;
+    std::map<std::string, Assembled*> m_labels;
     
     std::vector<std::unique_ptr<Assembled>> m_assembled;
+    
+    std::vector<uint16_t> m_binary;
 };
 
 #endif /* defined(__dcpu__Assembler__) */

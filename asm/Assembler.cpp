@@ -13,27 +13,21 @@
 
 #include "ASMUtils.h"
 #include "AssemblerException.h"
+#include "CodegenVisitor.h"
+#include "Constants.h"
+#include "Instruction.h"
 #include "Parser.h"
 #include "Lexer.h"
 
-const std::map<std::string, Registers::Code> Assembler::REGISTER_NAMES {
-    { "a", Registers::REG_A },
-    { "b", Registers::REG_B },
-    { "c", Registers::REG_C },
-    { "x", Registers::REG_X },
-    { "y", Registers::REG_Y },
-    { "z", Registers::REG_Z },
-    { "i", Registers::REG_I },
-    { "j", Registers::REG_J },
-    { "sp", Registers::REG_SP },
-    { "pc", Registers::REG_PC },
-    { "ex", Registers::REG_EX },
-};
 const std::string Assembler::JUMP_IDENTIFIER{"jmp"};
 const unsigned Assembler::JUMP_LENGTH{2};
 
 void Assembler::setLexer(std::unique_ptr<Lexer> lexer) {
     m_lexer = std::move(lexer);
+}
+
+const std::vector<uint16_t>& Assembler::binary() const {
+    return m_binary;
 }
 
 void Assembler::assemble() {
@@ -43,6 +37,7 @@ void Assembler::assemble() {
     simplifyOperands();
     assembleProgram();
     resolveJumps();
+    createBinary();
 }
 
 void Assembler::parseSource() {
@@ -51,17 +46,18 @@ void Assembler::parseSource() {
     
     while(m_lexer->good()) {
         auto node = m_parser.parseCommand(*m_lexer);
+        auto assembled = std::make_unique<Assembled>(std::move(node));
         if(node->label) {
             if(m_labels.find(node->label->identifier) != m_labels.end()) {
                 throw AssemblerException("Duplicate label found: \"" + node->label->identifier + "\"");
             }
-            if(REGISTER_NAMES.find(node->label->identifier) != REGISTER_NAMES.end()) {
+            if(Constants::REGISTER_NAMES.find(node->label->identifier) != Constants::REGISTER_NAMES.end()) {
                 throw AssemblerException("Label named as register found: \"" + node->label->identifier + "\""); 
             }
-            m_labels[node->label->identifier] = node.get();
+            m_labels[node->label->identifier] = assembled.get();
         }
         
-        m_assembled.emplace_back(std::make_unique<Assembled>(std::move(node)));
+        m_assembled.emplace_back(std::move(assembled));
     }
 }
 
@@ -99,17 +95,68 @@ void Assembler::resolveJumps() {
     }
 }
 
-void Assembler::checkJump(Assembled& from) {
+void Assembler::createBinary() {
+    m_binary.clear();
     
+    for(auto& assembled : m_assembled) {
+        m_binary.insert(m_binary.end(), assembled->instructions.begin(), assembled->instructions.end());
+    }
 }
 
+//class JumpVisitor : public ASTVisitor,
+//public ASTVisitorType<IdentifierExprAST>,
+//public ASTVisitorType<NumberExprAST>,
+//public ASTVisitorType<OperandExprAST> {
+//public:
+//    JumpVisitor() : addressing{false}, cmd{0}, nextWord{std::numeric_limits<int>::min()} {}
+//    
+//    uint8_t cmd;
+//    int nextWord;
+//    
+//private:
+//    bool addressing;
+//    
+//    virtual void visit(IdentifierExprAST& node) override {
+//        
+//    }
+//    virtual void visit(NumberExprAST& node) override {
+//        if(node.value > std::numeric_limits<uint16_t>::max()) {
+//            throw AssemblerException("Too big number in operation");
+//        }
+//        if(node.value >= -1 && node.value <= 30) {
+//            if(!addressing) {
+//                cmd = static_cast<uint8_t>(0x21 + node.value);
+//            } else {
+//                cmd = Constants::NEXT_WORD;
+//                nextWord = node.value;
+//            }
+//        } else {
+//            
+//        }
+//    }
+//    virtual void visit(OperandExprAST& node) override {
+//        addressing = node.addressing;
+//        node.expression->accept(*this);
+//    }
+//};
+
+//void Assembler::checkJump(Assembled& from) {
+//    Opcode op = OP_SET;
+//    Registers::Code b = Registers::REG_PC;
+//    int a = 0;
+//     jmpVisitor;
+//    from.parsed->a->accept(jmpVisitor);
+////    const auto& jmpTarget = from.parsed->a;
+////    if (jmpTarget->) {
+////    }
+//}
+
 void Assembler::codegen(Assembled& source) {
-    if(source.parsed->op->identifier == JUMP_IDENTIFIER) {
-        checkJump(source);
-        return;
+    CodegenVisitor v;
+    source.parsed->accept(v);
+    if(v.label.size()) {
+        source.jumpsTo = m_labels[v.label];
     }
-    
-    
 }
 
 void Assembler::simplify(OperandExprAST* node) const {
