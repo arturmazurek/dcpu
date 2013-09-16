@@ -9,6 +9,7 @@
 #ifndef __dcpu__ASTNodes__
 #define __dcpu__ASTNodes__
 
+#include <cassert>
 #include <memory>
 #include <string>
 
@@ -27,6 +28,8 @@ protected:
     static void acceptVisitor(T& visited, ASTVisitor& visitor) {
         if(ASTVisitorType<T> *p = dynamic_cast<ASTVisitorType<T>*>(&visitor)) {
             p->visit(visited);
+        } else {
+            assert(!"Unhandled node type");
         }
     }
 };

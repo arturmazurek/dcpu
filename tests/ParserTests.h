@@ -20,13 +20,13 @@ TESTS_START(ParserTests)
 
 TEST {
     meta.name = "Just label";
-    
+
     std::stringstream s{"label:   \n\n "};
     Lexer l{s};
     Parser p;
-    
+
     auto ast = p.parseCommand(l);
-    
+
     REQUIRE_TRUE(ast->label != nullptr, "Is label properly filled");
     CHECK_EQUAL(ast->label->identifier, "label", "Is label retrieved properly");
     
@@ -227,12 +227,12 @@ TEST {
         virtual void visit(BinaryExprAST& node) override {
             REQUIRE_TRUE(node.lhs != nullptr, "Are left hand expressions parsed");
             REQUIRE_TRUE(node.rhs != nullptr, "Are right hand expressions parsed");
-
+            
             CountingVisitor a;
             node.lhs->accept(a);
             CountingVisitor b;
             node.rhs->accept(b);
-        
+            
             switch(node.binop) {
                 case '+':
                     sum += a.sum + b.sum;
@@ -276,6 +276,7 @@ TEST {
     CountingVisitor v2;
     ast->b->accept(v2);
     CHECK_EQUAL(v2.sum, 121, "Are numbers counted correctly 2");
+    CHECK_TRUE(ast->b->addressing, "Is b correctly addressing");
 },
 
 TESTS_END

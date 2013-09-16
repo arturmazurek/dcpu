@@ -9,6 +9,8 @@
 #ifndef __dcpu__ASTVisitor__
 #define __dcpu__ASTVisitor__
 
+#include <iostream>
+
 class ASTVisitor {
 public:
     virtual ~ASTVisitor() {}
