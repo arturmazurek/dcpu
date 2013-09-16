@@ -219,9 +219,16 @@ std::unique_ptr<ExprAST> Parser::parseParenExpr(Lexer& l) {
         return nullptr;
     }
     
-    if(m_currentToken != '(') {
-        
+    if(m_currentToken != ')') {
+        std::stringstream s;
+        s << "Expected ')' found: '";
+        s << (m_currentToken > 0 ? static_cast<char>(m_currentToken) : m_currentToken);
+        s << "'";
+        throw ParserException(s.str());
     }
     
-    return nullptr;
+    // eat ')'
+    m_currentToken = l.nextToken();
+    
+    return expr;
 }

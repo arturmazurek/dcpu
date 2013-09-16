@@ -10,11 +10,60 @@
 #define dcpu_ParserTests_h
 
 #include <sstream>
+#include <string>
 
 #include "ASTVisitor.h"
 #include "Lexer.h"
 #include "Parser.h"
 #include "TestsUtil.h"
+
+    class CountingVisitor :
+    public ASTVisitor,
+    public ASTVisitorType<BinaryExprAST>,
+    public ASTVisitorType<NumberExprAST>,
+    public ASTVisitorType<OperandExprAST> {
+    public:
+        int sum;
+        CountingVisitor() : sum{0} {}
+        
+        virtual void visit(BinaryExprAST& node) override {
+        REQUIRE_TRUE(node.lhs != nullptr, "Are left hand expressions parsed");
+        REQUIRE_TRUE(node.rhs != nullptr, "Are right hand expressions parsed");
+        
+        CountingVisitor a;
+        node.lhs->accept(a);
+        CountingVisitor b;
+        node.rhs->accept(b);
+        
+        switch(node.binop) {
+            case '+':
+                sum += a.sum + b.sum;
+                break;
+                
+            case '-':
+                sum += a.sum - b.sum;
+                break;
+                
+            case '*':
+                sum += a.sum * b.sum;
+                break;
+                
+            case '/':
+                sum += a.sum / b.sum;
+                break;
+                
+            default:
+                assert(!"Should never get here");
+                
+        }
+    }
+    virtual void visit(NumberExprAST& node) override {
+        sum = node.value;
+    }
+    virtual void visit(OperandExprAST& node) override {
+        node.expression->accept(*this);
+    }
+};
 
 TESTS_START(ParserTests)
 
@@ -29,7 +78,7 @@ TEST {
 
     REQUIRE_TRUE(ast->label != nullptr, "Is label properly filled");
     CHECK_EQUAL(ast->label->identifier, "label", "Is label retrieved properly");
-    
+
     CHECK_TRUE(ast->op == nullptr, "Is op correctly empty");
     CHECK_TRUE(ast->a == nullptr, "Is a correctly empty");
     CHECK_TRUE(ast->b == nullptr, "Is b correctly empty");
@@ -215,54 +264,6 @@ TEST {
 TEST {
     meta.name = "Arithmetic operations";
     
-    class CountingVisitor :
-    public ASTVisitor,
-    public ASTVisitorType<BinaryExprAST>,
-    public ASTVisitorType<NumberExprAST>,
-    public ASTVisitorType<OperandExprAST> {
-    public:
-        int sum;
-        CountingVisitor() : sum{0} {}
-        
-        virtual void visit(BinaryExprAST& node) override {
-            REQUIRE_TRUE(node.lhs != nullptr, "Are left hand expressions parsed");
-            REQUIRE_TRUE(node.rhs != nullptr, "Are right hand expressions parsed");
-            
-            CountingVisitor a;
-            node.lhs->accept(a);
-            CountingVisitor b;
-            node.rhs->accept(b);
-            
-            switch(node.binop) {
-                case '+':
-                    sum += a.sum + b.sum;
-                    break;
-                    
-                case '-':
-                    sum += a.sum - b.sum;
-                    break;
-                    
-                case '*':
-                    sum += a.sum * b.sum;
-                    break;
-                    
-                case '/':
-                    sum += a.sum / b.sum;
-                    break;
-                    
-                default:
-                    assert(!"Should never get here");
-                    
-            }
-        }
-        virtual void visit(NumberExprAST& node) override {
-            sum = node.value;
-        }
-        virtual void visit(OperandExprAST& node) override {
-            node.expression->accept(*this);
-        }
-    };
-    
     std::stringstream s{"op 1+2+3*4-2/1, [2*3*4*5 + 1]"};
     Lexer l{s};
     
@@ -277,6 +278,29 @@ TEST {
     ast->b->accept(v2);
     CHECK_EQUAL(v2.sum, 121, "Are numbers counted correctly 2");
     CHECK_TRUE(ast->b->addressing, "Is b correctly addressing");
+},
+
+TEST {
+    meta.name = "Parentheses";
+    
+    std::stringstream s{"op (1+2)*3, [(1+2)-(3)+(4+2)*5]"};
+    Lexer l{s};
+    
+    Parser p;
+    
+    auto ast = p.parseCommand(l);
+    REQUIRE_TRUE(ast->a != nullptr, "Operand a must be retrieved");
+    REQUIRE_TRUE(ast->b != nullptr, "Operand b must be retrieved");
+    
+    CountingVisitor v1;
+    ast->a->accept(v1);
+    
+    CHECK_EQUAL(v1.sum, (1+2)*3, "Is operand a calculated correctly");
+
+    CountingVisitor v2;
+    ast->b->accept(v2);
+    
+    CHECK_EQUAL(v2.sum, (1+2)-(3)+(4+2)*5, "Is operand b calculated correctly");
 },
 
 TESTS_END
