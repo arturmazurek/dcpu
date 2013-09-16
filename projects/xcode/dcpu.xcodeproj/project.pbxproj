@@ -22,6 +22,8 @@
 		6D0CD76817E1EFF90002D2E1 /* Parser.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6D0CD76617E1EFF90002D2E1 /* Parser.cpp */; };
 		6D0CD76917E1EFF90002D2E1 /* Parser.h in Headers */ = {isa = PBXBuildFile; fileRef = 6D0CD76717E1EFF90002D2E1 /* Parser.h */; };
 		75B52E6E17E4B99700295E66 /* ASTVisitor.h in Headers */ = {isa = PBXBuildFile; fileRef = 75B52E6C17E4B99700295E66 /* ASTVisitor.h */; };
+		75B52E7117E7327700295E66 /* Assembler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 75B52E6F17E7327700295E66 /* Assembler.cpp */; };
+		75B52E7217E7327700295E66 /* Assembler.h in Headers */ = {isa = PBXBuildFile; fileRef = 75B52E7017E7327700295E66 /* Assembler.h */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -88,6 +90,10 @@
 		758875FA17DCD424004D557F /* Manufacturers.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Manufacturers.h; sourceTree = "<group>"; };
 		75ABD72217C5253E00BED3AB /* Instruction.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Instruction.cpp; sourceTree = "<group>"; };
 		75B52E6C17E4B99700295E66 /* ASTVisitor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ASTVisitor.h; sourceTree = "<group>"; };
+		75B52E6F17E7327700295E66 /* Assembler.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Assembler.cpp; sourceTree = "<group>"; };
+		75B52E7017E7327700295E66 /* Assembler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Assembler.h; sourceTree = "<group>"; };
+		75B52E7317E7420800295E66 /* AssemblerException.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AssemblerException.h; sourceTree = "<group>"; };
+		75B52E7417E75ABE00295E66 /* ASMUtils.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ASMUtils.h; sourceTree = "<group>"; };
 		75C7E38C17C3CDF3001247DA /* Opcodes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Opcodes.h; sourceTree = "<group>"; };
 		75C7E38D17C3D49B001247DA /* Core.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Core.cpp; sourceTree = "<group>"; };
 		75C7E38E17C3D49B001247DA /* Core.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Core.h; sourceTree = "<group>"; };
@@ -143,6 +149,10 @@
 				6D0CD76717E1EFF90002D2E1 /* Parser.h */,
 				6D0CD76A17E200570002D2E1 /* ParserException.h */,
 				75B52E6C17E4B99700295E66 /* ASTVisitor.h */,
+				75B52E6F17E7327700295E66 /* Assembler.cpp */,
+				75B52E7017E7327700295E66 /* Assembler.h */,
+				75B52E7317E7420800295E66 /* AssemblerException.h */,
+				75B52E7417E75ABE00295E66 /* ASMUtils.h */,
 			);
 			name = asm;
 			path = ../../asm;
@@ -221,6 +231,7 @@
 				6D0CD76517E1EBBF0002D2E1 /* ASTNodes.h in Headers */,
 				6D0CD76917E1EFF90002D2E1 /* Parser.h in Headers */,
 				75B52E6E17E4B99700295E66 /* ASTVisitor.h in Headers */,
+				75B52E7217E7327700295E66 /* Assembler.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -322,6 +333,7 @@
 			files = (
 				6D0CD73717E1BDC20002D2E1 /* Lexer.cpp in Sources */,
 				6D0CD76817E1EFF90002D2E1 /* Parser.cpp in Sources */,
+				75B52E7117E7327700295E66 /* Assembler.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

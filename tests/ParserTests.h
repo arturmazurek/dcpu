@@ -301,6 +301,8 @@ TEST {
     ast->b->accept(v2);
     
     CHECK_EQUAL(v2.sum, (1+2)-(3)+(4+2)*5, "Is operand b calculated correctly");
+    
+    ast = p.parseCommand(l);
 },
 
 TESTS_END

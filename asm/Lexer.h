@@ -36,6 +36,8 @@ public:
     const std::string& identifier() const;
     int number() const;
     
+    bool good() const;
+    
 private:
     static const std::map<std::string, Token> KEYWORDS;
     static const char COMMENT;

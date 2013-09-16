@@ -30,6 +30,10 @@ int Lexer::number() const {
     return m_number;
 }
 
+bool Lexer::good() const {
+    return m_lastChar != TOK_EOF;
+}
+
 int Lexer::nextToken() {
     while(m_lastChar == ' ' || m_lastChar == '\t') {
         m_lastChar = m_input.get();

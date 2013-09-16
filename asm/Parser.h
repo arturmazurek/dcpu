@@ -20,7 +20,6 @@ class Lexer;
 class Parser {
 public:
     Parser();
-    ~Parser();
     
     std::unique_ptr<CommandExprAST> parseCommand(Lexer& l);
     
@@ -41,6 +40,7 @@ private:
     static std::map<char, int> BINOP_PRECEDENCE;
     
     int m_currentToken;
+    bool m_finished;
 };
 
 #endif /* defined(__dcpu__Parser__) */

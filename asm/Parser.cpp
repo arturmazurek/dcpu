@@ -10,15 +10,9 @@
 
 #include <sstream>
 
+#include "ASMUtils.h"
 #include "Lexer.h"
 #include "ParserException.h"
-
-namespace std {
-    template <typename T, typename... Args>
-    static std::unique_ptr<T> make_unique(Args&&... args){
-        return std::unique_ptr<T>{new T(std::forward<Args>(args)...)};
-    }
-}
 
 std::map<char, int> Parser::BINOP_PRECEDENCE {
     { '+', 10 },
@@ -27,11 +21,7 @@ std::map<char, int> Parser::BINOP_PRECEDENCE {
     { '/', 20 }
 };
 
-Parser::Parser() : m_currentToken{0} {
-    
-}
-
-Parser::~Parser() {
+Parser::Parser() : m_currentToken{0}, m_finished{false} {
     
 }
 
@@ -64,6 +54,11 @@ std::unique_ptr<CommandExprAST> Parser::parseCommand(Lexer& l) {
                 result->op = std::move(ident);
             }
         }
+    }
+    
+    if(m_currentToken == Lexer::TOK_EOF) {
+        m_finished = true;
+        return nullptr;
     }
     
     return result;
