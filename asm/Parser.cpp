@@ -58,7 +58,6 @@ std::unique_ptr<CommandExprAST> Parser::parseCommand(Lexer& l) {
     
     if(m_currentToken == Lexer::TOK_EOF) {
         m_finished = true;
-        return nullptr;
     }
     
     return result;

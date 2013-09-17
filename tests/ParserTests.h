@@ -92,6 +92,7 @@ TEST {
     Parser p;
     
     auto ast = p.parseCommand(l);
+    REQUIRE_TRUE(ast != nullptr, "Is ast properly created");
     
     REQUIRE_TRUE(ast->op != nullptr, "Is operation properly filled");
     CHECK_EQUAL(ast->op->identifier, "op", "Is label retrieved properly");
@@ -109,6 +110,7 @@ TEST {
     Parser p;
     
     auto ast = p.parseCommand(l);
+    REQUIRE_TRUE(ast != nullptr, "Is ast properly created");
     
     REQUIRE_TRUE(ast->label != nullptr, "Is label properly found");
     CHECK_EQUAL(ast->label->identifier, "aaaa", "Is label retrieved properly");
@@ -149,6 +151,7 @@ TEST {
     Parser p;
     
     auto ast = p.parseCommand(l);
+    REQUIRE_TRUE(ast != nullptr, "Is ast properly created");
     
     REQUIRE_TRUE(ast->label != nullptr, "Is label properly found");
     CHECK_EQUAL(ast->label->identifier, "label1", "Is label retrieved properly");
@@ -163,6 +166,7 @@ TEST {
     CHECK_TRUE(ast->b->addressing, "Is operator b addressing");
     
     ast = p.parseCommand(l);
+    REQUIRE_TRUE(ast != nullptr, "Is ast properly created 2");
     
     REQUIRE_TRUE(ast->label != nullptr, "Is label properly found 2");
     CHECK_EQUAL(ast->label->identifier, "label2", "Is label retrieved properly 2");
@@ -246,6 +250,7 @@ TEST {
     Parser p;
     
     auto ast = p.parseCommand(l);
+    REQUIRE_TRUE(ast != nullptr, "Is ast properly created");
     
     CHECK_TRUE(ast->label == nullptr, "Is there no label");
     
@@ -270,6 +275,8 @@ TEST {
     Parser p;
     
     auto ast = p.parseCommand(l);
+    REQUIRE_TRUE(ast != nullptr, "Is ast properly created");
+    
     CountingVisitor v1;
     ast->a->accept(v1);
     CHECK_EQUAL(v1.sum, 13, "Are numbers counted correctly");
@@ -289,6 +296,7 @@ TEST {
     Parser p;
     
     auto ast = p.parseCommand(l);
+    REQUIRE_TRUE(ast != nullptr, "Is ast properly created");
     REQUIRE_TRUE(ast->a != nullptr, "Operand a must be retrieved");
     REQUIRE_TRUE(ast->b != nullptr, "Operand b must be retrieved");
     
