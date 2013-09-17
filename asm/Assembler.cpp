@@ -53,7 +53,7 @@ void Assembler::parseSource() {
             m_labels[labelName] = m_program.size();
         }
         
-        CodegenVisitor v;
+        CodegenVisitor v{m_labels};
         node->accept(v);
         m_program.insert(m_program.end(), v.assembled.begin(), v.assembled.end());
     }
@@ -65,7 +65,7 @@ void Assembler::resolveLabels() {
             continue; // code already generated
         }
         
-        CodegenVisitor v;
+        CodegenVisitor v{m_labels};
         line.generator->accept(v);
         assert(v.assembled.size() == 1 && "Ooops, at this point only single lines should be created");
         line.code.second = v.assembled[0].code.second;

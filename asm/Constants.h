@@ -18,6 +18,7 @@
 namespace Constants {
     extern const std::map<std::string, RegisterCode> REGISTER_NAMES;
     extern const std::map<std::string, Opcode> OPCODES_NAMES;
+    extern const std::map<std::string, Opcode> SPECIAL_OPCODES_NAMES;
     
     static constexpr int ADDRESSING = 0x08;
     static constexpr int ADDRESSING_AND_NEXT_WORD = 0x10;

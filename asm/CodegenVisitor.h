@@ -10,7 +10,10 @@
 #define __dcpu__CodegenVisitor__
 
 #include <cstdint>
+#include <map>
+#include <stdexcept>
 #include <string>
+#include <utility>
 #include <vector>
 
 #include "Assembler.h"
@@ -23,25 +26,48 @@ public ASTVisitorType<CommandExprAST> {
 public:
     std::vector<Assembler::CodeLine> assembled;
     
+    typedef std::map<std::string, uint16_t> LabelsContainer;
+    CodegenVisitor(const LabelsContainer& labels);
+    
     virtual void visit(CommandExprAST& command) override;
+    
+private:
+    std::pair<uint8_t, std::unique_ptr<ExprAST>> codegenOperand(OperandExprAST& from) const;
+    
+private:
+    const LabelsContainer& m_labels;
 };
 
 class InstructionVisitor : public ASTVisitor,
 public ASTVisitorType<BinaryExprAST>,
 public ASTVisitorType<IdentifierExprAST>,
-public ASTVisitorType<NumberExprAST>,
-public ASTVisitorType<OperandExprAST>{
+public ASTVisitorType<NumberExprAST> {
 public:
-    bool addressing;
-    uint8_t cmd;
-    int nextWord;
-    std::string label;
+    struct UnresolvedLabelException {
+        UnresolvedLabelException(const std::string& label) : label{label} {}
+        std::string label;
+    };
+    struct DuplicateRegisterException {
+        DuplicateRegisterException(RegisterCode reg) : reg{reg} {}
+        RegisterCode reg;
+    };
+    struct TooBigValueException {
+        TooBigValueException(int val) : val{val} {}
+        int val;
+    };
     
-    InstructionVisitor() : addressing{false}, cmd{0}, nextWord{0} {}
+    bool done;
+    int value;
+    std::string referencedRegister;
+    
+    InstructionVisitor(const CodegenVisitor::LabelsContainer& labels);
     
     virtual void visit(BinaryExprAST& node) override;
     virtual void visit(IdentifierExprAST& node) override;
     virtual void visit(NumberExprAST& node) override;
+    
+private:
+    const CodegenVisitor::LabelsContainer& m_labels;
 };
 
 #endif /* defined(__dcpu__CodegenVisitor__) */

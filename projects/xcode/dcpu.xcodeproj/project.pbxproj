@@ -104,6 +104,7 @@
 		75B52E7817E777B500295E66 /* CodegenVisitor.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CodegenVisitor.cpp; sourceTree = "<group>"; };
 		75B52E7917E777B500295E66 /* CodegenVisitor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CodegenVisitor.h; sourceTree = "<group>"; };
 		75BC78A217E8E05800C4B6B0 /* RegisterCode.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RegisterCode.h; sourceTree = "<group>"; };
+		75BC78A317E8E83100C4B6B0 /* SpecialOpcodes.inl */ = {isa = PBXFileReference; lastKnownFileType = text; path = SpecialOpcodes.inl; sourceTree = "<group>"; };
 		75C7E38D17C3D49B001247DA /* Core.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Core.cpp; sourceTree = "<group>"; };
 		75C7E38E17C3D49B001247DA /* Core.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Core.h; sourceTree = "<group>"; };
 		75C7E39017C3D9B9001247DA /* Registers.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Registers.h; sourceTree = "<group>"; };
@@ -177,6 +178,7 @@
 				6D62BAD217E8AFBA00621715 /* Opcodes.h */,
 				6D62BAD417E8B02B00621715 /* Opcodes.inl */,
 				75BC78A217E8E05800C4B6B0 /* RegisterCode.h */,
+				75BC78A317E8E83100C4B6B0 /* SpecialOpcodes.inl */,
 			);
 			name = inc;
 			path = ../../inc;

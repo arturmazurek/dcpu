@@ -8,6 +8,9 @@
 
 #include "Constants.h"
 
+#include <algorithm>
+#include <cctype>
+
 namespace Constants {
     const std::map<std::string, RegisterCode> REGISTER_NAMES {
         { "a", REG_A },
@@ -23,11 +26,30 @@ namespace Constants {
         { "ex", REG_EX },
     };
     
+    // Used to make lower case operand names (assembler uses lowercase)
+    class ToLower {
+    public:
+        explicit ToLower(const std::string& s) : m_string{s} {
+            std::transform(m_string.begin(), m_string.end(), m_string.begin(), std::tolower);
+        }
+        
+        operator std::string() {
+            return m_string;
+        }
+        
+    private:
+        std::string m_string;
+    };
+    
 #define OPCODES_INL
-#define OPCODE(op, val) { #op, OP_##op }
+#define OPCODE(op, val) { ToLower{#op}, OP_##op }
     
     const std::map<std::string, Opcode> OPCODES_NAMES {
         #include "Opcodes.inl"
+    };
+    
+    const std::map<std::string, Opcode> SPECIAL_OPCODES_NAMES {
+        #include "SpecialOpcodes.inl"
     };
     
 #undef OPCODES_INL

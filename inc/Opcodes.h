@@ -15,7 +15,10 @@
 #define OPCODE(op, value) OP_##op = value
 
 enum Opcode {
+    OP_NONE = 0x00, // special purpose one
+    
     #include "Opcodes.inl"
+    #include "SpecialOpcodes.inl"
 };
 
 constexpr static inline bool isConditional(Opcode op) {
