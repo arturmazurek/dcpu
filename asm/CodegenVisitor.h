@@ -13,13 +13,15 @@
 #include <string>
 #include <vector>
 
+#include "Assembler.h"
+
 #include "ASTNodes.h"
 #include "ASTVisitor.h"
 
 class CodegenVisitor : public ASTVisitor,
 public ASTVisitorType<CommandExprAST> {
 public:
-    std::vector<uint16_t> assembled;
+    std::vector<Assembler::CodeLine> assembled;
     std::string label;
     
     virtual void visit(CommandExprAST& command) override;

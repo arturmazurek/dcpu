@@ -34,132 +34,48 @@ void Assembler::assemble() {
     assert(m_lexer && "Lexer must be given to assemble");
     
     parseSource();
-    simplifyOperands();
-    assembleProgram();
-    resolveJumps();
+    resolveLabels();
     createBinary();
 }
 
 void Assembler::parseSource() {
-    m_assembled.clear();
+    m_program.clear();
     m_labels.clear();
     
     while(m_lexer->good()) {
         auto node = m_parser.parseCommand(*m_lexer);
-        auto assembled = std::make_unique<Assembled>(std::move(node));
+        
         if(node->label) {
-            if(m_labels.find(node->label->identifier) != m_labels.end()) {
-                throw AssemblerException("Duplicate label found: \"" + node->label->identifier + "\"");
+            const auto& labelName = node->label->identifier;
+            if(m_labels.find(labelName) != m_labels.end()) {
+                throw AssemblerException("Duplicate label: \"" + labelName + "\"");
             }
-            if(Constants::REGISTER_NAMES.find(node->label->identifier) != Constants::REGISTER_NAMES.end()) {
-                throw AssemblerException("Label named as register found: \"" + node->label->identifier + "\""); 
-            }
-            m_labels[node->label->identifier] = assembled.get();
+            m_labels[labelName] = m_program.size();
         }
         
-        m_assembled.emplace_back(std::move(assembled));
+        CodegenVisitor v;
+        node->accept(v);
+        m_program.insert(m_program.end(), v.assembled.begin(), v.assembled.end());
     }
 }
 
-void Assembler::simplifyOperands() {
-    for(auto& assembled : m_assembled) {
-        if(assembled->parsed->a.get()) {
-            simplify(assembled->parsed->a.get());
-        }
-        if(assembled->parsed->b) {
-            simplify(assembled->parsed->b.get());
-        }
-    }
-}
-
-void Assembler::assembleProgram() {
-    uint32_t currentOffset = 0;
-    for(auto& assembled : m_assembled) {
-        codegen(*assembled);
-        
-        assembled->offset = static_cast<uint16_t>(currentOffset);
-        
-        currentOffset += assembled->size;
-        if(currentOffset > std::numeric_limits<uint16_t>::max()) {
-            throw AssemblerException("Too big executable");
+void Assembler::resolveLabels() {
+    for(auto& line : m_program) {
+        if(line.code.first) {
+            continue; // code already generated
         }
         
-    }
-}
-
-void Assembler::resolveJumps() {
-    for(auto& assembled : m_assembled) {
-        if(assembled->jumpsTo) {
-            assembled->instructions.push_back(assembled->jumpsTo->offset);
-        }
+        CodegenVisitor v;
+        line.generator->accept(v);
+        assert(v.assembled.size() == 1 && "Ooops, at this point only single lines should be created");
+        line.code.second = v.assembled[0].code.second;
     }
 }
 
 void Assembler::createBinary() {
     m_binary.clear();
     
-    for(auto& assembled : m_assembled) {
-        m_binary.insert(m_binary.end(), assembled->instructions.begin(), assembled->instructions.end());
+    for(auto& assembled : m_program) {
+        m_binary.push_back(assembled.code.second);
     }
 }
-
-//class JumpVisitor : public ASTVisitor,
-//public ASTVisitorType<IdentifierExprAST>,
-//public ASTVisitorType<NumberExprAST>,
-//public ASTVisitorType<OperandExprAST> {
-//public:
-//    JumpVisitor() : addressing{false}, cmd{0}, nextWord{std::numeric_limits<int>::min()} {}
-//    
-//    uint8_t cmd;
-//    int nextWord;
-//    
-//private:
-//    bool addressing;
-//    
-//    virtual void visit(IdentifierExprAST& node) override {
-//        
-//    }
-//    virtual void visit(NumberExprAST& node) override {
-//        if(node.value > std::numeric_limits<uint16_t>::max()) {
-//            throw AssemblerException("Too big number in operation");
-//        }
-//        if(node.value >= -1 && node.value <= 30) {
-//            if(!addressing) {
-//                cmd = static_cast<uint8_t>(0x21 + node.value);
-//            } else {
-//                cmd = Constants::NEXT_WORD;
-//                nextWord = node.value;
-//            }
-//        } else {
-//            
-//        }
-//    }
-//    virtual void visit(OperandExprAST& node) override {
-//        addressing = node.addressing;
-//        node.expression->accept(*this);
-//    }
-//};
-
-//void Assembler::checkJump(Assembled& from) {
-//    Opcode op = OP_SET;
-//    Registers::Code b = Registers::REG_PC;
-//    int a = 0;
-//     jmpVisitor;
-//    from.parsed->a->accept(jmpVisitor);
-////    const auto& jmpTarget = from.parsed->a;
-////    if (jmpTarget->) {
-////    }
-//}
-
-void Assembler::codegen(Assembled& source) {
-    CodegenVisitor v;
-    source.parsed->accept(v);
-    if(v.label.size()) {
-        source.jumpsTo = m_labels[v.label];
-    }
-}
-
-void Assembler::simplify(OperandExprAST* node) const {
-    
-}
-
