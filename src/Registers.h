@@ -12,28 +12,17 @@
 #include <cassert>
 #include <cstdint>
 
+#include "RegisterCode.h"
+
 struct Registers {
-    enum Code {
-        REG_A = 0x00,
-        REG_B = 0x01,
-        REG_C = 0x02,
-        REG_X = 0x03,
-        REG_Y = 0x04,
-        REG_Z = 0x05,
-        REG_I = 0x06,
-        REG_J = 0x07,
-        REG_SP = 0x1b,
-        REG_PC = 0x1c,
-        REG_EX = 0x1d
-    };
-    
+
     uint16_t A, B, C, X, Y, Z, I, J;
     uint16_t PC;
     uint16_t SP;
     uint16_t EX;
     uint16_t IA;
     
-    uint16_t& value(Code reg) {
+    uint16_t& value(RegisterCode reg) {
         switch(reg) {
             case REG_A: return A;
             case REG_B: return B;

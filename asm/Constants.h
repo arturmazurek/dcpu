@@ -13,10 +13,10 @@
 #include <string>
 
 #include "Opcodes.h"
-#include "Registers.h"
+#include "RegisterCode.h"
 
 namespace Constants {
-    extern const std::map<std::string, Registers::Code> REGISTER_NAMES;
+    extern const std::map<std::string, RegisterCode> REGISTER_NAMES;
     extern const std::map<std::string, Opcode> OPCODES_NAMES;
     
     static constexpr int ADDRESSING = 0x08;
@@ -25,9 +25,9 @@ namespace Constants {
     static constexpr int PEEK = 0x19;
     static constexpr int PICK = 0x1a;
     static constexpr int NEXT_WORD_ADDR = 0x1e; // [next word]
-    static constexpr int NEXT_WORD = 0x1f;
-    static constexpr int LITERALS_START = 0x20; // -1
-    static constexpr int LITERALS_END = 0x3f; // 30
+    static constexpr int NEXT_WORD = 0x1f; // next word (literal)
+    static constexpr int LITERALS_MINUS_1 = 0x20; // -1
+    static constexpr int LITERALS_30 = 0x3f; // 30
 }
 
 #endif

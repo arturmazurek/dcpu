@@ -9,18 +9,18 @@
 #include "Constants.h"
 
 namespace Constants {
-    const std::map<std::string, Registers::Code> REGISTER_NAMES {
-        { "a", Registers::REG_A },
-        { "b", Registers::REG_B },
-        { "c", Registers::REG_C },
-        { "x", Registers::REG_X },
-        { "y", Registers::REG_Y },
-        { "z", Registers::REG_Z },
-        { "i", Registers::REG_I },
-        { "j", Registers::REG_J },
-        { "sp", Registers::REG_SP },
-        { "pc", Registers::REG_PC },
-        { "ex", Registers::REG_EX },
+    const std::map<std::string, RegisterCode> REGISTER_NAMES {
+        { "a", REG_A },
+        { "b", REG_B },
+        { "c", REG_C },
+        { "x", REG_X },
+        { "y", REG_Y },
+        { "z", REG_Z },
+        { "i", REG_I },
+        { "j", REG_J },
+        { "sp", REG_SP },
+        { "pc", REG_PC },
+        { "ex", REG_EX },
     };
     
 #define OPCODES_INL

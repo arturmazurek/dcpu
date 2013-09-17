@@ -261,14 +261,14 @@ void Core::decode() {
 uint16_t* Core::checkOperand(uint16_t& operand, bool inA) {
     if(operand <= 0x07) {
         // register (A, B, C, X, Y, Z, I or J, in that order)
-        return &m_registers.value(static_cast<Registers::Code>(operand));
+        return &m_registers.value(static_cast<RegisterCode>(operand));
     } else if(operand <= 0x0f) {
         // [register]
-        return &m_memory[m_registers.value(static_cast<Registers::Code>(operand - 0x08))];
+        return &m_memory[m_registers.value(static_cast<RegisterCode>(operand - 0x08))];
     } else if(operand <= 0x17) {
         // [register + next word]
         uint16_t nextWord = m_memory[m_registers.PC++];
-        return &m_memory[nextWord + m_registers.value(static_cast<Registers::Code>(operand - 0x10))];
+        return &m_memory[nextWord + m_registers.value(static_cast<RegisterCode>(operand - 0x10))];
     } else if(operand == 0x18) {
         // (PUSH / [--SP]) if in b, or (POP / [SP++]) if in a
         if(inA) {
