@@ -64,12 +64,18 @@ TEST {
     core.registers().PC = 8;
     core.registers().SP = 9;
     core.registers().EX = 10;
-    core.registers().IA = 11;
     
-    // there are 12 registers
-    for(int i = 0; i < 12; ++i) {
-        REQUIRE_EQUAL(core.registers().reg(i), i, "Is register retrieved correctly");
-    }
+    REQUIRE_EQUAL(core.registers().value(Registers::REG_A), 0, "Is register A retrieved correctly");
+    REQUIRE_EQUAL(core.registers().value(Registers::REG_B), 1, "Is register B retrieved correctly");
+    REQUIRE_EQUAL(core.registers().value(Registers::REG_C), 2, "Is register C retrieved correctly");
+    REQUIRE_EQUAL(core.registers().value(Registers::REG_X), 3, "Is register X retrieved correctly");
+    REQUIRE_EQUAL(core.registers().value(Registers::REG_Y), 4, "Is register Y retrieved correctly");
+    REQUIRE_EQUAL(core.registers().value(Registers::REG_Z), 5, "Is register Z retrieved correctly");
+    REQUIRE_EQUAL(core.registers().value(Registers::REG_I), 6, "Is register I retrieved correctly");
+    REQUIRE_EQUAL(core.registers().value(Registers::REG_J), 7, "Is register J retrieved correctly");
+    REQUIRE_EQUAL(core.registers().value(Registers::REG_PC), 8, "Is register PC retrieved correctly");
+    REQUIRE_EQUAL(core.registers().value(Registers::REG_SP), 9, "Is register SP retrieved correctly");
+    REQUIRE_EQUAL(core.registers().value(Registers::REG_EX), 10, "Is register EX retrieved correctly");
 },
 
 TEST {

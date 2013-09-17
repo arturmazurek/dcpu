@@ -33,13 +33,23 @@ struct Registers {
     uint16_t EX;
     uint16_t IA;
     
-    uint16_t& reg(int index) {
-        assert(index <= 12 && "There are 12 registers only");
-        char* start = reinterpret_cast<char*>(this);
-        start += sizeof(uint16_t) * index;
-        uint16_t* result = reinterpret_cast<uint16_t*>(start);
-        
-        return *result;
+    uint16_t& value(Code reg) {
+        switch(reg) {
+            case REG_A: return A;
+            case REG_B: return B;
+            case REG_C: return C;
+            case REG_X: return X;
+            case REG_Y: return Y;
+            case REG_Z: return Z;
+            case REG_I: return I;
+            case REG_J: return J;
+            case REG_SP: return SP;
+            case REG_PC: return PC;
+            case REG_EX: return EX;
+                
+            default:
+                assert(!"Unknown value of register to lookup");
+        }
     }
 };
 
