@@ -22,7 +22,6 @@ class CodegenVisitor : public ASTVisitor,
 public ASTVisitorType<CommandExprAST> {
 public:
     std::vector<Assembler::CodeLine> assembled;
-    std::string label;
     
     virtual void visit(CommandExprAST& command) override;
 };

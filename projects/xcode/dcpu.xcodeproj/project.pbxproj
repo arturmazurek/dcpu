@@ -74,6 +74,8 @@
 		6D0CD76B17E201AB0002D2E1 /* ParserTests.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ParserTests.h; sourceTree = "<group>"; };
 		6D1B541617E0C8FC005B3239 /* Lexer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Lexer.cpp; sourceTree = "<group>"; };
 		6D1B541717E0C8FC005B3239 /* Lexer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Lexer.h; sourceTree = "<group>"; };
+		6D62BAD217E8AFBA00621715 /* Opcodes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Opcodes.h; sourceTree = "<group>"; };
+		6D62BAD417E8B02B00621715 /* Opcodes.inl */ = {isa = PBXFileReference; lastKnownFileType = text; path = Opcodes.inl; sourceTree = "<group>"; };
 		6DF0DA9A17CCE6BA0048EBF5 /* SpecialOpcodesTests.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SpecialOpcodesTests.h; sourceTree = "<group>"; };
 		6DF0DA9B17CCEF240048EBF5 /* DCPUException.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DCPUException.h; sourceTree = "<group>"; };
 		7500250D17C8D5DD008CC090 /* OpcodesTests.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OpcodesTests.h; sourceTree = "<group>"; };
@@ -101,7 +103,6 @@
 		75B52E7617E7616400295E66 /* Constants.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Constants.cpp; sourceTree = "<group>"; };
 		75B52E7817E777B500295E66 /* CodegenVisitor.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CodegenVisitor.cpp; sourceTree = "<group>"; };
 		75B52E7917E777B500295E66 /* CodegenVisitor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CodegenVisitor.h; sourceTree = "<group>"; };
-		75C7E38C17C3CDF3001247DA /* Opcodes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Opcodes.h; sourceTree = "<group>"; };
 		75C7E38D17C3D49B001247DA /* Core.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Core.cpp; sourceTree = "<group>"; };
 		75C7E38E17C3D49B001247DA /* Core.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Core.h; sourceTree = "<group>"; };
 		75C7E39017C3D9B9001247DA /* Registers.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Registers.h; sourceTree = "<group>"; };
@@ -169,6 +170,16 @@
 			path = ../../asm;
 			sourceTree = "<group>";
 		};
+		6D62BAD317E8AFBD00621715 /* inc */ = {
+			isa = PBXGroup;
+			children = (
+				6D62BAD217E8AFBA00621715 /* Opcodes.h */,
+				6D62BAD417E8B02B00621715 /* Opcodes.inl */,
+			);
+			name = inc;
+			path = ../../inc;
+			sourceTree = "<group>";
+		};
 		7587BDAF17C7994800E0D416 /* test */ = {
 			isa = PBXGroup;
 			children = (
@@ -191,6 +202,7 @@
 		75C7E37417C3CA00001247DA = {
 			isa = PBXGroup;
 			children = (
+				6D62BAD317E8AFBD00621715 /* inc */,
 				6D1B541917E0CA49005B3239 /* asm */,
 				7587BDAF17C7994800E0D416 /* test */,
 				75C7E38917C3CA5F001247DA /* src */,
@@ -212,7 +224,6 @@
 		75C7E38917C3CA5F001247DA /* src */ = {
 			isa = PBXGroup;
 			children = (
-				75C7E38C17C3CDF3001247DA /* Opcodes.h */,
 				75C7E38D17C3D49B001247DA /* Core.cpp */,
 				75C7E38E17C3D49B001247DA /* Core.h */,
 				75C7E39017C3D9B9001247DA /* Registers.h */,
@@ -394,6 +405,7 @@
 				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
 				EXECUTABLE_PREFIX = lib;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				HEADER_SEARCH_PATHS = "$(SRCROOT)/../../inc";
 				PRODUCT_NAME = "dcpu-asm";
 			};
 			name = Debug;
@@ -404,6 +416,7 @@
 				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
 				EXECUTABLE_PREFIX = lib;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				HEADER_SEARCH_PATHS = "$(SRCROOT)/../../inc";
 				PRODUCT_NAME = "dcpu-asm";
 			};
 			name = Release;
@@ -414,6 +427,7 @@
 				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
 				EXECUTABLE_PREFIX = lib;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				HEADER_SEARCH_PATHS = "$(SRCROOT)/../../inc";
 				PRODUCT_NAME = dcpu;
 			};
 			name = Debug;
@@ -424,6 +438,7 @@
 				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
 				EXECUTABLE_PREFIX = lib;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				HEADER_SEARCH_PATHS = "$(SRCROOT)/../../inc";
 				PRODUCT_NAME = dcpu;
 			};
 			name = Release;
@@ -433,6 +448,7 @@
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				HEADER_SEARCH_PATHS = "$(SRCROOT)/inc";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Debug;
@@ -442,6 +458,7 @@
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				HEADER_SEARCH_PATHS = "$(SRCROOT)/inc";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;

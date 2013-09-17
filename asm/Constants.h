@@ -12,10 +12,12 @@
 #include <map>
 #include <string>
 
+#include "Opcodes.h"
 #include "Registers.h"
 
 namespace Constants {
     extern const std::map<std::string, Registers::Code> REGISTER_NAMES;
+    extern const std::map<std::string, Opcode> OPCODES_NAMES;
     
     static constexpr int ADDRESSING = 0x08;
     static constexpr int ADDRESSING_AND_NEXT_WORD = 0x10;

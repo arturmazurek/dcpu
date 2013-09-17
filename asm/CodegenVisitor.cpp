@@ -9,8 +9,10 @@
 #include "CodegenVisitor.h"
 
 void CodegenVisitor::visit(CommandExprAST& command) {
-    
+//    auto& op = command.op;
 }
+
+// Instruction visitor
 
 void InstructionVisitor::visit(BinaryExprAST& node) {
     

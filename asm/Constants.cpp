@@ -22,4 +22,14 @@ namespace Constants {
         { "pc", Registers::REG_PC },
         { "ex", Registers::REG_EX },
     };
+    
+#define OPCODES_INL
+#define OPCODE(op, val) { #op, OP_##op }
+    
+    const std::map<std::string, Opcode> OPCODES_NAMES {
+        #include "Opcodes.inl"
+    };
+    
+#undef OPCODES_INL
+#undef OPCODE
 }
