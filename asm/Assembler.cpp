@@ -65,10 +65,23 @@ void Assembler::resolveLabels() {
             continue; // code already generated
         }
         
-        CodegenVisitor v{m_labels};
+        InstructionVisitor v{m_labels};
         line.generator->accept(v);
-        assert(v.assembled.size() == 1 && "Ooops, at this point only single lines should be created");
-        line.code.second = v.assembled[0].code.second;
+        if(v.unresolvedLabels.size()) {
+            std::string s = "Unresolved labels: ";
+            for(const auto& l : v.unresolvedLabels) {
+                s += l + " ";
+            }
+            throw AssemblerException(s);
+        }
+        if(v.result() > std::numeric_limits<uint16_t>::max()) {
+            throw AssemblerException("Too big value");
+        }
+        if(v.result() < std::numeric_limits<int16_t>::min()) {
+            throw AssemblerException("Too big negative value");
+        }
+        
+        line.code.second = static_cast<uint16_t>(v.result());
     }
 }
 
