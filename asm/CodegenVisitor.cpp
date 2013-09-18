@@ -62,15 +62,17 @@ void CodegenVisitor::visit(CommandExprAST& command) {
 }
 
 std::pair<uint8_t, std::unique_ptr<ExprAST>> CodegenVisitor::codegenOperand(OperandExprAST& from) const {
-//    return {0, nullptr};
     InstructionVisitor iv{m_labels};
-    from.accept(iv);
-//    return {iv.value, iv.done ? nullptr : from };
+    
+    try {
+        from.accept(iv);
+    } catch (const InstructionVisitor::DuplicateRegisterException& e) {
+        throw ParserException("Duplicate register referenced"); // todo put the name
+    } 
+    bool done = iv.unresolvedLabels.size() == 0;
     
     std::pair<uint8_t, std::unique_ptr<ExprAST>> result;
-//    result.first = iv.value;
-//    result.second = iv.done ? nullptr : std::move(from.expression);
-    
+
     bool requireNext = false;
     
     if(iv.referencedRegister.length()) {
@@ -78,33 +80,42 @@ std::pair<uint8_t, std::unique_ptr<ExprAST>> CodegenVisitor::codegenOperand(Oper
         assert(it != Constants::REGISTER_NAMES.end() && "Recognised as register, but not a register?");
         
         result.first = static_cast<uint8_t>(it->second);
-        if(from.addressing && iv.value == 0) {
+        if(from.addressing && iv.result() == 0) {
             result.first += Constants::ADDRESSING;
-        } else if(from.addressing && iv.value != 0) {
+        } else if(from.addressing && iv.result() != 0) {
             result.first += Constants::ADDRESSING_AND_NEXT_WORD;
             requireNext = true;
         }
     }
     if(iv.referencedRegister == "sp") {
         if(!from.addressing) {
-            result.first = 0x1b;
-        } else if(iv.done) {
-            result.first = 0x19;
+            if(iv.result() != 0) {
+                throw ParserException("Cannot reference SP's value with a number");
+            }
+            result.first = REG_SP;
+        } else if(done && iv.result() == 0) {
+            result.first = Constants::PEEK;
         } else {
-            result.first = 0x1a;
+            result.first = Constants::PICK;
             requireNext = true;
         }
     }
     if(iv.referencedRegister == "pc") {
-        result.first = 0x1c;
+        result.first = REG_PC;
+        if(iv.result() != 0) {
+            throw ParserException("Cannot reference SP's value with a number");
+        }
     }
     if(iv.referencedRegister == "ex") {
-        result.first = 0x1d;
+        result.first = REG_EX;
+        if(iv.result() != 0) {
+            throw ParserException("Cannot reference SP's value with a number");
+        }
     }
     
-    if(iv.done) {
-        if(iv.value >= -1 && iv.value <= 30 && !from.addressing) {
-            result.first = static_cast<uint8_t>(iv.value);
+    if(done) {
+        if(iv.result() >= -1 && iv.result() <= 30 && !from.addressing) {
+            result.first = static_cast<uint8_t>(Constants::LITERALS_MINUS_1 + 1 + iv.result());
         } else {
             result.first = Constants::NEXT_WORD_ADDR;
             requireNext = true;
@@ -126,18 +137,49 @@ std::pair<uint8_t, std::unique_ptr<ExprAST>> CodegenVisitor::codegenOperand(Oper
 
 // Instruction visitor --------------------------------------------------------
 
-InstructionVisitor::InstructionVisitor(const CodegenVisitor::LabelsContainer& labels) : done{false}, value{0}, m_labels{labels} {
+InstructionVisitor::InstructionVisitor(const CodegenVisitor::LabelsContainer& labels) : m_labels{labels} {
 
+}
+
+int InstructionVisitor::result() const {
+    return m_values.top();
 }
 
 void InstructionVisitor::visit(BinaryExprAST& node) {
+    node.lhs->accept(*this);
+    node.rhs->accept(*this);
     
+    int lValue = m_values.top(); m_values.pop();
+    int rValue = m_values.top(); m_values.pop();
+    switch (node.binop) {
+        case '+': m_values.push(lValue + rValue); break;
+        case '-': m_values.push(lValue - rValue); break;
+        case '*': m_values.push(lValue * rValue); break;
+        case '/': m_values.push(lValue / rValue); break;
+            
+        default:
+            assert(!"Should never get here");
+            break;
+    }
 }
 
 void InstructionVisitor::visit(IdentifierExprAST& node) {
-    
+    if(Constants::REGISTER_NAMES.find(node.identifier) != Constants::REGISTER_NAMES.end()) {
+        // it's a register referenced
+        if(referencedRegister != node.identifier) {
+            throw DuplicateRegisterException(Constants::REGISTER_NAMES.at(node.identifier));
+        }
+        referencedRegister = node.identifier;
+        m_values.push(0);
+    } else if(m_labels.find(node.identifier) != m_labels.end()) {
+        // use the actual number
+        m_values.push(m_labels.at(node.identifier));
+    } else {
+        unresolvedLabels.push_back(node.identifier);
+        m_values.push(0);
+    }
 }
 
 void InstructionVisitor::visit(NumberExprAST& node) {
-    
+    m_values.push(node.value);
 }

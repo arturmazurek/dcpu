@@ -11,6 +11,7 @@
 
 #include <cstdint>
 #include <map>
+#include <stack>
 #include <stdexcept>
 #include <string>
 #include <utility>
@@ -51,16 +52,13 @@ public:
         DuplicateRegisterException(RegisterCode reg) : reg{reg} {}
         RegisterCode reg;
     };
-    struct TooBigValueException {
-        TooBigValueException(int val) : val{val} {}
-        int val;
-    };
     
-    bool done;
-    int value;
     std::string referencedRegister;
+    std::vector<std::string> unresolvedLabels;
     
     InstructionVisitor(const CodegenVisitor::LabelsContainer& labels);
+    
+    int result() const;
     
     virtual void visit(BinaryExprAST& node) override;
     virtual void visit(IdentifierExprAST& node) override;
@@ -68,6 +66,7 @@ public:
     
 private:
     const CodegenVisitor::LabelsContainer& m_labels;
+    std::stack<int> m_values;
 };
 
 #endif /* defined(__dcpu__CodegenVisitor__) */
