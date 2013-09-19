@@ -65,7 +65,7 @@ std::pair<uint8_t, std::unique_ptr<ExprAST>> CodegenVisitor::codegenOperand(Oper
     InstructionVisitor iv{m_labels};
     
     try {
-        from.accept(iv);
+        from.expression->accept(iv);
     } catch (const InstructionVisitor::DuplicateRegisterException& e) {
         throw ParserException("Duplicate register referenced"); // todo put the name
     } 

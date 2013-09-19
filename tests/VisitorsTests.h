@@ -9,9 +9,11 @@
 #ifndef dcpu_VisitorsTests_h
 #define dcpu_VisitorsTests_h
 
+#include <bitset>
 #include <sstream>
 
 #include "CodegenVisitor.h"
+#include "Instruction.h"
 #include "Lexer.h"
 #include "Parser.h"
 #include "TestsUtil.h"
@@ -106,6 +108,33 @@ TEST {
     CHECK_EQUAL(ivB2.referencedRegister, "sp", "Is proper register referenced");
     CHECK_TRUE(ivB2.unresolvedLabels.empty(), "No labels should be unresolved");
     CHECK_EQUAL(ivB2.result(), 11, "Is expression calculated correctly 2");
+},
+
+TEST {
+    meta.name = "Codegen visitor";
+    
+    std::stringstream s{"set a, 1"};
+    Instruction i{ OP_SET, REG_A, 0x22 };
+    
+    Lexer l{s};
+    Parser p;
+    
+    auto ast = p.parseCommand(l);
+    
+    CodegenVisitor::LabelsContainer noLabels{};
+    CodegenVisitor cv{noLabels};
+    
+    ast->accept(cv);
+    
+    REQUIRE_EQUAL(cv.assembled.size(), 1, "Should assemble to one instruction");
+    CHECK_TRUE(cv.assembled[0].code.first, "Should be fully generated");
+    uint16_t val = i.raw[0] << 8;
+    val += i.raw[1];
+    
+    std::cout << "Assembled: " << std::bitset<16>(cv.assembled[0].code.second) << std::endl;
+    std::cout << "Proper:    " << std::bitset<8>(i.raw[0]) << std::bitset<8>(i.raw[1]) << std::endl;
+    
+    CHECK_EQUAL(cv.assembled[0].code.second, val, "Is value correctly calculated");
 },
 
 TESTS_END
