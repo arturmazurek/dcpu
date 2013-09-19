@@ -14,7 +14,6 @@
 		6D0CD74617E1C0AD0002D2E1 /* CostCalculator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7500251017CB82FF008CC090 /* CostCalculator.cpp */; };
 		6D0CD74717E1C0AD0002D2E1 /* Hardware.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 758875F417DC7ED1004D557F /* Hardware.cpp */; };
 		6D0CD74817E1C0AD0002D2E1 /* GenericClock.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 758875F717DCD2E7004D557F /* GenericClock.cpp */; };
-		6D0CD75517E1C1AB0002D2E1 /* tests.1 in CopyFiles */ = {isa = PBXBuildFile; fileRef = 6D0CD75417E1C1AB0002D2E1 /* tests.1 */; };
 		6D0CD75A17E1C2130002D2E1 /* test_main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6D0CD75917E1C2130002D2E1 /* test_main.cpp */; };
 		6D0CD75F17E1C2680002D2E1 /* libdcpu-asm.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 6D0CD73317E1BD9B0002D2E1 /* libdcpu-asm.a */; };
 		6D0CD76017E1C2680002D2E1 /* libdcpu.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 6D0CD73F17E1C08B0002D2E1 /* libdcpu.a */; };
@@ -53,7 +52,6 @@
 			dstPath = /usr/share/man/man1/;
 			dstSubfolderSpec = 0;
 			files = (
-				6D0CD75517E1C1AB0002D2E1 /* tests.1 in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 1;
 		};
@@ -63,8 +61,6 @@
 		6D0CD73317E1BD9B0002D2E1 /* libdcpu-asm.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libdcpu-asm.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		6D0CD73F17E1C08B0002D2E1 /* libdcpu.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libdcpu.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		6D0CD75017E1C1AB0002D2E1 /* tests */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = tests; sourceTree = BUILT_PRODUCTS_DIR; };
-		6D0CD75217E1C1AB0002D2E1 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
-		6D0CD75417E1C1AB0002D2E1 /* tests.1 */ = {isa = PBXFileReference; lastKnownFileType = text.man; path = tests.1; sourceTree = "<group>"; };
 		6D0CD75917E1C2130002D2E1 /* test_main.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = test_main.cpp; sourceTree = "<group>"; };
 		6D0CD76117E1C8730002D2E1 /* LexerTests.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LexerTests.h; sourceTree = "<group>"; };
 		6D0CD76317E1EBBF0002D2E1 /* ASTNodes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ASTNodes.h; sourceTree = "<group>"; };
@@ -74,6 +70,7 @@
 		6D0CD76B17E201AB0002D2E1 /* ParserTests.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ParserTests.h; sourceTree = "<group>"; };
 		6D1B541617E0C8FC005B3239 /* Lexer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Lexer.cpp; sourceTree = "<group>"; };
 		6D1B541717E0C8FC005B3239 /* Lexer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Lexer.h; sourceTree = "<group>"; };
+		6D1EC40417EAF62A00999830 /* VisitorsTests.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VisitorsTests.h; sourceTree = "<group>"; };
 		6D62BAD217E8AFBA00621715 /* Opcodes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Opcodes.h; sourceTree = "<group>"; };
 		6D62BAD417E8B02B00621715 /* Opcodes.inl */ = {isa = PBXFileReference; lastKnownFileType = text; path = Opcodes.inl; sourceTree = "<group>"; };
 		6DF0DA9A17CCE6BA0048EBF5 /* SpecialOpcodesTests.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SpecialOpcodesTests.h; sourceTree = "<group>"; };
@@ -139,15 +136,6 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		6D0CD75117E1C1AB0002D2E1 /* tests */ = {
-			isa = PBXGroup;
-			children = (
-				6D0CD75217E1C1AB0002D2E1 /* main.cpp */,
-				6D0CD75417E1C1AB0002D2E1 /* tests.1 */,
-			);
-			path = tests;
-			sourceTree = "<group>";
-		};
 		6D1B541917E0CA49005B3239 /* asm */ = {
 			isa = PBXGroup;
 			children = (
@@ -198,6 +186,7 @@
 				6D0CD75917E1C2130002D2E1 /* test_main.cpp */,
 				6D0CD76117E1C8730002D2E1 /* LexerTests.h */,
 				6D0CD76B17E201AB0002D2E1 /* ParserTests.h */,
+				6D1EC40417EAF62A00999830 /* VisitorsTests.h */,
 			);
 			name = test;
 			path = ../../tests;
@@ -210,7 +199,6 @@
 				6D1B541917E0CA49005B3239 /* asm */,
 				7587BDAF17C7994800E0D416 /* test */,
 				75C7E38917C3CA5F001247DA /* src */,
-				6D0CD75117E1C1AB0002D2E1 /* tests */,
 				75C7E37E17C3CA00001247DA /* Products */,
 			);
 			sourceTree = "<group>";

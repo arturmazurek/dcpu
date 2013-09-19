@@ -166,7 +166,7 @@ void InstructionVisitor::visit(BinaryExprAST& node) {
 void InstructionVisitor::visit(IdentifierExprAST& node) {
     if(Constants::REGISTER_NAMES.find(node.identifier) != Constants::REGISTER_NAMES.end()) {
         // it's a register referenced
-        if(referencedRegister != node.identifier) {
+        if(!referencedRegister.empty() && referencedRegister != node.identifier) {
             throw DuplicateRegisterException(Constants::REGISTER_NAMES.at(node.identifier));
         }
         referencedRegister = node.identifier;

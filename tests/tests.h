@@ -16,6 +16,7 @@
 #include "ParserTests.h"
 #include "SpecialOpcodesTests.h"
 #include "TestsHolder.h"
+#include "VisitorsTests.h"
 
 static void runTests() {
     ADD_TESTS(BaseTests);
@@ -25,6 +26,8 @@ static void runTests() {
     
     ADD_TESTS(LexerTests);
     ADD_TESTS(ParserTests);
+    
+    ADD_TESTS(VisitorsTests);
     
     TestsHolder::instance().runTests();
 }
