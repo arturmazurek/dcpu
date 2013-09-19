@@ -149,8 +149,9 @@ void InstructionVisitor::visit(BinaryExprAST& node) {
     node.lhs->accept(*this);
     node.rhs->accept(*this);
     
-    int lValue = m_values.top(); m_values.pop();
+    // lvalue is visited first, so rvalue is popped first
     int rValue = m_values.top(); m_values.pop();
+    int lValue = m_values.top(); m_values.pop();
     switch (node.binop) {
         case '+': m_values.push(lValue + rValue); break;
         case '-': m_values.push(lValue - rValue); break;

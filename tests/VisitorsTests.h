@@ -41,6 +41,35 @@ TEST {
     CHECK_EQUAL(iv2.result(), 42, "Is result correctly 42");
 },
 
+TEST {
+    meta.name = "Binop instructions with labels";
+    
+    std::stringstream s{"set [a+42], 12*12-myLabel"};
+    
+    Lexer l{s};
+    Parser p;
+    
+    auto ast = p.parseCommand(l);
+    
+    CodegenVisitor::LabelsContainer labels{ {"myLabel", 44} };
+    
+    InstructionVisitor iv{labels};
+    ast->a->expression->accept(iv);
+    CHECK_EQUAL(iv.referencedRegister, "a", "Is register a referenced correctly");
+    CHECK_EQUAL(iv.result(), 42, "Is offset added correctly");
+    
+    CodegenVisitor::LabelsContainer noLabels;
+    InstructionVisitor ivNoLabels{noLabels};
+    ast->b->expression->accept(ivNoLabels);
+    REQUIRE_EQUAL(ivNoLabels.unresolvedLabels.size(), 1, "There must be one unresolved label");
+    CHECK_EQUAL(ivNoLabels.unresolvedLabels[0], "myLabel", "Is the unresolved label found properly");
+    
+    InstructionVisitor iv2{labels};
+    ast->b->expression->accept(iv2);
+    CHECK_TRUE(iv2.unresolvedLabels.empty(), "Are the labels properly resolved");
+    CHECK_EQUAL(iv2.result(), 100, "Is the expression calculated correctly when label is known");
+},
+
 TESTS_END
 
 #endif
