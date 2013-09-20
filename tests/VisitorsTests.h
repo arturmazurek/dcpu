@@ -33,12 +33,12 @@ TEST {
     CodegenVisitor::LabelsContainer labels;
     
     InstructionVisitor iv{labels};
-    ast->a->expression->accept(iv);
+    ast->b->expression->accept(iv);
     CHECK_EQUAL(iv.referencedRegister, "a", "Is instruction visitor properly finding a register");
     CHECK_EQUAL(iv.result(), 0, "Is result correctly 0");
     
     InstructionVisitor iv2{labels};
-    ast->b->expression->accept(iv2);
+    ast->a->expression->accept(iv2);
     CHECK_EQUAL(iv2.referencedRegister, "", "Is no register referenced");
     CHECK_EQUAL(iv2.result(), 42, "Is result correctly 42");
 },
@@ -56,18 +56,18 @@ TEST {
     CodegenVisitor::LabelsContainer labels{ {"myLabel", 44} };
     
     InstructionVisitor iv{labels};
-    ast->a->expression->accept(iv);
+    ast->b->expression->accept(iv);
     CHECK_EQUAL(iv.referencedRegister, "a", "Is register a referenced correctly");
     CHECK_EQUAL(iv.result(), 42, "Is offset added correctly");
     
     CodegenVisitor::LabelsContainer noLabels;
     InstructionVisitor ivNoLabels{noLabels};
-    ast->b->expression->accept(ivNoLabels);
+    ast->a->expression->accept(ivNoLabels);
     REQUIRE_EQUAL(ivNoLabels.unresolvedLabels.size(), 1, "There must be one unresolved label");
     CHECK_EQUAL(ivNoLabels.unresolvedLabels[0], "myLabel", "Is the unresolved label found properly");
     
     InstructionVisitor iv2{labels};
-    ast->b->expression->accept(iv2);
+    ast->a->expression->accept(iv2);
     CHECK_TRUE(iv2.unresolvedLabels.empty(), "Are the labels properly resolved");
     CHECK_EQUAL(iv2.result(), 100, "Is the expression calculated correctly when label is known");
 },
@@ -85,29 +85,29 @@ TEST {
     CodegenVisitor::LabelsContainer someLabels{ {"one", 1}, {"three", 3} };
     CodegenVisitor::LabelsContainer allLabels{ {"one", 1}, {"three", 3}, {"four", 4} };
     
-    InstructionVisitor ivA1{someLabels};
-    ast->a->expression->accept(ivA1);
-    CHECK_EQUAL(ivA1.referencedRegister, "a", "Is a referenced correctly");
-    REQUIRE_EQUAL(ivA1.unresolvedLabels.size(), 1, "Are labels unrecognised");
-    CHECK_EQUAL(ivA1.unresolvedLabels[0], "four", "Is proper label unrecognised");
-    
-    InstructionVisitor ivA2{allLabels};
-    ast->a->expression->accept(ivA2);
-    CHECK_EQUAL(ivA2.referencedRegister, "a", "Is a referenced correctly");
-    CHECK_TRUE(ivA2.unresolvedLabels.empty(), "Are all labels resolved");
-    CHECK_EQUAL(ivA2.result(), 13, "Is expression calculated correctly");
-    
     InstructionVisitor ivB1{someLabels};
     ast->b->expression->accept(ivB1);
-    CHECK_EQUAL(ivB1.referencedRegister, "sp", "Is proper register referenced");
+    CHECK_EQUAL(ivB1.referencedRegister, "a", "Is a referenced correctly");
     REQUIRE_EQUAL(ivB1.unresolvedLabels.size(), 1, "Are labels unrecognised");
     CHECK_EQUAL(ivB1.unresolvedLabels[0], "four", "Is proper label unrecognised");
     
     InstructionVisitor ivB2{allLabels};
     ast->b->expression->accept(ivB2);
-    CHECK_EQUAL(ivB2.referencedRegister, "sp", "Is proper register referenced");
-    CHECK_TRUE(ivB2.unresolvedLabels.empty(), "No labels should be unresolved");
-    CHECK_EQUAL(ivB2.result(), 11, "Is expression calculated correctly 2");
+    CHECK_EQUAL(ivB2.referencedRegister, "a", "Is a referenced correctly");
+    CHECK_TRUE(ivB2.unresolvedLabels.empty(), "Are all labels resolved");
+    CHECK_EQUAL(ivB2.result(), 13, "Is expression calculated correctly");
+    
+    InstructionVisitor ivA1{someLabels};
+    ast->a->expression->accept(ivA1);
+    CHECK_EQUAL(ivA1.referencedRegister, "sp", "Is proper register referenced");
+    REQUIRE_EQUAL(ivA1.unresolvedLabels.size(), 1, "Are labels unrecognised");
+    CHECK_EQUAL(ivA1.unresolvedLabels[0], "four", "Is proper label unrecognised");
+    
+    InstructionVisitor ivA2{allLabels};
+    ast->a->expression->accept(ivA2);
+    CHECK_EQUAL(ivA2.referencedRegister, "sp", "Is proper register referenced");
+    CHECK_TRUE(ivA2.unresolvedLabels.empty(), "No labels should be unresolved");
+    CHECK_EQUAL(ivA2.result(), 11, "Is expression calculated correctly 2");
 },
 
 TEST {
@@ -130,9 +130,6 @@ TEST {
     CHECK_TRUE(cv.assembled[0].code.first, "Should be fully generated");
     uint16_t val = i.raw[0] << 8;
     val += i.raw[1];
-    
-    std::cout << "Assembled: " << std::bitset<16>(cv.assembled[0].code.second) << std::endl;
-    std::cout << "Proper:    " << std::bitset<8>(i.raw[0]) << std::bitset<8>(i.raw[1]) << std::endl;
     
     CHECK_EQUAL(cv.assembled[0].code.second, val, "Is value correctly calculated");
 },

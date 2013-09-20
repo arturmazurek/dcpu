@@ -159,11 +159,11 @@ TEST {
     REQUIRE_TRUE(ast->op != nullptr, "Is operation properly found");
     CHECK_EQUAL(ast->op->identifier, "op1", "Is operation retrieved properly");
     
-    REQUIRE_TRUE(ast->a != nullptr, "Is operator a properly found");
-    CHECK_TRUE(!(ast->a->addressing), "Is operator a non-addressing");
+    REQUIRE_TRUE(ast->b != nullptr, "Is operator a properly found");
+    CHECK_TRUE(!(ast->b->addressing), "Is operator a non-addressing");
 
-    REQUIRE_TRUE(ast->b != nullptr, "Is operator b properly found");
-    CHECK_TRUE(ast->b->addressing, "Is operator b addressing");
+    REQUIRE_TRUE(ast->a != nullptr, "Is operator b properly found");
+    CHECK_TRUE(ast->a->addressing, "Is operator b addressing");
     
     ast = p.parseCommand(l);
     REQUIRE_TRUE(ast != nullptr, "Is ast properly created 2");
@@ -174,24 +174,24 @@ TEST {
     REQUIRE_TRUE(ast->op != nullptr, "Is operation properly found 2");
     CHECK_EQUAL(ast->op->identifier, "op2", "Is operation retrieved properly 2");
     
-    REQUIRE_TRUE(ast->a != nullptr, "Is operator c properly found");
-    CHECK_TRUE(ast->a->addressing, "Is operator c non-addressing");
+    REQUIRE_TRUE(ast->b != nullptr, "Is operator c properly found");
+    CHECK_TRUE(ast->b->addressing, "Is operator c non-addressing");
     
-    REQUIRE_TRUE(ast->b != nullptr, "Is operator d properly found");
-    CHECK_TRUE(!(ast->b->addressing), "Is operator d non-addressing");
+    REQUIRE_TRUE(ast->a != nullptr, "Is operator d properly found");
+    CHECK_TRUE(!(ast->a->addressing), "Is operator d non-addressing");
 },
 
 TEST {
     meta.name = "Binary ops";
     
-    class TestVisitorA :
+    class TestVisitorB :
     public ASTVisitor,
     public ASTVisitorType<IdentifierExprAST>,
     public ASTVisitorType<NumberExprAST>,
     public ASTVisitorType<OperandExprAST>,
     public ASTVisitorType<BinaryExprAST> {
     public:
-        TestVisitorA() : count{0} {}
+        TestVisitorB() : count{0} {}
         int count;
         
         virtual void visit(IdentifierExprAST& node) override {
@@ -219,14 +219,14 @@ TEST {
             REQUIRE_TRUE(node.expression != nullptr, "Is there an expression");
             node.expression->accept(*this);
         }
-    } visitorA;
+    } visitorB;
     
-    class TestVisitorB :
+    class TestVisitorA :
     public ASTVisitor,
     public ASTVisitorType<IdentifierExprAST>,
     public ASTVisitorType<OperandExprAST> {
     public:
-        TestVisitorB() : count{0} {}
+        TestVisitorA() : count{0} {}
         int count;
         
         virtual void visit(IdentifierExprAST& node) override {
@@ -236,11 +236,11 @@ TEST {
         
         virtual void visit(OperandExprAST& node) override {
             ++count;
-            CHECK_TRUE(!(node.addressing), "Is b non addressing");
+            CHECK_TRUE(!(node.addressing), "Is a non addressing");
             REQUIRE_TRUE(node.expression != nullptr, "Is there an expression 2");
             node.expression->accept(*this);
         }
-    } visitorB;
+    } visitorA;
     
     std::stringstream s{
         "op [a+1],b"
@@ -259,11 +259,11 @@ TEST {
     
     REQUIRE_TRUE(ast->a != nullptr, "Is operand a retrieved");
     ast->a->accept(visitorA);
-    CHECK_EQUAL(visitorA.count, 4, "Is visitorA visited appropriate number of times");
+    CHECK_EQUAL(visitorA.count, 2, "Is visitorA visited appropriate number of times");
 
     REQUIRE_TRUE(ast->b != nullptr, "Is operand b retrieved");
     ast->b->accept(visitorB);
-    CHECK_EQUAL(visitorB.count, 2, "Is visitor B visited appropriate number of times");
+    CHECK_EQUAL(visitorB.count, 4, "Is visitor B visited appropriate number of times");
 },
 
 TEST {
@@ -278,13 +278,13 @@ TEST {
     REQUIRE_TRUE(ast != nullptr, "Is ast properly created");
     
     CountingVisitor v1;
-    ast->a->accept(v1);
+    ast->b->accept(v1);
     CHECK_EQUAL(v1.sum, 13, "Are numbers counted correctly");
 
     CountingVisitor v2;
-    ast->b->accept(v2);
+    ast->a->accept(v2);
     CHECK_EQUAL(v2.sum, 121, "Are numbers counted correctly 2");
-    CHECK_TRUE(ast->b->addressing, "Is b correctly addressing");
+    CHECK_TRUE(ast->a->addressing, "Is b correctly addressing");
 },
 
 TEST {
@@ -301,12 +301,12 @@ TEST {
     REQUIRE_TRUE(ast->b != nullptr, "Operand b must be retrieved");
     
     CountingVisitor v1;
-    ast->a->accept(v1);
+    ast->b->accept(v1);
     
     CHECK_EQUAL(v1.sum, (1+2)*3, "Is operand a calculated correctly");
 
     CountingVisitor v2;
-    ast->b->accept(v2);
+    ast->a->accept(v2);
     
     CHECK_EQUAL(v2.sum, (1+2)-(3)+(4+2)*5, "Is operand b calculated correctly");
     

@@ -32,10 +32,10 @@ std::unique_ptr<CommandExprAST> Parser::parseCommand(Lexer& l) {
     
     while (m_currentToken != Lexer::TOK_ENDLINE && m_currentToken != Lexer::TOK_EOF) {
         if(result->op) {
-            result->a = parseOperand(l);
+            result->b = parseOperand(l);
             if(m_currentToken == ',') {
                 m_currentToken = l.nextToken();
-                result->b = parseOperand(l);
+                result->a = parseOperand(l);
             } else if(m_currentToken == Lexer::TOK_ENDLINE || m_currentToken == Lexer::TOK_EOF) {
                 break;
             } else {

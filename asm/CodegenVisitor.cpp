@@ -114,17 +114,27 @@ std::pair<uint8_t, std::unique_ptr<ExprAST>> CodegenVisitor::codegenOperand(Oper
     }
     
     if(done) {
-        if(iv.result() >= -1 && iv.result() <= 30 && !from.addressing) {
-            result.first = static_cast<uint8_t>(Constants::LITERALS_MINUS_1 + 1 + iv.result());
+        if(iv.referencedRegister.empty()) {
+            if(iv.result() >= -1 && iv.result() <= 30 && !from.addressing) {
+                result.first = static_cast<uint8_t>(Constants::LITERALS_MINUS_1 + 1 + iv.result());
+            } else {
+                result.first = Constants::NEXT_WORD_ADDR;
+                requireNext = true;
+            }
         } else {
-            result.first = Constants::NEXT_WORD_ADDR;
-            requireNext = true;
+            if(from.addressing) {
+                result.first += Constants::ADDRESSING;
+            }
         }
     } else {
-        if(from.addressing) {
-            result.first = Constants::NEXT_WORD_ADDR;
+        if(iv.referencedRegister.empty()) {
+            if(from.addressing) {
+                result.first = Constants::NEXT_WORD_ADDR;
+            } else {
+                result.first = Constants::NEXT_WORD;
+            }
         } else {
-            result.first = Constants::NEXT_WORD;
+            result.first += Constants::ADDRESSING_AND_NEXT_WORD;
         }
         requireNext = true;
     }
