@@ -134,7 +134,7 @@ std::pair<uint8_t, std::unique_ptr<ExprAST>> CodegenVisitor::codegenOperand(Oper
             if(iv.result() >= -1 && iv.result() <= 30 && !from.addressing) {
                 result.first = static_cast<uint8_t>(Constants::LITERALS_MINUS_1 + 1 + iv.result());
             } else {
-                result.first = Constants::NEXT_WORD_ADDR;
+                result.first = from.addressing ? Constants::NEXT_WORD_ADDR : Constants::NEXT_WORD;
                 requireNext = true;
             }
         }
