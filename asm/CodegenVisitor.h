@@ -25,10 +25,12 @@
 class CodegenVisitor : public ASTVisitor,
 public ASTVisitorType<CommandExprAST> {
 public:
+    typedef std::map<std::string, uint16_t> LabelsContainer;
+    static LabelsContainer NoLabels;
+public:
     std::vector<Assembler::CodeLine> assembled;
     
-    typedef std::map<std::string, uint16_t> LabelsContainer;
-    CodegenVisitor(const LabelsContainer& labels);
+    CodegenVisitor(const LabelsContainer& labels = NoLabels);
     
     virtual void visit(CommandExprAST& command) override;
     
@@ -56,7 +58,7 @@ public:
     std::string referencedRegister;
     std::vector<std::string> unresolvedLabels;
     
-    InstructionVisitor(const CodegenVisitor::LabelsContainer& labels);
+    InstructionVisitor(const CodegenVisitor::LabelsContainer& labels = CodegenVisitor::NoLabels);
     
     int result() const;
     

@@ -134,6 +134,34 @@ TEST {
     CHECK_EQUAL(cv.assembled[0].code.second, val, "Is value correctly calculated");
 },
 
+TEST {
+    meta.name = "Codegen visitor 2";
+    
+    std::stringstream s{"set [b+2], 12*12"};
+    Instruction i[] = {
+        {OP_SET, 0x11, 0x1f}, // SET [B+2], 12*12
+        { 144 },
+        { 2 }
+    };
+    
+    Lexer l{s};
+    Parser p;
+    
+    auto ast = p.parseCommand(l);
+    
+    CodegenVisitor cv;
+    ast->accept(cv);
+    
+    REQUIRE_EQUAL(cv.assembled.size(), 3, "Is proper amount of lines assembled");
+    CHECK_TRUE(cv.assembled[0].code.first, "Is first line codegened");
+    CHECK_TRUE(cv.assembled[1].code.first, "Is second line codegened");
+    CHECK_TRUE(cv.assembled[2].code.first, "Is third line codegened");
+
+    uint16_t val = i[0].raw[0] << 8;
+    val += i[0].raw[1];
+    CHECK_EQUAL(cv.assembled[0].code.second, val, "Is first line correct");
+},
+
 TESTS_END
 
 #endif

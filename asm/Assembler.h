@@ -43,8 +43,11 @@ private:
     
     std::map<std::string, uint16_t> m_labels;
     struct CodeLine {
+        typedef std::pair<bool, uint16_t> CodeOptional;
+        CodeLine(std::shared_ptr<ExprAST> generator, CodeOptional code) : generator{generator}, code{code} {}
+        
         std::shared_ptr<ExprAST> generator;
-        std::pair<bool, uint16_t> code;
+        CodeOptional code;
     };
     std::vector<CodeLine> m_program;
     

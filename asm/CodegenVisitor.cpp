@@ -12,6 +12,8 @@
 #include "Constants.h"
 #include "Opcodes.h"
 
+CodegenVisitor::LabelsContainer CodegenVisitor::NoLabels{};
+
 // Codegen visitor ------------------------------------------------------------
 
 CodegenVisitor::CodegenVisitor(const LabelsContainer& labels) : m_labels{labels} {
@@ -31,12 +33,26 @@ void CodegenVisitor::visit(CommandExprAST& command) {
         auto b = codegenOperand(*command.b);
         first |= (b.first & 0b11111) << 5;
         
-        assembled.push_back(Assembler::CodeLine{nullptr, {true, first}});
+        assembled.emplace_back(nullptr, std::make_pair(true, first));
         if(a.second) {
-            assembled.push_back(Assembler::CodeLine{std::move(a.second), {false, 0}});
+            InstructionVisitor iv{m_labels};
+            a.second->accept(iv);
+            
+            if(iv.unresolvedLabels.empty()) {
+                assembled.emplace_back(nullptr, std::make_pair(true, iv.result()));
+            } else {
+                assembled.emplace_back(std::move(a.second), std::make_pair(false, 0));
+            }
         }
         if(b.second) {
-            assembled.push_back(Assembler::CodeLine{std::move(b.second), {false, 0}});
+            InstructionVisitor iv{m_labels};
+            b.second->accept(iv);
+            
+            if(iv.unresolvedLabels.empty()) {
+                assembled.emplace_back(nullptr, std::make_pair(true, iv.result()));
+            } else {
+                assembled.emplace_back(std::move(b.second), std::make_pair(false, 0));
+            }
         }
         
         return;
@@ -50,9 +66,9 @@ void CodegenVisitor::visit(CommandExprAST& command) {
         auto a = codegenOperand(*command.a);
         first |= (a.first & 0b111111) << 10;
         
-        assembled.push_back(Assembler::CodeLine{nullptr, {true, first}});
+        assembled.emplace_back(nullptr, std::make_pair(true, first));
         if(a.second) {
-            assembled.push_back(Assembler::CodeLine{std::move(a.second), {false, 0}});
+            assembled.emplace_back(std::move(a.second), std::make_pair(false, 0));
         }
         
         return;
