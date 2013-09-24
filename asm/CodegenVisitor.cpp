@@ -137,10 +137,6 @@ std::pair<uint8_t, std::unique_ptr<ExprAST>> CodegenVisitor::codegenOperand(Oper
                 result.first = Constants::NEXT_WORD_ADDR;
                 requireNext = true;
             }
-        } else {
-            if(from.addressing) {
-                result.first += Constants::ADDRESSING;
-            }
         }
     } else {
         if(iv.referencedRegister.empty()) {
