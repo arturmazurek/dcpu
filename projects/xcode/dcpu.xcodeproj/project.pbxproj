@@ -80,7 +80,6 @@
 		7500251017CB82FF008CC090 /* CostCalculator.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CostCalculator.cpp; sourceTree = "<group>"; };
 		7500251117CB82FF008CC090 /* CostCalculator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CostCalculator.h; sourceTree = "<group>"; };
 		7500537F17E1068900A3C08F /* LexerException.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LexerException.h; sourceTree = "<group>"; };
-		7587BDAE17C798E700E0D416 /* tests.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = tests.h; sourceTree = "<group>"; };
 		7587BDB017C79A3600E0D416 /* TestsHolder.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TestsHolder.h; sourceTree = "<group>"; };
 		7587BDB417C79D4000E0D416 /* TestsHolder.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TestsHolder.cpp; sourceTree = "<group>"; };
 		7587BDB817C7A14600E0D416 /* BaseTests.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BaseTests.h; sourceTree = "<group>"; };
@@ -107,6 +106,7 @@
 		75C7E39017C3D9B9001247DA /* Registers.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Registers.h; sourceTree = "<group>"; };
 		75C7E39117C3DF74001247DA /* Instruction.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Instruction.h; sourceTree = "<group>"; };
 		75E60CFB17DE6B240039618A /* CoreTests.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CoreTests.h; sourceTree = "<group>"; };
+		75EEFA1917F32CFF0049AE8B /* AssemblerTests.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AssemblerTests.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -175,7 +175,6 @@
 		7587BDAF17C7994800E0D416 /* test */ = {
 			isa = PBXGroup;
 			children = (
-				7587BDAE17C798E700E0D416 /* tests.h */,
 				7587BDB017C79A3600E0D416 /* TestsHolder.h */,
 				7587BDB417C79D4000E0D416 /* TestsHolder.cpp */,
 				7587BDB817C7A14600E0D416 /* BaseTests.h */,
@@ -187,6 +186,7 @@
 				6D0CD76117E1C8730002D2E1 /* LexerTests.h */,
 				6D0CD76B17E201AB0002D2E1 /* ParserTests.h */,
 				6D1EC40417EAF62A00999830 /* VisitorsTests.h */,
+				75EEFA1917F32CFF0049AE8B /* AssemblerTests.h */,
 			);
 			name = test;
 			path = ../../tests;
