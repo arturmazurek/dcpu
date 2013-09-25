@@ -10,7 +10,6 @@
 		6D0CD73717E1BDC20002D2E1 /* Lexer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6D1B541617E0C8FC005B3239 /* Lexer.cpp */; };
 		6D0CD74317E1C0AD0002D2E1 /* TestsHolder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7587BDB417C79D4000E0D416 /* TestsHolder.cpp */; };
 		6D0CD74417E1C0AD0002D2E1 /* Core.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 75C7E38D17C3D49B001247DA /* Core.cpp */; };
-		6D0CD74517E1C0AD0002D2E1 /* Instruction.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 75ABD72217C5253E00BED3AB /* Instruction.cpp */; };
 		6D0CD74617E1C0AD0002D2E1 /* CostCalculator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7500251017CB82FF008CC090 /* CostCalculator.cpp */; };
 		6D0CD74717E1C0AD0002D2E1 /* Hardware.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 758875F417DC7ED1004D557F /* Hardware.cpp */; };
 		6D0CD74817E1C0AD0002D2E1 /* GenericClock.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 758875F717DCD2E7004D557F /* GenericClock.cpp */; };
@@ -89,7 +88,6 @@
 		758875F717DCD2E7004D557F /* GenericClock.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GenericClock.cpp; sourceTree = "<group>"; };
 		758875F817DCD2E7004D557F /* GenericClock.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GenericClock.h; sourceTree = "<group>"; };
 		758875FA17DCD424004D557F /* Manufacturers.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Manufacturers.h; sourceTree = "<group>"; };
-		75ABD72217C5253E00BED3AB /* Instruction.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Instruction.cpp; sourceTree = "<group>"; };
 		75B52E6C17E4B99700295E66 /* ASTVisitor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ASTVisitor.h; sourceTree = "<group>"; };
 		75B52E6F17E7327700295E66 /* Assembler.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Assembler.cpp; sourceTree = "<group>"; };
 		75B52E7017E7327700295E66 /* Assembler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Assembler.h; sourceTree = "<group>"; };
@@ -167,6 +165,7 @@
 				6D62BAD417E8B02B00621715 /* Opcodes.inl */,
 				75BC78A217E8E05800C4B6B0 /* RegisterCode.h */,
 				75BC78A317E8E83100C4B6B0 /* SpecialOpcodes.inl */,
+				75C7E39117C3DF74001247DA /* Instruction.h */,
 			);
 			name = inc;
 			path = ../../inc;
@@ -219,8 +218,6 @@
 				75C7E38D17C3D49B001247DA /* Core.cpp */,
 				75C7E38E17C3D49B001247DA /* Core.h */,
 				75C7E39017C3D9B9001247DA /* Registers.h */,
-				75C7E39117C3DF74001247DA /* Instruction.h */,
-				75ABD72217C5253E00BED3AB /* Instruction.cpp */,
 				7500250E17C8E1B7008CC090 /* Util.h */,
 				7500251017CB82FF008CC090 /* CostCalculator.cpp */,
 				7500251117CB82FF008CC090 /* CostCalculator.h */,
@@ -360,7 +357,6 @@
 			files = (
 				6D0CD74317E1C0AD0002D2E1 /* TestsHolder.cpp in Sources */,
 				6D0CD74417E1C0AD0002D2E1 /* Core.cpp in Sources */,
-				6D0CD74517E1C0AD0002D2E1 /* Instruction.cpp in Sources */,
 				6D0CD74617E1C0AD0002D2E1 /* CostCalculator.cpp in Sources */,
 				6D0CD74717E1C0AD0002D2E1 /* Hardware.cpp in Sources */,
 				6D0CD74817E1C0AD0002D2E1 /* GenericClock.cpp in Sources */,

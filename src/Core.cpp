@@ -52,10 +52,14 @@ uint16_t Core::memory(uint16_t at) const {
     return m_memory[at];
 }
 
-void Core::setMemory(uint16_t* m, unsigned size, unsigned startingAt) {
+void Core::setMemory(const uint16_t* m, unsigned size, unsigned startingAt) {
     assert(size + startingAt < MEMORY_SIZE);
     
     std::copy(m, m + size, begin(m_memory));
+}
+
+void Core::setMemory(const std::vector<uint16_t>& m, unsigned startingAt) {
+    setMemory(m.data(), static_cast<unsigned>(m.size()), startingAt);
 }
 
 void Core::setInstructions(Instruction* m, unsigned size, unsigned startingAt) {

@@ -128,9 +128,8 @@ TEST {
     
     REQUIRE_EQUAL(cv.assembled.size(), 1, "Should assemble to one instruction");
     CHECK_TRUE(cv.assembled[0].code.first, "Should be fully generated");
-    uint16_t val = i.raw[0] << 8;
-    val += i.raw[1];
     
+    uint16_t val = *reinterpret_cast<uint16_t*>(i.raw);
     CHECK_EQUAL(cv.assembled[0].code.second, val, "Is value correctly calculated");
 },
 
@@ -157,16 +156,15 @@ TEST {
     CHECK_TRUE(cv.assembled[1].code.first, "Is second line codegened");
     CHECK_TRUE(cv.assembled[2].code.first, "Is third line codegened");
 
-    uint16_t val = i[0].raw[0] << 8;
-    val += i[0].raw[1];
+    uint16_t val = *reinterpret_cast<uint16_t*>(i[0].raw);
     CHECK_EQUAL(cv.assembled[0].code.second, val, "Is first line correct");
     
     // All data is little endian host-level because assumption is x86 and ARM that
     // runs the emulator are also little endian
-    val = *reinterpret_cast<uint16_t*>(&i[1].raw);
+    val = *reinterpret_cast<uint16_t*>(i[1].raw);
     CHECK_EQUAL(cv.assembled[1].code.second, val, "Is second line correct");
     
-    val = *reinterpret_cast<uint16_t*>(&i[2].raw);
+    val = *reinterpret_cast<uint16_t*>(i[2].raw);
     CHECK_EQUAL(cv.assembled[2].code.second, val, "Is third line correct");
 },
 
@@ -191,11 +189,10 @@ TEST {
     CHECK_TRUE(cv.assembled[0].code.first, "Is first line codegened");
     CHECK_TRUE(cv.assembled[1].code.first, "Is second line codegened");
 
-    uint16_t val = i[0].raw[0] << 8;
-    val += i[0].raw[1];
+    uint16_t val = *reinterpret_cast<uint16_t*>(i[0].raw);
     CHECK_EQUAL(cv.assembled[0].code.second, val, "Is first line correct");
 
-    val = *reinterpret_cast<uint16_t*>(&i[1].raw);
+    val = *reinterpret_cast<uint16_t*>(i[1].raw);
     CHECK_EQUAL(cv.assembled[1].code.second, val, "Is second line correct");
 },
 

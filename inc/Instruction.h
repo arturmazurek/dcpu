@@ -9,6 +9,7 @@
 #ifndef dcpu_Instruction_h
 #define dcpu_Instruction_h
 
+#include <cassert>
 #include <cstdint>
 
 #include <bitset>
@@ -19,10 +20,37 @@
 struct Instruction final {
     uint8_t raw[2];
     
-    Instruction(uint16_t data);
-    Instruction(Opcode op, uint8_t b, uint8_t a);
-    Instruction(Opcode op, uint8_t a);
-    Instruction();
+    Instruction(uint16_t data) {
+        raw[0] = data;
+        raw[1] = data >> 8;
+    }
+    
+    Instruction(Opcode op, uint8_t b, uint8_t a) {
+        assert(a <= 0b111111);
+        assert(b <= 0b11111);
+        assert(op <= 0b11111);
+        
+        raw[1] = op;
+        raw[1] |= (b << 5);
+        
+        raw[0] = b >> 3;
+        raw[0] |= a << 2;
+    }
+    
+    Instruction(Opcode op, uint8_t a) {
+        assert(a <= 0b111111);
+        assert(op <= 0b11111);
+        
+        raw[1] = 0;
+        raw[1] |= (op << 5);
+        
+        raw[0] = op >> 3;
+        raw[0] |= a << 2;
+    }
+    
+    Instruction() : raw{0, 0} {
+        
+    }
 };
 
 static inline std::ostream& operator<<(std::ostream& os, const Instruction& instr) {

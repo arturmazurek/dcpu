@@ -10,6 +10,7 @@
 
 #include "AssemblerException.h"
 #include "Constants.h"
+#include "Instruction.h"
 #include "Opcodes.h"
 
 CodegenVisitor::LabelsContainer CodegenVisitor::NoLabels{};
@@ -20,20 +21,14 @@ CodegenVisitor::CodegenVisitor(const LabelsContainer& labels) : m_labels{labels}
 }
 
 void CodegenVisitor::visit(CommandExprAST& command) {
-    uint16_t first = 0;
-
     auto found = Constants::OPCODES_NAMES.find(command.op->identifier);
     if(found != Constants::OPCODES_NAMES.end()) {
-        first |= (found->second & 0b11111);
         
         // codegen a and b
         auto a = codegenOperand(*command.a);
-        first |= (a.first & 0b111111) << 10;
-        
         auto b = codegenOperand(*command.b);
-        first |= (b.first & 0b11111) << 5;
         
-        assembled.emplace_back(nullptr, std::make_pair(true, first));
+        assembled.emplace_back(nullptr, std::make_pair(true, makeInstruction(a.first, b.first, found->second)));
         if(a.second) {
             InstructionVisitor iv{m_labels};
             a.second->accept(iv);
@@ -60,13 +55,10 @@ void CodegenVisitor::visit(CommandExprAST& command) {
     
     found = Constants::SPECIAL_OPCODES_NAMES.find(command.op->identifier);
     if(found != Constants::SPECIAL_OPCODES_NAMES.end()) {
-        first |= (found->second & 0b11111) << 5;
-        
         // codegen a
         auto a = codegenOperand(*command.a);
-        first |= (a.first & 0b111111) << 10;
         
-        assembled.emplace_back(nullptr, std::make_pair(true, first));
+        assembled.emplace_back(nullptr, std::make_pair(true, makeInstruction(a.first, found->second)));
         if(a.second) {
             InstructionVisitor iv{m_labels};
             a.second->accept(iv);
@@ -82,6 +74,16 @@ void CodegenVisitor::visit(CommandExprAST& command) {
     }
     
     throw AssemblerException("Unknown operation - \"" + command.op->identifier + "\"");
+}
+
+uint16_t CodegenVisitor::makeInstruction(uint8_t a, uint8_t b, uint8_t o) const {
+    Instruction i{static_cast<Opcode>(o), b, a};
+    return *reinterpret_cast<uint16_t*>(i.raw);
+}
+
+uint16_t CodegenVisitor::makeInstruction(uint8_t a, uint8_t o) const {
+    Instruction i{static_cast<Opcode>(o), a};
+    return *reinterpret_cast<uint16_t*>(i.raw);
 }
 
 std::pair<uint8_t, std::unique_ptr<ExprAST>> CodegenVisitor::codegenOperand(OperandExprAST& from) const {

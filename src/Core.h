@@ -16,6 +16,7 @@
 #include <memory>
 #include <queue>
 #include <thread>
+#include <vector>
 
 #include "Instruction.h"
 #include "Registers.h"
@@ -31,7 +32,8 @@ public:
     Core& operator=(const Core&) = delete;
     
     void resetState();
-    void setMemory(uint16_t* m, unsigned size, unsigned startingAt = 0);
+    void setMemory(const uint16_t* m, unsigned size, unsigned startingAt = 0);
+    void setMemory(const std::vector<uint16_t>& m, unsigned startingAt = 0);
     void setInstructions(Instruction* m, unsigned size, unsigned startingAt = 0);
     
     void attachHardware(std::shared_ptr<Hardware> hardware);
