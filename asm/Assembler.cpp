@@ -53,9 +53,12 @@ void Assembler::parseSource() {
             m_labels[labelName] = m_program.size();
         }
         
-        CodegenVisitor v{m_labels};
-        node->accept(v);
-        m_program.insert(m_program.end(), v.assembled.begin(), v.assembled.end());
+        // check if not just a line with label
+        if(node->op) {
+            CodegenVisitor v{m_labels};
+            node->accept(v);
+            m_program.insert(m_program.end(), v.assembled.begin(), v.assembled.end());
+        }
     }
 }
 
