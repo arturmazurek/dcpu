@@ -68,7 +68,14 @@ void CodegenVisitor::visit(CommandExprAST& command) {
         
         assembled.emplace_back(nullptr, std::make_pair(true, first));
         if(a.second) {
-            assembled.emplace_back(std::move(a.second), std::make_pair(false, 0));
+            InstructionVisitor iv{m_labels};
+            a.second->accept(iv);
+            
+            if(iv.unresolvedLabels.empty()) {
+                assembled.emplace_back(nullptr, std::make_pair(true, iv.result()));
+            } else {
+                assembled.emplace_back(std::move(a.second), std::make_pair(false, 0));
+            }
         }
         
         return;

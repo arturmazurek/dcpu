@@ -170,6 +170,35 @@ TEST {
     CHECK_EQUAL(cv.assembled[2].code.second, val, "Is third line correct");
 },
 
+TEST {
+    meta.name = "Codegen visitor 3";
+    
+    std::stringstream s{"hwn [sp + 12]"};
+    Instruction i[] = {
+        { OP_HWN, 0x1a }, // HWN [SP + 12]
+        { 12 }
+    };
+    
+    Lexer l{s};
+    Parser p;
+
+    auto ast = p.parseCommand(l);
+
+    CodegenVisitor cv;
+    ast->accept(cv);
+
+    REQUIRE_EQUAL(cv.assembled.size(), 2, "Is the amount of instructions correct");
+    CHECK_TRUE(cv.assembled[0].code.first, "Is first line codegened");
+    CHECK_TRUE(cv.assembled[1].code.first, "Is second line codegened");
+
+    uint16_t val = i[0].raw[0] << 8;
+    val += i[0].raw[1];
+    CHECK_EQUAL(cv.assembled[0].code.second, val, "Is first line correct");
+
+    val = *reinterpret_cast<uint16_t*>(&i[1].raw);
+    CHECK_EQUAL(cv.assembled[1].code.second, val, "Is second line correct");
+},
+
 TESTS_END
 
 #endif

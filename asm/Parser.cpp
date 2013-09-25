@@ -37,6 +37,7 @@ std::unique_ptr<CommandExprAST> Parser::parseCommand(Lexer& l) {
                 m_currentToken = l.nextToken();
                 result->a = parseOperand(l);
             } else if(m_currentToken == Lexer::TOK_ENDLINE || m_currentToken == Lexer::TOK_EOF) {
+                result->a = std::move(result->b);
                 break;
             } else {
                 std::stringstream s;
