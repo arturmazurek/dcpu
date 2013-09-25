@@ -123,6 +123,33 @@ TEST {
 },
 
 TEST {
+    meta.name = "Free label";
+    
+    std::stringstream s{
+        "label: \n\
+        op a, b"
+    };
+    Lexer l{s};
+    Parser p;
+    
+    auto ast = p.parseCommand(l);
+    
+    REQUIRE_TRUE(ast != nullptr, "Is ast properly created");
+    REQUIRE_TRUE(ast->label != nullptr, "Is label properly found");
+    CHECK_EQUAL(ast->label->identifier, "label", "Is label retrieved properly");
+    CHECK_TRUE(ast->a == nullptr, "Is a empty");
+    CHECK_TRUE(ast->b == nullptr, "Is b empty");
+    
+    ast = p.parseCommand(l);
+    
+    CHECK_TRUE(ast->label == nullptr, "Is label properly empty");
+    REQUIRE_TRUE(ast->op != nullptr, "Is op found");
+    CHECK_EQUAL(ast->op->identifier, "op", "Is op recognised");
+    CHECK_TRUE(ast->a != nullptr, "Is a found");
+    CHECK_TRUE(ast->b != nullptr, "Is b found");
+},
+
+TEST {
     meta.name = "No comma";
     
     std::stringstream s{"op a b"};
