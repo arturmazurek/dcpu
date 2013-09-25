@@ -160,6 +160,14 @@ TEST {
     uint16_t val = i[0].raw[0] << 8;
     val += i[0].raw[1];
     CHECK_EQUAL(cv.assembled[0].code.second, val, "Is first line correct");
+    
+    // All data is little endian host-level because assumption is x86 and ARM that
+    // runs the emulator are also little endian
+    val = *reinterpret_cast<uint16_t*>(&i[1].raw);
+    CHECK_EQUAL(cv.assembled[1].code.second, val, "Is second line correct");
+    
+    val = *reinterpret_cast<uint16_t*>(&i[2].raw);
+    CHECK_EQUAL(cv.assembled[2].code.second, val, "Is third line correct");
 },
 
 TESTS_END
