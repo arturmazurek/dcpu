@@ -69,10 +69,15 @@ int Lexer::nextToken() {
         return TOK_IDENTIFIER;
     }
     
-    // digit - [1-9][0-9]*
+    // digit - 0 | [1-9][0-9]*
     if(isdigit(m_lastChar)) {
         if(m_lastChar == '0') {
-            throw LexerException("Only the following format of digits - [1-9][0-9]* currently allowed - tried '0'");
+            m_lastChar = m_input.get();
+            if (isdigit(m_lastChar)) {
+                throw LexerException("Only the following format of digits - 0 | [1-9][0-9]* currently allowed");
+            }
+            m_number = 0;
+            return TOK_NUMBER;
         }
         std::string number;
         do {

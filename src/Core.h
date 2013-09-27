@@ -57,6 +57,8 @@ public:
     
     void receiveInterrupt(uint16_t message);
     
+    void join();
+    
 private:
     void doCycle();
     

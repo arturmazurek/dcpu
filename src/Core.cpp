@@ -154,6 +154,10 @@ void Core::doCycle() {
     }
 }
 
+void Core::join() {
+    m_runThread.join();
+}
+
 void Core::printRegisters() const {
     using namespace std;
     
@@ -586,6 +590,10 @@ void Core::executeNormal() {
             
         default:
             std::cout << "Unhandled opcode: " << std::hex << std::showbase << m_decoded.opcode << " from: " << m_current << std::endl;
+            if(m_running) {
+                std::cout << "Bailing out core" << std::endl;
+                stop();
+            }
             break;
     }
 }
@@ -655,6 +663,10 @@ void Core::executeSpecial() {
             
         default:
             std::cout << "Unhandled special: " << std::hex << std::showbase << m_decoded.opcode << " from: " << m_current << std::endl;
+            if(m_running) {
+                std::cout << "Bailing out core" << std::endl;
+                stop();
+            }
             break;
     }
 }
