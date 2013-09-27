@@ -77,9 +77,9 @@ TEST {
         virtual void doReceiveInterrupt(Core& from) override {
             called = true;
             
-            CHECK_EQUAL(from.registers().B, next(), "Is the value sent correct");
+            CHECK_EQUAL(from.registers().A, next(), "Is the value sent correct");
             
-            if(from.registers().B > 100) {
+            if(from.registers().A > 100) {
                 from.stop();
             }
         }
@@ -103,15 +103,13 @@ TEST {
     std::stringstream s{ R"(
             set a, 1
             set b, 1
-            hwi 0
-            hwi 0
             loop:
-            add a, b
+            hwi 0           ; register a is checked by the attached hardware
+            add a, b        ; a += b, swap(a, b)
             set c, a
             set a, b
             set b, c
-            hwi 0
-            set pc, loop
+            set pc, loop    ; jmp loop
         )"
     };
     
