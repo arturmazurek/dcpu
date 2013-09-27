@@ -32,8 +32,7 @@ private:
     std::unique_ptr<ExprAST> parseBinOpRhs(int precedence, std::unique_ptr<ExprAST> lhs, Lexer& l);
     std::unique_ptr<NumberExprAST> parseNumber(Lexer& l);
     std::unique_ptr<ExprAST> parseParenExpr(Lexer& l);
-    
-    std::unique_ptr<ExprAST> error(const std::string& what);
+    std::vector<std::unique_ptr<OperandExprAST>> parseOperands(Lexer& l);
     
     int getTokenPrecedence(int token) const;
     

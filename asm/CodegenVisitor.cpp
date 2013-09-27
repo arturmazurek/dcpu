@@ -24,16 +24,13 @@ void CodegenVisitor::visit(CommandExprAST& command) {
     auto found = Constants::OPCODES_NAMES.find(command.op->identifier);
     if(found != Constants::OPCODES_NAMES.end()) {
         
-        if(!command.a) {
-            throw ParserException("No operand a found for operation \"" + command.op->identifier + "\"");
-        }
-        if(!command.a) {
-            throw ParserException("No operand b found for operation \"" + command.op->identifier + "\"");
+        if(command.operands.size() != 2) {
+            throw ParserException("Wrong number of operands found for operation \"" + command.op->identifier + "\"");
         }
         
         // codegen a and b
-        auto a = codegenOperand(*command.a);
-        auto b = codegenOperand(*command.b);
+        auto b = codegenOperand(*command.operands[0]);
+        auto a = codegenOperand(*command.operands[1]);
         
         assembled.emplace_back(nullptr, std::make_pair(true, makeInstruction(a.first, b.first, found->second)));
         if(a.second) {
@@ -63,12 +60,12 @@ void CodegenVisitor::visit(CommandExprAST& command) {
     found = Constants::SPECIAL_OPCODES_NAMES.find(command.op->identifier);
     if(found != Constants::SPECIAL_OPCODES_NAMES.end()) {
         
-        if(!command.a) {
-            throw ParserException("No operand a found for operation \"" + command.op->identifier + "\"");
+        if(command.operands.size() != 1) {
+            throw ParserException("No operands found for operation \"" + command.op->identifier + "\"");
         }
         
         // codegen a
-        auto a = codegenOperand(*command.a);
+        auto a = codegenOperand(*command.operands[0]);
         
         assembled.emplace_back(nullptr, std::make_pair(true, makeInstruction(a.first, found->second)));
         if(a.second) {
