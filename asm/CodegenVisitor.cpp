@@ -24,6 +24,13 @@ void CodegenVisitor::visit(CommandExprAST& command) {
     auto found = Constants::OPCODES_NAMES.find(command.op->identifier);
     if(found != Constants::OPCODES_NAMES.end()) {
         
+        if(!command.a) {
+            throw ParserException("No operand a found for operation \"" + command.op->identifier + "\"");
+        }
+        if(!command.a) {
+            throw ParserException("No operand b found for operation \"" + command.op->identifier + "\"");
+        }
+        
         // codegen a and b
         auto a = codegenOperand(*command.a);
         auto b = codegenOperand(*command.b);
@@ -55,6 +62,11 @@ void CodegenVisitor::visit(CommandExprAST& command) {
     
     found = Constants::SPECIAL_OPCODES_NAMES.find(command.op->identifier);
     if(found != Constants::SPECIAL_OPCODES_NAMES.end()) {
+        
+        if(!command.a) {
+            throw ParserException("No operand a found for operation \"" + command.op->identifier + "\"");
+        }
+        
         // codegen a
         auto a = codegenOperand(*command.a);
         
