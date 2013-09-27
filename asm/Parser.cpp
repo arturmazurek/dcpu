@@ -14,7 +14,15 @@
 #include "Lexer.h"
 #include "ParserException.h"
 
-std::map<char, int> Parser::BINOP_PRECEDENCE {
+void handleJMP(CommandExprAST& cmd) {
+    
+}
+
+const std::map<int, std::function<void(CommandExprAST&)>> Parser::SPECIAL_TOKENS_FUNCTIONS{
+//    { Lexer::TOK_JMP, handleJMP }
+};
+
+const std::map<char, int> Parser::BINOP_PRECEDENCE {
     { '+', 10 },
     { '-', 10 },
     { '*', 20 },
@@ -146,11 +154,11 @@ int Parser::getTokenPrecedence(int token) const {
         return -1;
     }
     
-    int prec = BINOP_PRECEDENCE[token];
-    if(prec <= 0) {
+    auto found = BINOP_PRECEDENCE.find(token);
+    if(found == BINOP_PRECEDENCE.end()) {
         return -1;
     } else {
-        return prec;
+        return found->second;
     }
 }
 

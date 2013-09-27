@@ -9,6 +9,7 @@
 #ifndef __dcpu__Parser__
 #define __dcpu__Parser__
 
+#include <functional>
 #include <map>
 #include <memory>
 
@@ -37,7 +38,8 @@ private:
     int getTokenPrecedence(int token) const;
     
 private:
-    static std::map<char, int> BINOP_PRECEDENCE;
+    static const std::map<char, int> BINOP_PRECEDENCE;
+    static const std::map<int, std::function<void(CommandExprAST&)>> SPECIAL_TOKENS_FUNCTIONS;
     
     int m_currentToken;
     bool m_finished;

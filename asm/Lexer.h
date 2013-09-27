@@ -25,7 +25,9 @@ public:
         TOK_IDENTIFIER = -3,
         TOK_NUMBER = -4,
         
-        TOK_REPEAT = -5
+        // keywords
+        TOK_REPEAT = -5,
+        TOK_JMP = -6,
     };
     
 public:
@@ -37,6 +39,10 @@ public:
     int number() const;
     
     bool good() const;
+    
+private:
+    int tryIdentifier();
+    int tryDigit();
     
 private:
     static const std::map<std::string, Token> KEYWORDS;

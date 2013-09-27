@@ -123,6 +123,17 @@ TEST {
     CHECK_EQUAL(l.nextToken(), Lexer::TOK_EOF, "Is input end properly recognised");
 },
 
+TEST {
+    meta.name = "Lexing jmp";
+    
+    std::stringstream s{"jmp 12"};
+    Lexer l{s};
+    
+    CHECK_EQUAL(l.nextToken(), Lexer::TOK_JMP, "Is jmp properly recognised");
+    CHECK_EQUAL(l.nextToken(), Lexer::TOK_NUMBER, "Is then a number properly recognised");
+    CHECK_EQUAL(l.number(), 12, "Is that number correct");
+},
+
 TESTS_END
 
 #endif

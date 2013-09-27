@@ -14,7 +14,8 @@
 #include "LexerException.h"
 
 const std::map<std::string, Lexer::Token> Lexer::KEYWORDS{
-    { "repeat", TOK_REPEAT }
+    { "repeat", TOK_REPEAT },
+    { "jmp", TOK_JMP }
 };
 const char Lexer::COMMENT{';'};
 
@@ -56,37 +57,12 @@ int Lexer::nextToken() {
     
     // identifier: [a-zA-Z][a-zA-Z0-9]*
     if(isalpha(m_lastChar)) {
-        m_identifier = m_lastChar;
-        while(isalnum(m_lastChar = m_input.get())) {
-            m_identifier += m_lastChar;
-        }
-        
-        auto it = KEYWORDS.find(m_identifier);
-        if(it != KEYWORDS.end()) {
-            return it->second;
-        }
-        
-        return TOK_IDENTIFIER;
+        return tryIdentifier();
     }
     
     // digit - 0 | [1-9][0-9]*
     if(isdigit(m_lastChar)) {
-        if(m_lastChar == '0') {
-            m_lastChar = m_input.get();
-            if (isdigit(m_lastChar)) {
-                throw LexerException("Only the following format of digits - 0 | [1-9][0-9]* currently allowed");
-            }
-            m_number = 0;
-            return TOK_NUMBER;
-        }
-        std::string number;
-        do {
-            number += m_lastChar;
-            m_lastChar = m_input.get();
-        } while (isdigit(m_lastChar));
-        
-        m_number = std::stoi(number);
-        return TOK_NUMBER;
+        return tryDigit();
     }
     
     if(m_lastChar == COMMENT) {
@@ -109,4 +85,37 @@ int Lexer::nextToken() {
     char c = m_lastChar;
     m_lastChar = m_input.get();
     return c;
+}
+
+int Lexer::tryIdentifier() {
+    m_identifier = m_lastChar;
+    while(isalnum(m_lastChar = m_input.get())) {
+        m_identifier += m_lastChar;
+    }
+    
+    auto it = KEYWORDS.find(m_identifier);
+    if(it != KEYWORDS.end()) {
+        return it->second;
+    }
+    
+    return TOK_IDENTIFIER;
+}
+
+int Lexer::tryDigit() {
+    if(m_lastChar == '0') {
+        m_lastChar = m_input.get();
+        if (isdigit(m_lastChar)) {
+            throw LexerException("Only the following format of digits - 0 | [1-9][0-9]* currently allowed");
+        }
+        m_number = 0;
+        return TOK_NUMBER;
+    }
+    std::string number;
+    do {
+        number += m_lastChar;
+        m_lastChar = m_input.get();
+    } while (isdigit(m_lastChar));
+    
+    m_number = std::stoi(number);
+    return TOK_NUMBER;
 }
