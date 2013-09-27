@@ -41,6 +41,26 @@ TEST {
     CHECK_EQUAL(core.registers().A, 1, "Is register updated correctly");
 },
 
+TEST {
+    meta.name = "More complicated asembler";
+    
+    std::stringstream s{
+        "set a, 1  \n\
+         add a, 124"
+    };
+    
+    Assembler assembler;
+    assembler.setLexer(std::make_unique<Lexer>(s));
+    assembler.assemble();
+    
+    core.setMemory(assembler.binary());
+    core.cycle(1);
+    CHECK_EQUAL(core.registers().A, 1, "Is A set correctly");
+
+    core.cycle(3);
+    CHECK_EQUAL(core.registers().A, 125, "Is addition correct");
+},
+
 TESTS_END
 
 #endif
