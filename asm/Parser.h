@@ -36,12 +36,8 @@ private:
     
     int getTokenPrecedence(int token) const;
     
-    void checkSpecials(CommandExprAST& ast) const;
-    void handleJMP(CommandExprAST& ast) const;
-    
 private:
     static const std::map<char, int> BINOP_PRECEDENCE;
-    static const std::string JMP_PSEUDO_OPCODE;
     
     int m_currentToken;
     bool m_finished;

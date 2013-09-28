@@ -22,8 +22,6 @@ const std::map<char, int> Parser::BINOP_PRECEDENCE {
     { '/', 20 }
 };
 
-const std::string Parser::JMP_PSEUDO_OPCODE{"jmp"};
-
 Parser::Parser() : m_currentToken{0}, m_finished{false} {
     
 }
@@ -52,8 +50,6 @@ std::unique_ptr<CommandExprAST> Parser::parseCommand(Lexer& l) {
     if(m_currentToken == Lexer::TOK_EOF) {
         m_finished = true;
     }
-    
-    checkSpecials(*result);
     
     return result;
 }
@@ -239,20 +235,4 @@ std::vector<std::unique_ptr<OperandExprAST>> Parser::parseOperands(Lexer& l) {
     }
     
     return result;
-}
-
-void Parser::checkSpecials(CommandExprAST& ast) const {
-    if(!ast.op) {
-        return; // just label
-    }
-    
-    if(ast.op->identifier == JMP_PSEUDO_OPCODE) {
-        handleJMP(ast);
-    }
-}
-
-void Parser::handleJMP(CommandExprAST& ast) const {
-    ast.op = std::make_unique<IdentifierExprAST>("set");
-    ast.operands.emplace(ast.operands.begin(), std::make_unique<OperandExprAST>());
-    ast.operands[0]->expression = std::make_unique<IdentifierExprAST>("pc");
 }
