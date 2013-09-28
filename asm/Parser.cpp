@@ -11,19 +11,9 @@
 #include <sstream>
 
 #include "ASMUtils.h"
+#include "Constants.h"
 #include "Lexer.h"
 #include "ParserException.h"
-
-void handleJMP(CommandExprAST& cmd) {
-    cmd.op = std::make_unique<IdentifierExprAST>("set");
-    // TODO
-//    cmd.a = std::make_unique<OperandExprAST>();
-//    cmd.a->expression = std::make_unique<IdentifierExprAST>("pc");
-}
-
-const std::map<int, std::function<void(CommandExprAST&)>> Parser::SPECIAL_TOKENS_FUNCTIONS{
-    { Lexer::TOK_JMP, handleJMP }
-};
 
 const std::map<char, int> Parser::BINOP_PRECEDENCE {
     { '+', 10 },
@@ -31,6 +21,8 @@ const std::map<char, int> Parser::BINOP_PRECEDENCE {
     { '*', 20 },
     { '/', 20 }
 };
+
+const std::string Parser::JMP_PSEUDO_OPCODE{"jmp"};
 
 Parser::Parser() : m_currentToken{0}, m_finished{false} {
     
@@ -43,18 +35,6 @@ std::unique_ptr<CommandExprAST> Parser::parseCommand(Lexer& l) {
     
     while (m_currentToken != Lexer::TOK_ENDLINE && m_currentToken != Lexer::TOK_EOF) {
         if(result->op) {
-//            result->b = parseOperand(l);
-//            if(m_currentToken == ',') {
-//                m_currentToken = l.nextToken();
-//                result->a = parseOperand(l);
-//            } else if(m_currentToken == Lexer::TOK_ENDLINE || m_currentToken == Lexer::TOK_EOF) {
-//                result->a = std::move(result->b);
-//                break;
-//            } else {
-//                std::stringstream s;
-//                s << "Expected comma or line end, found: '" << ((m_currentToken > 0) ? static_cast<char>(m_currentToken) : m_currentToken) << "'";
-//                throw ParserException(s.str());
-//            }
             result->operands = parseOperands(l);
         } else if(result->label) {
             result->op = parseIdentifier(l);
@@ -72,6 +52,8 @@ std::unique_ptr<CommandExprAST> Parser::parseCommand(Lexer& l) {
     if(m_currentToken == Lexer::TOK_EOF) {
         m_finished = true;
     }
+    
+    checkSpecials(*result);
     
     return result;
 }
@@ -257,4 +239,20 @@ std::vector<std::unique_ptr<OperandExprAST>> Parser::parseOperands(Lexer& l) {
     }
     
     return result;
+}
+
+void Parser::checkSpecials(CommandExprAST& ast) const {
+    if(!ast.op) {
+        return; // just label
+    }
+    
+    if(ast.op->identifier == JMP_PSEUDO_OPCODE) {
+        handleJMP(ast);
+    }
+}
+
+void Parser::handleJMP(CommandExprAST& ast) const {
+    ast.op = std::make_unique<IdentifierExprAST>("set");
+    ast.operands.emplace(ast.operands.begin(), std::make_unique<OperandExprAST>());
+    ast.operands[0]->expression = std::make_unique<IdentifierExprAST>("pc");
 }

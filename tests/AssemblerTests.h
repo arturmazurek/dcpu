@@ -20,11 +20,41 @@
 #include "Hardware.h"
 #include "Lexer.h"
 
+class Fibonacci : public Hardware {
+public:
+    bool called;
+    
+    Fibonacci() : Hardware{1, 1, 2}, called{false}, m_a{1}, m_b{1} {}
+    
+    virtual void doReceiveInterrupt(Core& from) override {
+        called = true;
+        
+        CHECK_EQUAL(from.registers().A, next(), "Is the value sent correct");
+        
+        if(from.registers().A > 100) {
+            from.stop();
+        }
+    }
+    
+private:
+    int next() {
+        auto res = m_a;
+        
+        m_a += m_b;
+        std::swap(m_a, m_b);
+        
+        return res;
+    }
+    
+    int m_a;
+    int m_b;
+};
+
 TESTS_START(AssemblerTests)
 
 TEST {
     meta.name = "Basic assembler";
-    
+
     std::stringstream s{"set a, 1"};
     
     Assembler assembler;
@@ -68,48 +98,50 @@ TEST {
 TEST {
     meta.name = "More complicated assembler 2";
     
-    class Fibonacci : public Hardware {
-    public:
-        bool called;
-        
-        Fibonacci() : Hardware{1, 1, 2}, called{false}, m_a{1}, m_b{1} {}
-        
-        virtual void doReceiveInterrupt(Core& from) override {
-            called = true;
-            
-            CHECK_EQUAL(from.registers().A, next(), "Is the value sent correct");
-            
-            if(from.registers().A > 100) {
-                from.stop();
-            }
-        }
-        
-    private:
-        int next() {
-            auto res = m_a;
-            
-            m_a += m_b;
-            std::swap(m_a, m_b);
-            
-            return res;
-        }
-        
-        int m_a;
-        int m_b;
-    };
     auto fibonacci = std::make_shared<Fibonacci>();
     
     // every HWN register B will contain next fibonacci number
     std::stringstream s{ R"(
             set a, 1
             set b, 1
-            loop:
+        loop:
             hwi 0           ; register a is checked by the attached hardware
             add a, b        ; a += b, swap(a, b)
             set c, a
             set a, b
             set b, c
             set pc, loop    ; jmp loop
+        )"
+    };
+    
+    Assembler a;
+    a.setLexer(std::make_unique<Lexer>(s));
+    a.assemble();
+    
+    core.setMemory(a.binary());
+    core.attachHardware(fibonacci);
+    core.run();
+    core.join();
+    
+    REQUIRE_TRUE(fibonacci->called, "Was the fibonacci counter actually called");
+},
+
+TEST {
+    meta.name = "More complicated assembler 2 with jmp";
+    
+    auto fibonacci = std::make_shared<Fibonacci>();
+    
+    // every HWN register B will contain next fibonacci number
+    std::stringstream s{ R"(
+            set a, 1
+            set b, 1
+        loop:
+            hwi 0           ; register a is checked by the attached hardware
+            add a, b        ; a += b, swap(a, b)
+            set c, a
+            set a, b
+            set b, c
+            jmp loop
         )"
     };
     

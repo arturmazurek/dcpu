@@ -196,6 +196,26 @@ TEST {
     CHECK_EQUAL(cv.assembled[1].code.second, val, "Is second line correct");
 },
 
+TEST {
+    meta.name = "jmp instruction";
+    
+    std::stringstream s{"jmp 30"};
+    Instruction i = { OP_SET, REG_PC, 0x3f }; // SET PC, 30
+    
+    Lexer l{s};
+    Parser p;
+    
+    auto ast = p.parseCommand(l);
+    
+    CodegenVisitor cv;
+    ast->accept(cv);
+    
+    REQUIRE_EQUAL(cv.assembled.size(), 1, "Is the amount of instructions correct");
+    
+    uint16_t val = *reinterpret_cast<uint16_t*>(&i.raw);
+    CHECK_EQUAL(cv.assembled[0].code.second, val, "Is jmp correctly codegened");
+},
+
 TESTS_END
 
 #endif

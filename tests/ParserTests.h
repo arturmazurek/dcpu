@@ -332,6 +332,19 @@ TEST {
     ast = p.parseCommand(l);
 },
 
+TEST {
+    meta.name = "jmp operation";
+    
+    std::stringstream s{"jmp 2"};
+    Lexer l{s};
+    
+    Parser p;
+    
+    auto ast = p.parseCommand(l);
+    CHECK_EQUAL(ast->op->identifier, "set", "This should be translated to set");
+    REQUIRE_EQUAL(ast->operands.size(), 2, "There have to be two operands");
+},
+
 TESTS_END
 
 #endif
