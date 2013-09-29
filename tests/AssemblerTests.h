@@ -174,7 +174,7 @@ TEST {
 TEST {
     meta.name = "RESW 2";
     
-    std::stringstream s { R"(
+    std::stringstream s{ R"(
             set pc, 5
             resw 4
             set a, 42
@@ -194,7 +194,7 @@ TEST {
 TEST {
     meta.name = "RESW + labels";
     
-    std::stringstream s { R"(
+    std::stringstream s{ R"(
             set a, 1
             set a, 2
             set a, 3
@@ -208,6 +208,22 @@ TEST {
     a.assemble();
     
     CHECK_EQUAL(a.binary().size(), 32, "Is proper size reserved");
+},
+    
+TEST {
+    meta.name = "DW + labels";
+    
+    std::stringstream s{ "dw 1,2,3,4,5" };
+    Instruction i[] = {
+        {1}, {2}, {3}, {4}, {5}
+    };
+    
+    Assembler a;
+    a.setLexer(std::make_unique<Lexer>(s));
+    a.assemble();
+    
+    REQUIRE_EQUAL(a.binary().size(), ARRAY_SIZE(i), "Are values properly declared");
+    CHECK_EQUAL(memcmp(a.binary().data(), i, ARRAY_SIZE(i)), 0, "Are values properly declared 2");
 },
 
 TESTS_END

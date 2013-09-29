@@ -51,9 +51,34 @@ static bool handleRESW(CodegenVisitor* thiz, CommandExprAST& ast) {
     return true;
 }
 
+bool handleDW(CodegenVisitor* thiz, CommandExprAST& ast) {
+    for(const auto& operandPtr : ast.operands) {
+        InstructionVisitor iv;
+        operandPtr->expression->accept(iv);
+        
+        if(iv.unresolvedLabels.size()) {
+            throw AssemblerException("Cannot declare words with unknown label in them");
+        }
+        if(!iv.referencedRegister.empty()) {
+            throw AssemblerException("Cannot reference register in declaration");
+        }
+        if(iv.result() > std::numeric_limits<uint16_t>::max()) {
+            throw AssemblerException("Too big number used in declaration");
+        }
+        if(iv.result() < std::numeric_limits<int16_t>::min()) {
+            throw AssemblerException("Too big negative number used in declaration");
+        }
+        
+        thiz->assembled.emplace_back(nullptr, std::make_pair(true, iv.result()));
+    }
+    
+    return true;
+}
+
 const std::map<std::string, std::function<bool(CodegenVisitor*, CommandExprAST&)>> CodegenVisitor::PSEUDO_OPCODE_FUNCTIONS {
     { "jmp", handleJMP },
-    { "resw", handleRESW }
+    { "resw", handleRESW },
+    { "dw", handleDW }
 };
 
 // Codegen visitor ------------------------------------------------------------

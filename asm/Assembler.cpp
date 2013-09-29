@@ -47,6 +47,10 @@ void Assembler::parseSource() {
         
         if(node->label) {
             const auto& labelName = node->label->identifier;
+            if(Constants::REGISTER_NAMES.find(labelName) != Constants::REGISTER_NAMES.end()) {
+                throw AssemblerException("Cannot use a register name as a label identifier");
+            }
+            
             if(m_labels.find(labelName) != m_labels.end()) {
                 throw AssemblerException("Duplicate label: \"" + labelName + "\"");
             }
