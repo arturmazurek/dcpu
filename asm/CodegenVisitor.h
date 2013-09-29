@@ -30,6 +30,7 @@ public:
     static LabelsContainer NoLabels;
 public:
     std::vector<Assembler::CodeLine> assembled;
+    const LabelsContainer& labels;
     
     CodegenVisitor(const LabelsContainer& labels = NoLabels);
     
@@ -45,9 +46,6 @@ private:
     std::pair<uint8_t, std::unique_ptr<ExprAST>> codegenOperand(OperandExprAST& from) const;
     uint16_t makeInstruction(uint8_t a, uint8_t b, uint8_t o) const;
     uint16_t makeInstruction(uint8_t a, uint8_t o) const;
-    
-private:
-    const LabelsContainer& m_labels;
 };
 
 class InstructionVisitor : public ASTVisitor,

@@ -156,6 +156,40 @@ TEST {
     
     REQUIRE_TRUE(fibonacci->called, "Was the fibonacci counter actually called");
 },
+    
+TEST {
+    meta.name = "Reserve word - resw";
+    
+    std::stringstream s{"resw 2"};
+    Instruction i[] = { { 0 }, { 0 } };
+    
+    Assembler a;
+    a.setLexer(std::make_unique<Lexer>(s));
+    a.assemble();
+    
+    REQUIRE_EQUAL(a.binary().size(), ARRAY_SIZE(i), "Is resw reserving proper amount");
+    CHECK_EQUAL(memcmp(a.binary().data(), i, ARRAY_SIZE(i)), 0, "Is resw actually reserving stuff?");
+},
+    
+TEST {
+    meta.name = "RESW 2";
+    
+    std::stringstream s { R"(
+            set pc, 5
+            resw 4
+            set a, 42
+        )"
+    };
+    
+    Assembler a;
+    a.setLexer(std::make_unique<Lexer>(s));
+    a.assemble();
+    
+    core.setMemory(a.binary());
+    core.cycle(3);
+    
+    CHECK_EQUAL(core.registers().A, 42, "Was a set correctly");
+},
 
 TESTS_END
 

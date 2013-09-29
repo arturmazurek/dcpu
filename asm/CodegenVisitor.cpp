@@ -24,8 +24,31 @@ static bool handleJMP(CodegenVisitor* thiz, CommandExprAST& ast) {
 }
 
 static bool handleRESW(CodegenVisitor* thiz, CommandExprAST& ast) {
-    throw AssemblerException("resw unsupported yet");
-    return false;
+    if(ast.operands.size() != 1) {
+        throw AssemblerException("Must be one operands for resw");
+    }
+    
+    InstructionVisitor iv{thiz->labels};
+    ast.operands[0]->expression->accept(iv);
+    
+    if(!iv.referencedRegister.empty()) {
+        throw AssemblerException("Cannot reference registers when calling resw");
+    }
+    if(!iv.unresolvedLabels.empty()) {
+        throw AssemblerException("Cannot use unknown labels with resw");
+    }
+    if(iv.result() < 0) {
+        throw AssemblerException("Cannot reserve negative amount of words");
+    }
+    if(iv.result() > std::numeric_limits<uint16_t>::max()) {
+        throw AssemblerException("Trying to reserve more memory than total available");
+    }
+    
+    for(int i = 0; i < iv.result(); ++i) {
+        thiz->assembled.emplace_back(nullptr, std::make_pair(true, 0));
+    }
+    
+    return true;
 }
 
 const std::map<std::string, std::function<bool(CodegenVisitor*, CommandExprAST&)>> CodegenVisitor::PSEUDO_OPCODE_FUNCTIONS {
@@ -35,7 +58,7 @@ const std::map<std::string, std::function<bool(CodegenVisitor*, CommandExprAST&)
 
 // Codegen visitor ------------------------------------------------------------
 
-CodegenVisitor::CodegenVisitor(const LabelsContainer& labels) : m_labels{labels} {
+CodegenVisitor::CodegenVisitor(const LabelsContainer& labels) : labels{labels} {
 }
 
 void CodegenVisitor::visit(CommandExprAST& command) {
@@ -79,7 +102,7 @@ bool CodegenVisitor::tryBaseOpcodes(CommandExprAST& command) {
     
     assembled.emplace_back(nullptr, std::make_pair(true, makeInstruction(a.first, b.first, found->second)));
     if(a.second) {
-        InstructionVisitor iv{m_labels};
+        InstructionVisitor iv{labels};
         a.second->accept(iv);
         
         if(iv.unresolvedLabels.empty()) {
@@ -89,7 +112,7 @@ bool CodegenVisitor::tryBaseOpcodes(CommandExprAST& command) {
         }
     }
     if(b.second) {
-        InstructionVisitor iv{m_labels};
+        InstructionVisitor iv{labels};
         b.second->accept(iv);
         
         if(iv.unresolvedLabels.empty()) {
@@ -117,7 +140,7 @@ bool CodegenVisitor::trySpecialOpcodes(CommandExprAST& command) {
     
     assembled.emplace_back(nullptr, std::make_pair(true, makeInstruction(a.first, found->second)));
     if(a.second) {
-        InstructionVisitor iv{m_labels};
+        InstructionVisitor iv{labels};
         a.second->accept(iv);
         
         if(iv.unresolvedLabels.empty()) {
@@ -141,7 +164,7 @@ uint16_t CodegenVisitor::makeInstruction(uint8_t a, uint8_t o) const {
 }
 
 std::pair<uint8_t, std::unique_ptr<ExprAST>> CodegenVisitor::codegenOperand(OperandExprAST& from) const {
-    InstructionVisitor iv{m_labels};
+    InstructionVisitor iv{labels};
     
     try {
         from.expression->accept(iv);
