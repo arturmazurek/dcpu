@@ -190,6 +190,25 @@ TEST {
     
     CHECK_EQUAL(core.registers().A, 42, "Was a set correctly");
 },
+    
+TEST {
+    meta.name = "RESW + labels";
+    
+    std::stringstream s { R"(
+            set a, 1
+            set a, 2
+            set a, 3
+            set a, 4
+        reserve: resw 32-reserve
+        )"
+    };
+    
+    Assembler a;
+    a.setLexer(std::make_unique<Lexer>(s));
+    a.assemble();
+    
+    CHECK_EQUAL(a.binary().size(), 32, "Is proper size reserved");
+},
 
 TESTS_END
 
