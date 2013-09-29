@@ -211,7 +211,7 @@ TEST {
 },
     
 TEST {
-    meta.name = "DW + labels";
+    meta.name = "Declare Word - dw";
     
     std::stringstream s{ "dw 1,2,3,4,5" };
     Instruction i[] = {
@@ -224,6 +224,29 @@ TEST {
     
     REQUIRE_EQUAL(a.binary().size(), ARRAY_SIZE(i), "Are values properly declared");
     CHECK_EQUAL(memcmp(a.binary().data(), i, ARRAY_SIZE(i)), 0, "Are values properly declared 2");
+},
+    
+TEST {
+    meta.name = "DW + labels";
+    
+    std::stringstream s{ R"(
+            set a, [data]
+            set b, [data+1]
+            set c, [data+2]
+            data: dw 42,43,44
+        )"
+    };
+    
+    Assembler a;
+    a.setLexer(std::make_unique<Lexer>(s));
+    a.assemble();
+    
+    core.setMemory(a.binary());
+    core.cycle(6);
+    
+    CHECK_EQUAL(core.registers().A, 42, "Is a set correctly");
+    CHECK_EQUAL(core.registers().B, 43, "Is a set correctly");
+    CHECK_EQUAL(core.registers().C, 44, "Is a set correctly");
 },
 
 TESTS_END
