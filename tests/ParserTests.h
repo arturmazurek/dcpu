@@ -17,7 +17,7 @@
 #include "Parser.h"
 #include "TestsUtil.h"
 
-    class CountingVisitor :
+class CountingVisitor :
     public ASTVisitor,
     public ASTVisitorType<BinaryExprAST>,
     public ASTVisitorType<NumberExprAST>,
@@ -80,8 +80,7 @@ TEST {
     CHECK_EQUAL(ast->label->identifier, "label", "Is label retrieved properly");
 
     CHECK_TRUE(ast->op == nullptr, "Is op correctly empty");
-    CHECK_TRUE(ast->a == nullptr, "Is a correctly empty");
-    CHECK_TRUE(ast->b == nullptr, "Is b correctly empty");
+    CHECK_TRUE(ast->operands.empty(), "Are operands correctly empty");
 },
 
 TEST {
@@ -98,8 +97,7 @@ TEST {
     CHECK_EQUAL(ast->op->identifier, "op", "Is label retrieved properly");
     
     CHECK_TRUE(ast->label == nullptr, "Is label correctly empty");
-    CHECK_TRUE(ast->a == nullptr, "Is a correctly empty");
-    CHECK_TRUE(ast->b == nullptr, "Is b correctly empty");
+    CHECK_TRUE(ast->operands.empty(), "Are operands correctly empty");
 },
 
 TEST {
@@ -118,8 +116,7 @@ TEST {
     REQUIRE_TRUE(ast->op != nullptr, "Is operation properly found");
     CHECK_EQUAL(ast->op->identifier, "dddd", "Is operation retrieved properly");
     
-    CHECK_TRUE(ast->a == nullptr, "Is operand a correctly empty");
-    CHECK_TRUE(ast->b == nullptr, "Is operand b correctly empty");
+    CHECK_TRUE(ast->operands.empty(), "Are operands correctly empty");
 },
 
 TEST {
@@ -137,16 +134,14 @@ TEST {
     REQUIRE_TRUE(ast != nullptr, "Is ast properly created");
     REQUIRE_TRUE(ast->label != nullptr, "Is label properly found");
     CHECK_EQUAL(ast->label->identifier, "label", "Is label retrieved properly");
-    CHECK_TRUE(ast->a == nullptr, "Is a empty");
-    CHECK_TRUE(ast->b == nullptr, "Is b empty");
+    CHECK_TRUE(ast->operands.empty(), "Are operands correctly empty");
     
     ast = p.parseCommand(l);
     
     CHECK_TRUE(ast->label == nullptr, "Is label properly empty");
     REQUIRE_TRUE(ast->op != nullptr, "Is op found");
     CHECK_EQUAL(ast->op->identifier, "op", "Is op recognised");
-    CHECK_TRUE(ast->a != nullptr, "Is a found");
-    CHECK_TRUE(ast->b != nullptr, "Is b found");
+    CHECK_EQUAL(ast->operands.size(), 2, "Are operands present");
 },
 
 TEST {
@@ -186,11 +181,10 @@ TEST {
     REQUIRE_TRUE(ast->op != nullptr, "Is operation properly found");
     CHECK_EQUAL(ast->op->identifier, "op1", "Is operation retrieved properly");
     
-    REQUIRE_TRUE(ast->b != nullptr, "Is operator a properly found");
-    CHECK_TRUE(!(ast->b->addressing), "Is operator a non-addressing");
-
-    REQUIRE_TRUE(ast->a != nullptr, "Is operator b properly found");
-    CHECK_TRUE(ast->a->addressing, "Is operator b addressing");
+    REQUIRE_EQUAL(ast->operands.size(), 2, "Are both operands found");
+    
+    CHECK_TRUE(!ast->operands[0]->addressing, "Is operator a non-addressing");
+    CHECK_TRUE(ast->operands[1]->addressing, "Is operator b addressing");
     
     ast = p.parseCommand(l);
     REQUIRE_TRUE(ast != nullptr, "Is ast properly created 2");
@@ -201,11 +195,10 @@ TEST {
     REQUIRE_TRUE(ast->op != nullptr, "Is operation properly found 2");
     CHECK_EQUAL(ast->op->identifier, "op2", "Is operation retrieved properly 2");
     
-    REQUIRE_TRUE(ast->b != nullptr, "Is operator c properly found");
-    CHECK_TRUE(ast->b->addressing, "Is operator c non-addressing");
+    REQUIRE_EQUAL(ast->operands.size(), 2, "Are operands properly found 2");
     
-    REQUIRE_TRUE(ast->a != nullptr, "Is operator d properly found");
-    CHECK_TRUE(!(ast->a->addressing), "Is operator d non-addressing");
+    CHECK_TRUE(ast->operands[0]->addressing, "Is operator c non-addressing");
+    CHECK_TRUE(!(ast->operands[1]->addressing), "Is operator d non-addressing");
 },
 
 TEST {
@@ -284,13 +277,13 @@ TEST {
     REQUIRE_TRUE(ast->op != nullptr, "Is operation parsed");
     CHECK_EQUAL(ast->op->identifier, "op", "Is operation properly retrieved");
     
-    REQUIRE_TRUE(ast->a != nullptr, "Is operand a retrieved");
-    ast->a->accept(visitorA);
-    CHECK_EQUAL(visitorA.count, 2, "Is visitorA visited appropriate number of times");
-
-    REQUIRE_TRUE(ast->b != nullptr, "Is operand b retrieved");
-    ast->b->accept(visitorB);
+    REQUIRE_EQUAL(ast->operands.size(), 2, "Are operands retrieved");
+    
+    ast->operands[0]->accept(visitorB);
     CHECK_EQUAL(visitorB.count, 4, "Is visitor B visited appropriate number of times");
+    
+    ast->operands[1]->accept(visitorA);
+    CHECK_EQUAL(visitorA.count, 2, "Is visitorA visited appropriate number of times");
 },
 
 TEST {
@@ -305,13 +298,13 @@ TEST {
     REQUIRE_TRUE(ast != nullptr, "Is ast properly created");
     
     CountingVisitor v1;
-    ast->b->accept(v1);
+    ast->operands[0]->accept(v1);
     CHECK_EQUAL(v1.sum, 13, "Are numbers counted correctly");
 
     CountingVisitor v2;
-    ast->a->accept(v2);
+    ast->operands[1]->accept(v2);
     CHECK_EQUAL(v2.sum, 121, "Are numbers counted correctly 2");
-    CHECK_TRUE(ast->a->addressing, "Is b correctly addressing");
+    CHECK_TRUE(ast->operands[1]->addressing, "Is b correctly addressing");
 },
 
 TEST {
@@ -324,16 +317,15 @@ TEST {
     
     auto ast = p.parseCommand(l);
     REQUIRE_TRUE(ast != nullptr, "Is ast properly created");
-    REQUIRE_TRUE(ast->a != nullptr, "Operand a must be retrieved");
-    REQUIRE_TRUE(ast->b != nullptr, "Operand b must be retrieved");
+    REQUIRE_EQUAL(ast->operands.size(), 2, "Are operands retrieved");
     
     CountingVisitor v1;
-    ast->b->accept(v1);
+    ast->operands[0]->accept(v1);
     
     CHECK_EQUAL(v1.sum, (1+2)*3, "Is operand a calculated correctly");
 
     CountingVisitor v2;
-    ast->a->accept(v2);
+    ast->operands[1]->accept(v2);
     
     CHECK_EQUAL(v2.sum, (1+2)-(3)+(4+2)*5, "Is operand b calculated correctly");
     

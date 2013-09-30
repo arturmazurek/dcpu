@@ -8,6 +8,7 @@
 
 #include "CodegenVisitor.h"
 
+#include "ASMUtils.h"
 #include "AssemblerException.h"
 #include "Constants.h"
 #include "Instruction.h"
@@ -15,77 +16,166 @@
 
 CodegenVisitor::LabelsContainer CodegenVisitor::NoLabels{};
 
+static bool handleJMP(CodegenVisitor* thiz, CommandExprAST& ast) {
+    ast.op = std::make_unique<IdentifierExprAST>("set");
+    ast.operands.emplace(ast.operands.begin(), std::make_unique<OperandExprAST>());
+    ast.operands[0]->expression = std::make_unique<IdentifierExprAST>("pc");
+    return false; // this is a type of a preprocessor step actually
+}
+
+static bool handleRESW(CodegenVisitor* thiz, CommandExprAST& ast) {
+    if(ast.operands.size() != 1) {
+        throw AssemblerException("Must be one operands for resw");
+    }
+    
+    InstructionVisitor iv{thiz->labels};
+    ast.operands[0]->expression->accept(iv);
+    
+    if(!iv.referencedRegister.empty()) {
+        throw AssemblerException("Cannot reference registers when calling resw");
+    }
+    if(!iv.unresolvedLabels.empty()) {
+        throw AssemblerException("Cannot use unknown labels with resw");
+    }
+    if(iv.result() < 0) {
+        throw AssemblerException("Cannot reserve negative amount of words");
+    }
+    if(iv.result() > std::numeric_limits<uint16_t>::max()) {
+        throw AssemblerException("Trying to reserve more memory than total available");
+    }
+    
+    for(int i = 0; i < iv.result(); ++i) {
+        thiz->assembled.emplace_back(nullptr, std::make_pair(true, 0));
+    }
+    
+    return true;
+}
+
+bool handleDW(CodegenVisitor* thiz, CommandExprAST& ast) {
+    for(const auto& operandPtr : ast.operands) {
+        InstructionVisitor iv;
+        operandPtr->expression->accept(iv);
+        
+        if(iv.unresolvedLabels.size()) {
+            throw AssemblerException("Cannot declare words with unknown label in them");
+        }
+        if(!iv.referencedRegister.empty()) {
+            throw AssemblerException("Cannot reference register in declaration");
+        }
+        if(iv.result() > std::numeric_limits<uint16_t>::max()) {
+            throw AssemblerException("Too big number used in declaration");
+        }
+        if(iv.result() < std::numeric_limits<int16_t>::min()) {
+            throw AssemblerException("Too big negative number used in declaration");
+        }
+        
+        thiz->assembled.emplace_back(nullptr, std::make_pair(true, iv.result()));
+    }
+    
+    return true;
+}
+
+const std::map<std::string, std::function<bool(CodegenVisitor*, CommandExprAST&)>> CodegenVisitor::PSEUDO_OPCODE_FUNCTIONS {
+    { "jmp", handleJMP },
+    { "resw", handleRESW },
+    { "dw", handleDW }
+};
+
 // Codegen visitor ------------------------------------------------------------
 
-CodegenVisitor::CodegenVisitor(const LabelsContainer& labels) : m_labels{labels} {
+CodegenVisitor::CodegenVisitor(const LabelsContainer& labels) : labels{labels} {
 }
 
 void CodegenVisitor::visit(CommandExprAST& command) {
-    auto found = Constants::OPCODES_NAMES.find(command.op->identifier);
-    if(found != Constants::OPCODES_NAMES.end()) {
-        
-        if(!command.a) {
-            throw ParserException("No operand a found for operation \"" + command.op->identifier + "\"");
-        }
-        if(!command.a) {
-            throw ParserException("No operand b found for operation \"" + command.op->identifier + "\"");
-        }
-        
-        // codegen a and b
-        auto a = codegenOperand(*command.a);
-        auto b = codegenOperand(*command.b);
-        
-        assembled.emplace_back(nullptr, std::make_pair(true, makeInstruction(a.first, b.first, found->second)));
-        if(a.second) {
-            InstructionVisitor iv{m_labels};
-            a.second->accept(iv);
-            
-            if(iv.unresolvedLabels.empty()) {
-                assembled.emplace_back(nullptr, std::make_pair(true, iv.result()));
-            } else {
-                assembled.emplace_back(std::move(a.second), std::make_pair(false, 0));
-            }
-        }
-        if(b.second) {
-            InstructionVisitor iv{m_labels};
-            b.second->accept(iv);
-            
-            if(iv.unresolvedLabels.empty()) {
-                assembled.emplace_back(nullptr, std::make_pair(true, iv.result()));
-            } else {
-                assembled.emplace_back(std::move(b.second), std::make_pair(false, 0));
-            }
-        }
-        
+    if(tryPseudoOpcodes(command)) {
         return;
     }
     
-    found = Constants::SPECIAL_OPCODES_NAMES.find(command.op->identifier);
-    if(found != Constants::SPECIAL_OPCODES_NAMES.end()) {
-        
-        if(!command.a) {
-            throw ParserException("No operand a found for operation \"" + command.op->identifier + "\"");
-        }
-        
-        // codegen a
-        auto a = codegenOperand(*command.a);
-        
-        assembled.emplace_back(nullptr, std::make_pair(true, makeInstruction(a.first, found->second)));
-        if(a.second) {
-            InstructionVisitor iv{m_labels};
-            a.second->accept(iv);
-            
-            if(iv.unresolvedLabels.empty()) {
-                assembled.emplace_back(nullptr, std::make_pair(true, iv.result()));
-            } else {
-                assembled.emplace_back(std::move(a.second), std::make_pair(false, 0));
-            }
-        }
-        
+    if(tryBaseOpcodes(command)) {
+        return;
+    }
+    
+    if(trySpecialOpcodes(command)) {
         return;
     }
     
     throw AssemblerException("Unknown operation - \"" + command.op->identifier + "\"");
+}
+
+bool CodegenVisitor::tryPseudoOpcodes(CommandExprAST& command) {
+    auto found = PSEUDO_OPCODE_FUNCTIONS.find(command.op->identifier);
+    if(found == PSEUDO_OPCODE_FUNCTIONS.end()) {
+        return false;
+    } else {
+        return found->second(this, command);
+    }
+}
+
+bool CodegenVisitor::tryBaseOpcodes(CommandExprAST& command) {
+    auto found = Constants::OPCODES_NAMES.find(command.op->identifier);
+    if(found == Constants::OPCODES_NAMES.end()) {
+        return false;
+    }
+        
+    if(command.operands.size() != 2) {
+        throw ParserException("Wrong number of operands found for operation \"" + command.op->identifier + "\"");
+    }
+    
+    // codegen a and b
+    auto b = codegenOperand(*command.operands[0]);
+    auto a = codegenOperand(*command.operands[1]);
+    
+    assembled.emplace_back(nullptr, std::make_pair(true, makeInstruction(a.first, b.first, found->second)));
+    if(a.second) {
+        InstructionVisitor iv{labels};
+        a.second->accept(iv);
+        
+        if(iv.unresolvedLabels.empty()) {
+            assembled.emplace_back(nullptr, std::make_pair(true, iv.result()));
+        } else {
+            assembled.emplace_back(std::move(a.second), std::make_pair(false, 0));
+        }
+    }
+    if(b.second) {
+        InstructionVisitor iv{labels};
+        b.second->accept(iv);
+        
+        if(iv.unresolvedLabels.empty()) {
+            assembled.emplace_back(nullptr, std::make_pair(true, iv.result()));
+        } else {
+            assembled.emplace_back(std::move(b.second), std::make_pair(false, 0));
+        }
+    }
+    
+    return true;
+}
+
+bool CodegenVisitor::trySpecialOpcodes(CommandExprAST& command) {
+    auto found = Constants::SPECIAL_OPCODES_NAMES.find(command.op->identifier);
+    if(found == Constants::SPECIAL_OPCODES_NAMES.end()) {
+        return false;
+    }
+        
+    if(command.operands.size() != 1) {
+        throw ParserException("No operands found for operation \"" + command.op->identifier + "\"");
+    }
+    
+    // codegen a
+    auto a = codegenOperand(*command.operands[0]);
+    
+    assembled.emplace_back(nullptr, std::make_pair(true, makeInstruction(a.first, found->second)));
+    if(a.second) {
+        InstructionVisitor iv{labels};
+        a.second->accept(iv);
+        
+        if(iv.unresolvedLabels.empty()) {
+            assembled.emplace_back(nullptr, std::make_pair(true, iv.result()));
+        } else {
+            assembled.emplace_back(std::move(a.second), std::make_pair(false, 0));
+        }
+    }
+    
+    return true;
 }
 
 uint16_t CodegenVisitor::makeInstruction(uint8_t a, uint8_t b, uint8_t o) const {
@@ -99,7 +189,7 @@ uint16_t CodegenVisitor::makeInstruction(uint8_t a, uint8_t o) const {
 }
 
 std::pair<uint8_t, std::unique_ptr<ExprAST>> CodegenVisitor::codegenOperand(OperandExprAST& from) const {
-    InstructionVisitor iv{m_labels};
+    InstructionVisitor iv{labels};
     
     try {
         from.expression->accept(iv);

@@ -10,17 +10,11 @@
 
 #include <sstream>
 
+#include "ASMUtils.h"
+#include "Constants.h"
 #include "Lexer.h"
 #include "ParserException.h"
 #include "Utils.h"
-
-void handleJMP(CommandExprAST& cmd) {
-    
-}
-
-const std::map<int, std::function<void(CommandExprAST&)>> Parser::SPECIAL_TOKENS_FUNCTIONS{
-//    { Lexer::TOK_JMP, handleJMP }
-};
 
 const std::map<char, int> Parser::BINOP_PRECEDENCE {
     { '+', 10 },
@@ -40,18 +34,7 @@ std::unique_ptr<CommandExprAST> Parser::parseCommand(Lexer& l) {
     
     while (m_currentToken != Lexer::TOK_ENDLINE && m_currentToken != Lexer::TOK_EOF) {
         if(result->op) {
-            result->b = parseOperand(l);
-            if(m_currentToken == ',') {
-                m_currentToken = l.nextToken();
-                result->a = parseOperand(l);
-            } else if(m_currentToken == Lexer::TOK_ENDLINE || m_currentToken == Lexer::TOK_EOF) {
-                result->a = std::move(result->b);
-                break;
-            } else {
-                std::stringstream s;
-                s << "Expected comma or line end, found: '" << ((m_currentToken > 0) ? static_cast<char>(m_currentToken) : m_currentToken) << "'";
-                throw ParserException(s.str());
-            }
+            result->operands = parseOperands(l);
         } else if(result->label) {
             result->op = parseIdentifier(l);
         } else {
@@ -234,4 +217,23 @@ std::unique_ptr<ExprAST> Parser::parseParenExpr(Lexer& l) {
     m_currentToken = l.nextToken();
     
     return expr;
+}
+
+std::vector<std::unique_ptr<OperandExprAST>> Parser::parseOperands(Lexer& l) {
+    std::vector<std::unique_ptr<OperandExprAST>> result;
+    
+    while (true) {
+        result.emplace_back(parseOperand(l));
+        if(m_currentToken == Lexer::TOK_ENDLINE || m_currentToken == Lexer::TOK_EOF) {
+            return result;
+        }
+        
+        if(m_currentToken == ',') {
+            m_currentToken = l.nextToken(); // eat ','
+        } else {
+            throw ParserException("Unknown token encountered, expected ','");
+        }
+    }
+    
+    return result;
 }

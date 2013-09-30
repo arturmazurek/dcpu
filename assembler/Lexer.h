@@ -27,7 +27,6 @@ public:
         
         // keywords
         TOK_REPEAT = -5,
-        TOK_JMP = -6,
     };
     
 public:

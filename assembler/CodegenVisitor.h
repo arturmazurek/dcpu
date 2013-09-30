@@ -10,6 +10,7 @@
 #define __dcpu__CodegenVisitor__
 
 #include <cstdint>
+#include <functional>
 #include <map>
 #include <stack>
 #include <stdexcept>
@@ -29,18 +30,22 @@ public:
     static LabelsContainer NoLabels;
 public:
     std::vector<Assembler::CodeLine> assembled;
+    const LabelsContainer& labels;
     
     CodegenVisitor(const LabelsContainer& labels = NoLabels);
     
     virtual void visit(CommandExprAST& command) override;
     
 private:
+    static const std::map<std::string, std::function<bool(CodegenVisitor*, CommandExprAST&)>> PSEUDO_OPCODE_FUNCTIONS;
+    
+    bool tryPseudoOpcodes(CommandExprAST& from);
+    bool tryBaseOpcodes(CommandExprAST& from);
+    bool trySpecialOpcodes(CommandExprAST& from);
+    
     std::pair<uint8_t, std::unique_ptr<ExprAST>> codegenOperand(OperandExprAST& from) const;
     uint16_t makeInstruction(uint8_t a, uint8_t b, uint8_t o) const;
     uint16_t makeInstruction(uint8_t a, uint8_t o) const;
-    
-private:
-    const LabelsContainer& m_labels;
 };
 
 class InstructionVisitor : public ASTVisitor,

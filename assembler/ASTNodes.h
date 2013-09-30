@@ -12,6 +12,7 @@
 #include <cassert>
 #include <memory>
 #include <string>
+#include <vector>
 
 #include "ASTVisitor.h"
 
@@ -85,8 +86,7 @@ public:
     
     std::unique_ptr<IdentifierExprAST> label;
     std::unique_ptr<IdentifierExprAST> op;
-    std::unique_ptr<OperandExprAST> a;
-    std::unique_ptr<OperandExprAST> b;
+    std::vector<std::unique_ptr<OperandExprAST>> operands;
     
     VISITABLE();
 };
