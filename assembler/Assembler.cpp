@@ -18,9 +18,6 @@
 #include "Lexer.h"
 #include "Parser.h"
 
-const std::string Assembler::JUMP_IDENTIFIER{"jmp"};
-const unsigned Assembler::JUMP_LENGTH{2};
-
 void Assembler::setLexer(std::unique_ptr<Lexer> lexer) {
     m_lexer = std::move(lexer);
 }

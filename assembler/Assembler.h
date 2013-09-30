@@ -35,9 +35,6 @@ private:
 private:
     friend class CodegenVisitor;
     
-    static const std::string JUMP_IDENTIFIER;
-    static const unsigned JUMP_LENGTH;
-    
     Parser m_parser;
     std::unique_ptr<Lexer> m_lexer;
     
