@@ -11,6 +11,8 @@
 
 #include <fstream>
 #include <iostream>
+#include <limits>
+#include <sstream>
 #include <stdexcept>
 #include <vector>
 
@@ -78,7 +80,7 @@ void mainLoop(Core& core) {
     
     string in;
     while(true) {
-        cin >> in;
+        getline(cin, in);
         
         if(in == "q" || in == "quit") {
             cout << "Goodbye" << endl;
@@ -89,8 +91,23 @@ void mainLoop(Core& core) {
             core.printRegisters();
         } else if(in == "h" || in == "help") {
             printMainLoopHelp();
+        } else if(in.find("pm") == 0 || in.find("print memory") == 0) {
+            cout << "Enter index and length" << endl;
+            
+            string s;
+            getline(cin, s);
+            stringstream ss{s};
+            
+            uint16_t begin = 0, len = 0;
+            if(!(ss >> begin) || !(ss >> len)) {
+                cout << "Wrong line encountered - " << s << endl;
+                continue;
+            }
+            core.printMemory(begin, begin + len);
         } else {
-            cout << "Use 'h' or 'help' for help on commands, 'q' or 'quit' to quit" << endl;
+            if(in.size()) {
+                cout << "Use 'h' or 'help' for help on commands, 'q' or 'quit' to quit" << endl;
+            }
         }
     }
 }
