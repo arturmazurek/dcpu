@@ -44,9 +44,12 @@ int main(int argc, char** argv) {
     vector<uint16_t> memory;
     uint16_t buffer[BUF_SIZE];
     
-    while(inputFile) {
+    while(true) {
         memset(buffer, 0, BUF_SIZE * sizeof(uint16_t));
         auto size = inputFile.readsome(reinterpret_cast<char*>(buffer), BUF_SIZE * sizeof(uint16_t));
+        if(size <= 0) {
+            break;
+        }
         memory.insert(memory.end(), buffer, buffer + (size / sizeof(uint16_t)));
     }
     
