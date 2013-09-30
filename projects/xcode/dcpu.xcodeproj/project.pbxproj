@@ -197,7 +197,7 @@
 				6D62BAD317E8AFBD00621715 /* inc */,
 				6D1B541917E0CA49005B3239 /* asm */,
 				7587BDAF17C7994800E0D416 /* test */,
-				75C7E38917C3CA5F001247DA /* src */,
+				75C7E38917C3CA5F001247DA /* emulator */,
 				75C7E37E17C3CA00001247DA /* Products */,
 			);
 			sourceTree = "<group>";
@@ -212,7 +212,7 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
-		75C7E38917C3CA5F001247DA /* src */ = {
+		75C7E38917C3CA5F001247DA /* emulator */ = {
 			isa = PBXGroup;
 			children = (
 				75C7E38D17C3D49B001247DA /* Core.cpp */,
@@ -228,8 +228,8 @@
 				758875F817DCD2E7004D557F /* GenericClock.h */,
 				758875FA17DCD424004D557F /* Manufacturers.h */,
 			);
-			name = src;
-			path = ../../src;
+			name = emulator;
+			path = ../../emulator;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
