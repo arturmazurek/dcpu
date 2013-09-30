@@ -158,7 +158,7 @@
 			path = ../../assembler;
 			sourceTree = "<group>";
 		};
-		6D62BAD317E8AFBD00621715 /* inc */ = {
+		6D62BAD317E8AFBD00621715 /* include */ = {
 			isa = PBXGroup;
 			children = (
 				6D62BAD217E8AFBA00621715 /* Opcodes.h */,
@@ -167,8 +167,8 @@
 				75BC78A317E8E83100C4B6B0 /* SpecialOpcodes.inl */,
 				75C7E39117C3DF74001247DA /* Instruction.h */,
 			);
-			name = inc;
-			path = ../../inc;
+			name = include;
+			path = ../../include;
 			sourceTree = "<group>";
 		};
 		7587BDAF17C7994800E0D416 /* test */ = {
@@ -194,7 +194,7 @@
 		75C7E37417C3CA00001247DA = {
 			isa = PBXGroup;
 			children = (
-				6D62BAD317E8AFBD00621715 /* inc */,
+				6D62BAD317E8AFBD00621715 /* include */,
 				6D1B541917E0CA49005B3239 /* assembler */,
 				7587BDAF17C7994800E0D416 /* test */,
 				75C7E38917C3CA5F001247DA /* emulator */,
@@ -393,7 +393,7 @@
 				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
 				EXECUTABLE_PREFIX = lib;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
-				HEADER_SEARCH_PATHS = "$(SRCROOT)/../../inc";
+				HEADER_SEARCH_PATHS = "$(SRCROOT)/../../include";
 				PRODUCT_NAME = "dcpu-asm";
 			};
 			name = Debug;
@@ -404,7 +404,7 @@
 				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
 				EXECUTABLE_PREFIX = lib;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
-				HEADER_SEARCH_PATHS = "$(SRCROOT)/../../inc";
+				HEADER_SEARCH_PATHS = "$(SRCROOT)/../../include";
 				PRODUCT_NAME = "dcpu-asm";
 			};
 			name = Release;
@@ -415,7 +415,7 @@
 				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
 				EXECUTABLE_PREFIX = lib;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
-				HEADER_SEARCH_PATHS = "$(SRCROOT)/../../inc";
+				HEADER_SEARCH_PATHS = "$(SRCROOT)/../../include";
 				PRODUCT_NAME = dcpu;
 			};
 			name = Debug;
@@ -426,7 +426,7 @@
 				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
 				EXECUTABLE_PREFIX = lib;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
-				HEADER_SEARCH_PATHS = "$(SRCROOT)/../../inc";
+				HEADER_SEARCH_PATHS = "$(SRCROOT)/../../include";
 				PRODUCT_NAME = dcpu;
 			};
 			name = Release;
@@ -436,7 +436,7 @@
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
-				HEADER_SEARCH_PATHS = "$(SRCROOT)/inc";
+				HEADER_SEARCH_PATHS = "$(SRCROOT)/include";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Debug;
@@ -446,7 +446,7 @@
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
-				HEADER_SEARCH_PATHS = "$(SRCROOT)/inc";
+				HEADER_SEARCH_PATHS = "$(SRCROOT)/include";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;
