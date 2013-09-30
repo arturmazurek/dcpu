@@ -15,6 +15,8 @@
 #include <chrono>
 #include <memory>
 #include <queue>
+#include <stdexcept>
+#include <string>
 #include <thread>
 #include <vector>
 
@@ -22,6 +24,11 @@
 #include "Registers.h"
 
 class Hardware;
+
+class CoreException : public std::runtime_error {
+public:
+    CoreException(const std::string& what) : std::runtime_error{what} {}
+};
 
 class Core {
 public:    

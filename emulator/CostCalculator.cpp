@@ -10,8 +10,8 @@
 
 #include <cassert>
 
-constexpr static unsigned s_normalCosts[] {
-    0, // OP_NONE = 0x00, // special
+static const int s_normalCosts[] {
+    CostCalculator::INVALID_COST, // OP_NONE = 0x00, // special
     1, // OP_SET = 0x01, // sets b to a
     2, // OP_ADD = 0x02, // sets b to b+a, sets EX to 0x0001 if there's an overflow, 0x0 otherwise
     2, // OP_SUB = 0x03, // sets b to b-a, sets EX to 0xffff if there's an underflow, 0x0 otherwise
@@ -35,28 +35,32 @@ constexpr static unsigned s_normalCosts[] {
     2, // OP_IFA = 0x15, // performs next instruction only if b>a (signed)
     2, // OP_IFL = 0x16, // performs next instruction only if b<a
     2, // OP_IFU = 0x17, // performs next instruction only if b<a (signed)
-    0, // 0x18
-    0, // 0x19
+    CostCalculator::INVALID_COST, // 0x18
+    CostCalculator::INVALID_COST, // 0x19
     3, // OP_ADX = 0x1a, // sets b to b+a+EX, sets EX to 0x0001 if there is an overflow, 0x0 otherwise
     3, // OP_SBX = 0x1b, // sets b to b-a+EX, sets EX to 0xFFFF if there is an underflow, 0x0001 if there's an overflow, 0x0 otherwise
-    0, // 0x1c
-    0, // 0x1d
+    CostCalculator::INVALID_COST, // 0x1c
+    CostCalculator::INVALID_COST, // 0x1d
     2, // OP_STI = 0x1e, // sets b to a, then increases I and J by 1
     2, // OP_STD = 0x1f, // sets b to a, then decreases I and J by 1
 };
 
-unsigned CostCalculator::getNormalCost(Opcode o, uint8_t b, uint8_t a) {
+const int CostCalculator::INVALID_COST{-1};
+
+int CostCalculator::getNormalCost(Opcode o, uint8_t b, uint8_t a) {
     assert(a <= 0b111111);
     assert(b <= 0b11111);
     assert(o <= 0b11111);
     
-    unsigned result = s_normalCosts[o];
-    assert(result && "Must be a known opcode");
+    int result = s_normalCosts[o];
+    if(result == INVALID_COST) {
+        return INVALID_COST;
+    }
     
     return result + argumentCost(a) + argumentCost(b);
 }
 
-unsigned CostCalculator::getSpecialCost(Opcode o, uint8_t a) {
+int CostCalculator::getSpecialCost(Opcode o, uint8_t a) {
     assert(a <= 0b111111);
     assert(o <= 0b11111);
     
@@ -73,14 +77,14 @@ unsigned CostCalculator::getSpecialCost(Opcode o, uint8_t a) {
         case OP_HWI: result = 4; break;
             
         default:
-            assert(!"Unknown special opcode");
+            return INVALID_COST;
             break;
     }
     
     return result + argumentCost(a);
 }
 
-constexpr static unsigned s_arguments[] = {
+constexpr static int s_arguments[] = {
     0, 0, 0, 0, 0, 0, 0, 0, // 0x00-0x07 - register (A, B, C, X, Y, Z, I or J, in that order)
     0, 0, 0, 0, 0, 0, 0, 0, // 0x08-0x0f - [register]
     1, 1, 1, 1, 1, 1, 1, 1, // 0x10-0x17 - [register + next word]
@@ -94,7 +98,7 @@ constexpr static unsigned s_arguments[] = {
     0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 // 0x20-0x3f - literal value 0xffff-0x1e (-1..30) (literal) (only for a)
 };
 
-unsigned CostCalculator::argumentCost(uint8_t arg) {
+int CostCalculator::argumentCost(uint8_t arg) {
     assert(arg <= 0x3f);
     return s_arguments[arg];
 }

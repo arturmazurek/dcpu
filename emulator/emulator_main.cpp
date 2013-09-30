@@ -11,6 +11,7 @@
 
 #include <fstream>
 #include <iostream>
+#include <stdexcept>
 #include <vector>
 
 #include "Core.h"
@@ -19,15 +20,17 @@ using namespace std;
 
 enum ReturnCodes {
     RETURN_SUCCESS = 0,
-    RETURN_WRONG_INVOCATION = 1,
-    RETURN_FILE_ERROR = 2,
-    RETURN_CORE_EXCEPTION = 3,
+    RETURN_PROGRAM_ERROR = 1,
+    RETURN_WRONG_INVOCATION = 2,
+    RETURN_FILE_ERROR = 3,
+    RETURN_CORE_EXCEPTION = 4,
 };
 
 static constexpr int BUF_SIZE = 1024;
 
 void mainLoop(Core& core);
 void printHelp();
+void printMainLoopHelp();
 
 int main(int argc, char** argv) {
     if(argc < 2) {
@@ -35,27 +38,28 @@ int main(int argc, char** argv) {
         return RETURN_WRONG_INVOCATION;
     }
     
-    ifstream inputFile{argv[1], ios_base::in | ios_base::binary};
+    ifstream inputFile{argv[1], ios_base::in | ios_base::binary | ios::ate};
     if(inputFile.bad()) {
         cout << "Could not open " << argv[1] << endl;
         return RETURN_FILE_ERROR;
     }
 
-    vector<uint16_t> memory;
-    uint16_t buffer[BUF_SIZE];
-    
-    while(true) {
-        memset(buffer, 0, BUF_SIZE * sizeof(uint16_t));
-        auto size = inputFile.readsome(reinterpret_cast<char*>(buffer), BUF_SIZE * sizeof(uint16_t));
-        if(size <= 0) {
-            break;
-        }
-        memory.insert(memory.end(), buffer, buffer + (size / sizeof(uint16_t)));
-    }
+    auto size = inputFile.tellg();
+    std::vector<uint16_t> memory(size / sizeof(uint16_t));
+    inputFile.seekg(0, ios::beg);
+    inputFile.read(reinterpret_cast<char*>(memory.data()), size);
+    inputFile.close();
     
     Core core;
+    core.resetState();
     core.setMemory(memory);
-    mainLoop(core);
+    
+    try {
+        mainLoop(core);
+    } catch(const std::runtime_error& e) {
+        cout << "Execution error - " << e.what() << endl;
+        return RETURN_PROGRAM_ERROR;
+    }
     
     return RETURN_SUCCESS;
 }
@@ -65,14 +69,28 @@ void printHelp() {
     cout << "    dcpu-emu <binary_path>" << endl;
 }
 
+void printMainLoopHelp() {
+    cout << "Help unavailable yet." << endl;
+}
+
 void mainLoop(Core& core) {
+    cout << "DCPU-16 running:" << endl;
+    
     string in;
     while(true) {
         cin >> in;
         
-        if(in == "q") {
+        if(in == "q" || in == "quit") {
             cout << "Goodbye" << endl;
             break;
+        } else if(in == "c" || in == "cycle") {
+            core.cycle();
+        } else if(in == "pr" || in == "print registers") {
+            core.printRegisters();
+        } else if(in == "h" || in == "help") {
+            printMainLoopHelp();
+        } else {
+            cout << "Use 'h' or 'help' for help on commands, 'q' or 'quit' to quit" << endl;
         }
     }
 }

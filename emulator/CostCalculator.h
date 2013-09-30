@@ -17,11 +17,13 @@ class Instruction;
 
 class CostCalculator {
 public:
-    static unsigned getNormalCost(Opcode o, uint8_t b, uint8_t a);
-    static unsigned getSpecialCost(Opcode o, uint8_t a);
+    static const int INVALID_COST;
+    
+    static int getNormalCost(Opcode o, uint8_t b, uint8_t a);
+    static int getSpecialCost(Opcode o, uint8_t a);
     
 private:
-    static unsigned argumentCost(uint8_t arg);
+    static int argumentCost(uint8_t arg);
     
     CostCalculator() = delete;
     ~CostCalculator() = delete;

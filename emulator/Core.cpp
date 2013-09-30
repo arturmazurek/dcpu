@@ -250,6 +250,9 @@ void Core::decode() {
         m_decoded.opcode = static_cast<Opcode>(element2(m_current));
         m_decoded.a = element1(m_current);
         m_decoded.costLeft = CostCalculator::getSpecialCost(m_decoded.opcode, m_decoded.a);
+        if(m_decoded.costLeft == CostCalculator::INVALID_COST) {
+            throw CoreException("Unknown opcode encountered");
+        }
         
         m_decoded.source = checkOperand(m_decoded.a, true);
         
@@ -258,6 +261,9 @@ void Core::decode() {
         m_decoded.b = element2(m_current);
         m_decoded.a = element1(m_current);
         m_decoded.costLeft = CostCalculator::getNormalCost(m_decoded.opcode, m_decoded.b, m_decoded.a);
+        if(m_decoded.costLeft == CostCalculator::INVALID_COST) {
+            throw CoreException("Unknown special opcode encountered");
+        }
         
         m_decoded.source = checkOperand(m_decoded.a, true);
         m_decoded.target = checkOperand(m_decoded.b, false);
