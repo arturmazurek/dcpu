@@ -134,7 +134,7 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		6D1B541917E0CA49005B3239 /* asm */ = {
+		6D1B541917E0CA49005B3239 /* assembler */ = {
 			isa = PBXGroup;
 			children = (
 				6D1B541617E0C8FC005B3239 /* Lexer.cpp */,
@@ -154,8 +154,8 @@
 				75B52E7817E777B500295E66 /* CodegenVisitor.cpp */,
 				75B52E7917E777B500295E66 /* CodegenVisitor.h */,
 			);
-			name = asm;
-			path = ../../asm;
+			name = assembler;
+			path = ../../assembler;
 			sourceTree = "<group>";
 		};
 		6D62BAD317E8AFBD00621715 /* inc */ = {
@@ -195,7 +195,7 @@
 			isa = PBXGroup;
 			children = (
 				6D62BAD317E8AFBD00621715 /* inc */,
-				6D1B541917E0CA49005B3239 /* asm */,
+				6D1B541917E0CA49005B3239 /* assembler */,
 				7587BDAF17C7994800E0D416 /* test */,
 				75C7E38917C3CA5F001247DA /* emulator */,
 				75C7E37E17C3CA00001247DA /* Products */,
