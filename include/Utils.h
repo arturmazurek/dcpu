@@ -11,6 +11,8 @@
 
 #include <memory>
 
+#define ARRAY_SIZE(x) (sizeof(x)/sizeof(*x))
+
 namespace std {
     template <typename T, typename... Args>
     static std::unique_ptr<T> make_unique(Args&&... args){

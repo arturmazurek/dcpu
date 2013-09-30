@@ -21,6 +21,8 @@
 		6D0CD76917E1EFF90002D2E1 /* Parser.h in Headers */ = {isa = PBXBuildFile; fileRef = 6D0CD76717E1EFF90002D2E1 /* Parser.h */; };
 		7515706F17F96D8000083178 /* libdcpu-asm.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 6D0CD73317E1BD9B0002D2E1 /* libdcpu-asm.a */; };
 		7515707217F96DB800083178 /* main_assembler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7515706117F96D0C00083178 /* main_assembler.cpp */; };
+		7515708417F996AC00083178 /* emulator_main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7515707417F9959A00083178 /* emulator_main.cpp */; };
+		7515708517F996B100083178 /* libdcpu.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 6D0CD73F17E1C08B0002D2E1 /* libdcpu.a */; };
 		75B52E6E17E4B99700295E66 /* ASTVisitor.h in Headers */ = {isa = PBXBuildFile; fileRef = 75B52E6C17E4B99700295E66 /* ASTVisitor.h */; };
 		75B52E7117E7327700295E66 /* Assembler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 75B52E6F17E7327700295E66 /* Assembler.cpp */; };
 		75B52E7217E7327700295E66 /* Assembler.h in Headers */ = {isa = PBXBuildFile; fileRef = 75B52E7017E7327700295E66 /* Assembler.h */; };
@@ -51,6 +53,13 @@
 			remoteGlobalIDString = 6D0CD73217E1BD9B0002D2E1;
 			remoteInfo = "lib-dcpu-asm";
 		};
+		7515708217F996A500083178 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 75C7E37517C3CA00001247DA /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 6D0CD73E17E1C08B0002D2E1;
+			remoteInfo = "lib-dcpu";
+		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -64,6 +73,15 @@
 			runOnlyForDeploymentPostprocessing = 1;
 		};
 		7515706417F96D6300083178 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = /usr/share/man/man1/;
+			dstSubfolderSpec = 0;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 1;
+		};
+		7515707717F9968D00083178 /* CopyFiles */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
 			dstPath = /usr/share/man/man1/;
@@ -99,6 +117,8 @@
 		7515706117F96D0C00083178 /* main_assembler.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main_assembler.cpp; sourceTree = "<group>"; };
 		7515706617F96D6300083178 /* dcpu-asm */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "dcpu-asm"; sourceTree = BUILT_PRODUCTS_DIR; };
 		7515707317F98EB700083178 /* Utils.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Utils.h; sourceTree = "<group>"; };
+		7515707417F9959A00083178 /* emulator_main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = emulator_main.cpp; sourceTree = "<group>"; };
+		7515707917F9968D00083178 /* dcpu-emu */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "dcpu-emu"; sourceTree = BUILT_PRODUCTS_DIR; };
 		7587BDB017C79A3600E0D416 /* TestsHolder.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TestsHolder.h; sourceTree = "<group>"; };
 		7587BDB417C79D4000E0D416 /* TestsHolder.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TestsHolder.cpp; sourceTree = "<group>"; };
 		7587BDB817C7A14600E0D416 /* BaseTests.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BaseTests.h; sourceTree = "<group>"; };
@@ -155,6 +175,14 @@
 			buildActionMask = 2147483647;
 			files = (
 				7515706F17F96D8000083178 /* libdcpu-asm.a in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		7515707617F9968D00083178 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7515708517F996B100083178 /* libdcpu.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -237,6 +265,7 @@
 				6D0CD73F17E1C08B0002D2E1 /* libdcpu.a */,
 				6D0CD75017E1C1AB0002D2E1 /* tests */,
 				7515706617F96D6300083178 /* dcpu-asm */,
+				7515707917F9968D00083178 /* dcpu-emu */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -255,6 +284,7 @@
 				758875F717DCD2E7004D557F /* GenericClock.cpp */,
 				758875F817DCD2E7004D557F /* GenericClock.h */,
 				758875FA17DCD424004D557F /* Manufacturers.h */,
+				7515707417F9959A00083178 /* emulator_main.cpp */,
 			);
 			name = emulator;
 			path = ../../emulator;
@@ -356,6 +386,24 @@
 			productReference = 7515706617F96D6300083178 /* dcpu-asm */;
 			productType = "com.apple.product-type.tool";
 		};
+		7515707817F9968D00083178 /* dcpu-emu */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 7515707F17F9968D00083178 /* Build configuration list for PBXNativeTarget "dcpu-emu" */;
+			buildPhases = (
+				7515707517F9968D00083178 /* Sources */,
+				7515707617F9968D00083178 /* Frameworks */,
+				7515707717F9968D00083178 /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				7515708317F996A500083178 /* PBXTargetDependency */,
+			);
+			name = "dcpu-emu";
+			productName = "dcpu-emu";
+			productReference = 7515707917F9968D00083178 /* dcpu-emu */;
+			productType = "com.apple.product-type.tool";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -381,6 +429,7 @@
 				6D0CD73E17E1C08B0002D2E1 /* lib-dcpu */,
 				6D0CD74F17E1C1AB0002D2E1 /* tests */,
 				7515706517F96D6300083178 /* dcpu-asm */,
+				7515707817F9968D00083178 /* dcpu-emu */,
 			);
 		};
 /* End PBXProject section */
@@ -426,6 +475,14 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		7515707517F9968D00083178 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7515708417F996AC00083178 /* emulator_main.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
@@ -443,6 +500,11 @@
 			isa = PBXTargetDependency;
 			target = 6D0CD73217E1BD9B0002D2E1 /* lib-dcpu-asm */;
 			targetProxy = 7515707017F96D8700083178 /* PBXContainerItemProxy */;
+		};
+		7515708317F996A500083178 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 6D0CD73E17E1C08B0002D2E1 /* lib-dcpu */;
+			targetProxy = 7515708217F996A500083178 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -515,6 +577,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				CLANG_CXX_LANGUAGE_STANDARD = "c++0x";
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				HEADER_SEARCH_PATHS = "$(SRCROOT)/../../include";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -525,8 +588,29 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				CLANG_CXX_LANGUAGE_STANDARD = "c++0x";
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				HEADER_SEARCH_PATHS = "$(SRCROOT)/../../include";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
+		7515708017F9968D00083178 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				CLANG_CXX_LANGUAGE_STANDARD = "c++0x";
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		7515708117F9968D00083178 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				CLANG_CXX_LANGUAGE_STANDARD = "c++0x";
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;
@@ -636,6 +720,14 @@
 			buildConfigurations = (
 				7515706D17F96D6300083178 /* Debug */,
 				7515706E17F96D6300083178 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+		7515707F17F9968D00083178 /* Build configuration list for PBXNativeTarget "dcpu-emu" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				7515708017F9968D00083178 /* Debug */,
+				7515708117F9968D00083178 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 		};

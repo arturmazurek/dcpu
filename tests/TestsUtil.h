@@ -24,8 +24,6 @@ TestsHolder::instance().addTest(tests[i]);\
 }\
 }
 
-#define ARRAY_SIZE(x) (sizeof(x)/sizeof(*x))
-
 #define TEST \
     (TestsHolder::TestFunction)[](Core& core, TestsHolder::TestMeta& meta)
 
