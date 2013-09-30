@@ -14,9 +14,8 @@
 #include <memory>
 
 #include "ASTNodes.h"
+#include "Lexer.h"
 #include "ParserException.h"
-
-class Lexer;
 
 class Parser {
 public:

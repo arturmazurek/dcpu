@@ -93,12 +93,12 @@
 		6DF0DA9A17CCE6BA0048EBF5 /* SpecialOpcodesTests.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SpecialOpcodesTests.h; sourceTree = "<group>"; };
 		6DF0DA9B17CCEF240048EBF5 /* DCPUException.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DCPUException.h; sourceTree = "<group>"; };
 		7500250D17C8D5DD008CC090 /* OpcodesTests.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OpcodesTests.h; sourceTree = "<group>"; };
-		7500250E17C8E1B7008CC090 /* Util.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Util.h; sourceTree = "<group>"; };
 		7500251017CB82FF008CC090 /* CostCalculator.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CostCalculator.cpp; sourceTree = "<group>"; };
 		7500251117CB82FF008CC090 /* CostCalculator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CostCalculator.h; sourceTree = "<group>"; };
 		7500537F17E1068900A3C08F /* LexerException.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LexerException.h; sourceTree = "<group>"; };
 		7515706117F96D0C00083178 /* main_assembler.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main_assembler.cpp; sourceTree = "<group>"; };
 		7515706617F96D6300083178 /* dcpu-asm */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "dcpu-asm"; sourceTree = BUILT_PRODUCTS_DIR; };
+		7515707317F98EB700083178 /* Utils.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Utils.h; sourceTree = "<group>"; };
 		7587BDB017C79A3600E0D416 /* TestsHolder.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TestsHolder.h; sourceTree = "<group>"; };
 		7587BDB417C79D4000E0D416 /* TestsHolder.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TestsHolder.cpp; sourceTree = "<group>"; };
 		7587BDB817C7A14600E0D416 /* BaseTests.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BaseTests.h; sourceTree = "<group>"; };
@@ -112,7 +112,6 @@
 		75B52E6F17E7327700295E66 /* Assembler.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Assembler.cpp; sourceTree = "<group>"; };
 		75B52E7017E7327700295E66 /* Assembler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Assembler.h; sourceTree = "<group>"; };
 		75B52E7317E7420800295E66 /* AssemblerException.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AssemblerException.h; sourceTree = "<group>"; };
-		75B52E7417E75ABE00295E66 /* ASMUtils.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ASMUtils.h; sourceTree = "<group>"; };
 		75B52E7517E7614200295E66 /* Constants.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Constants.h; sourceTree = "<group>"; };
 		75B52E7617E7616400295E66 /* Constants.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Constants.cpp; sourceTree = "<group>"; };
 		75B52E7817E777B500295E66 /* CodegenVisitor.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CodegenVisitor.cpp; sourceTree = "<group>"; };
@@ -176,7 +175,6 @@
 				75B52E6F17E7327700295E66 /* Assembler.cpp */,
 				75B52E7017E7327700295E66 /* Assembler.h */,
 				75B52E7317E7420800295E66 /* AssemblerException.h */,
-				75B52E7417E75ABE00295E66 /* ASMUtils.h */,
 				75B52E7517E7614200295E66 /* Constants.h */,
 				75B52E7617E7616400295E66 /* Constants.cpp */,
 				75B52E7817E777B500295E66 /* CodegenVisitor.cpp */,
@@ -195,6 +193,7 @@
 				75BC78A217E8E05800C4B6B0 /* RegisterCode.h */,
 				75BC78A317E8E83100C4B6B0 /* SpecialOpcodes.inl */,
 				75C7E39117C3DF74001247DA /* Instruction.h */,
+				7515707317F98EB700083178 /* Utils.h */,
 			);
 			name = include;
 			path = ../../include;
@@ -248,7 +247,6 @@
 				75C7E38D17C3D49B001247DA /* Core.cpp */,
 				75C7E38E17C3D49B001247DA /* Core.h */,
 				75C7E39017C3D9B9001247DA /* Registers.h */,
-				7500250E17C8E1B7008CC090 /* Util.h */,
 				7500251017CB82FF008CC090 /* CostCalculator.cpp */,
 				7500251117CB82FF008CC090 /* CostCalculator.h */,
 				6DF0DA9B17CCEF240048EBF5 /* DCPUException.h */,

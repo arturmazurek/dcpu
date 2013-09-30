@@ -1,13 +1,13 @@
 //
-//  ASMUtils.h
+//  Utils.h
 //  dcpu
 //
-//  Created by Artur Mazurek on 16.09.2013.
+//  Created by Artur on 30/09/2013.
 //  Copyright (c) 2013 Artur Mazurek. All rights reserved.
 //
 
-#ifndef dcpu_ASMUtils_h
-#define dcpu_ASMUtils_h
+#ifndef dcpu_Utils_h
+#define dcpu_Utils_h
 
 #include <memory>
 

@@ -15,7 +15,7 @@
 
 #include "TestsUtil.h"
 
-#include "ASMUtils.h"
+#include "Utils.h"
 #include "Assembler.h"
 #include "Hardware.h"
 #include "Lexer.h"

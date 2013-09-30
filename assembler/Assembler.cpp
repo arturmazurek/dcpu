@@ -11,13 +11,12 @@
 #include <cassert>
 #include <limits>
 
-#include "ASMUtils.h"
 #include "AssemblerException.h"
 #include "CodegenVisitor.h"
 #include "Constants.h"
 #include "Instruction.h"
-#include "Parser.h"
 #include "Lexer.h"
+#include "Parser.h"
 
 const std::string Assembler::JUMP_IDENTIFIER{"jmp"};
 const unsigned Assembler::JUMP_LENGTH{2};

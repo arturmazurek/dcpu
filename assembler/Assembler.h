@@ -15,11 +15,11 @@
 #include <utility>
 #include <vector>
 
+#include "Lexer.h"
 #include "Parser.h"
 #include "Registers.h"
 
 class CommandExprAST;
-class Lexer;
 
 class Assembler {
 public:
